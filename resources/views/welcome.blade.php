@@ -31,6 +31,14 @@
             animation: fadeIn 1s ease, float 3s ease-in-out infinite;
         }
 
+        /* Imagen agregada */
+        .logo-img {
+            width: 180px;
+            height: auto;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease, float 3s ease-in-out infinite;
+        }
+
         h1 {
             font-size: 3rem;
             font-weight: 600;
@@ -78,6 +86,19 @@
         .highlight {
             color: #ffdd57;
         }
+        .logo-img {
+            width: 300px;
+            height: auto;
+            margin-bottom: 25px;
+            animation: fadeIn 1s ease, float 3s ease-in-out infinite;
+        }
+
+        @media (max-width: 600px) {
+            .logo-img {
+                width: 200px;
+            }
+        }
+
 
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-30px); }
@@ -106,14 +127,15 @@
     </style>
 </head>
 <body>
-    <div class="logo">🎓</div>
+
+    <img src="{{ asset('imagenes/logo.png') }}" alt="Logo AddedUT" class="logo-img">
 
     <h1>Bienvenido a <span class="highlight">AddedUT</span></h1>
     <h2>Plataforma de Actividades Extracurriculares<br>Universidad Tecnológica de Tecámac</h2>
 
     <div class="btn-container">
         <a href="{{ route('login') }}" class="btn">Iniciar Sesión</a>
-        <a href="{{ route('register') }}" class="btn">Registrarse</a>
+        <a href="{{ route('registro') }}" class="btn">Registrarse</a>
     </div>
 
     <footer>
