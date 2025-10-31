@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* === Fondo animado === */
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(270deg, #007BFF, #00C6FF, #6a11cb, #2575fc);
+    background-size: 800% 800%;
+    animation: gradientShift 12s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* === Contenedor principal === */
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 420px;
+    color: white;
+    animation: fadeIn 1.2s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Título === */
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+/* === Etiquetas === */
+label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 500;
+    color: #e3e3e3;
+}
+
+/* === Inputs y selects estilizados === */
+input, select {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    margin-top: 6px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+/* === Color del texto en los selects === */
+select option {
+    background: #1e1e2e;
+    color: #fff;
+}
+
+/* === Flecha personalizada en selects === */
+select {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='18' width='18' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+/* === Placeholder === */
+input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* === Efecto focus === */
+input:focus, select:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #00C6FF;
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+    transform: scale(1.03);
+}
+
+/* === Botón moderno === */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #00C6FF, #007BFF);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 198, 255, 0.5);
+}
+
+/* === Mensaje de éxito === */
+.mensaje {
+    text-align: center;
+    margin-top: 20px;
+    color: #00ff95;
+    font-weight: bold;
+    animation: popUp 0.5s ease-in;
+}
+
+@keyframes popUp {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* === Responsivo === */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+        padding: 25px;
+    }
+    h1 { font-size: 22px; }
+}

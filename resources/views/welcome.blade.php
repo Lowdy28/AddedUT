@@ -113,7 +113,7 @@
 
     <div class="btn-container">
         <a href="{{ route('login') }}" class="btn">Iniciar Sesión</a>
-        <a href="{{ route('register') }}" class="btn">Registrarse</a>
+        <a href="{{ route('registro') }}" class="btn">Registrarse</a>
     </div>
 
     <footer>
