@@ -15,13 +15,19 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- reCAPTCHA -->
+        <div class="mt-4">
+            <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+            @if ($errors->has('captcha'))
+                <p class="text-red-500 text-sm mt-2">{{ $errors->first('captcha') }}</p>
+            @endif
         </div>
 
         <!-- Remember Me -->
@@ -44,4 +50,7 @@
             </x-primary-button>
         </div>
     </form>
+
+    <!-- Agregar script de reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </x-guest-layout>
