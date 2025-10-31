@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -29,7 +30,30 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'g-recaptcha-response' => ['required'], // <-- regla para reCAPTCHA
         ];
+    }
+
+    /**
+     * Add additional validation for reCAPTCHA.
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->filled('g-recaptcha-response')) {
+                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => env('RECAPTCHA_SECRET_KEY'),
+                    'response' => $this->input('g-recaptcha-response'),
+                    'remoteip' => $this->ip(),
+                ]);
+
+                $result = $response->json();
+
+                if (!($result['success'] ?? false)) {
+                    $validator->errors()->add('captcha', 'Por favor, confirma que no eres un robot.');
+                }
+            }
+        });
     }
 
     /**
