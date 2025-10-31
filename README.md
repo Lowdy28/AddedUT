@@ -6,7 +6,5 @@ Actualmente la información está dispersa en carteles, publicaciones en redes S
 
 ## Documentación
 
-## Documentación
-
 [Ver PDF del proyecto](docs/Doc_proyecto.pdf)
 
