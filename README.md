@@ -6,4 +6,7 @@ Actualmente la información está dispersa en carteles, publicaciones en redes S
 
 ## Documentación
 
-<iframe src="docs/Doc_proyecto.pdf" width="100%" height="600px"></iframe>
+## Documentación
+
+[Ver PDF del proyecto](docs/Doc_proyecto.pdf)
+
