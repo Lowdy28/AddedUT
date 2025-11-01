@@ -216,21 +216,21 @@
 
         <div class="intro">
             <p>
-                En <span class="highlight">AddedUT</span> podrás inscribirte, gestionar y participar en las 
-                <b>actividades extracurriculares</b> de nuestra universidad. 
-                Fomentamos el desarrollo personal, social y profesional de cada estudiante 
+                En <span class="highlight">AddedUT</span> podrás inscribirte, gestionar y participar en las
+                <b>actividades extracurriculares</b> de nuestra universidad.
+                Fomentamos el desarrollo personal, social y profesional de cada estudiante
                 a través de actividades deportivas, culturales, tecnológicas y de bienestar integral.
             </p>
             <p>
-                ¡Forma parte de la comunidad activa de la <b>UT Tecámac</b> y descubre 
+                ¡Forma parte de la comunidad activa de la <b>UT Tecámac</b> y descubre
                 todo lo que puedes lograr fuera del aula!
             </p>
         </div>
 
-        <div class="btn-container">
-            <a href="{{ route('login') }}" class="btn">Iniciar Sesión</a>
-            <a href="{{ route('register') }}" class="btn">Registrarse</a>
-        </div>
+      <div class="btn-container">
+    <a href="{{ route('login') }}" class="btn">Iniciar Sesión</a>
+    <a href="{{ route('registro') }}" class="btn">Registrarse</a>
+</div>
 
         <section class="activities">
             <h2>Explora nuestras <span class="highlight">Actividades</span></h2>
