@@ -1,36 +1,87 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Panel Admin') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+<body class="bg-gray-100 text-gray-900">
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+<div class="flex">
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <!-- Sidebar -->
+    <aside class="w-64 min-h-screen bg-gray-900 text-white shadow-lg">
+        <div class="p-4 text-center border-b border-gray-700">
+            <h1 class="text-2xl font-bold">Actividades</h1>
+            <p class="text-sm opacity-75">Panel Administrativo</p>
         </div>
-    </body>
+
+        <nav class="mt-6">
+            <ul>
+                <li>
+                    <a href="{{ route('dashboard') }}" 
+                       class="block px-6 py-3 hover:bg-gray-700 {{ request()->is('dashboard') ? 'bg-gray-800' : '' }}">
+                        📊 Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('usuarios.index') }}" 
+                       class="block px-6 py-3 hover:bg-gray-700 {{ request()->is('usuarios*') ? 'bg-gray-800' : '' }}">
+                        👤 Usuarios
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('eventos.index') }}" 
+                       class="block px-6 py-3 hover:bg-gray-700 {{ request()->is('eventos*') ? 'bg-gray-800' : '' }}">
+                        🎉 Eventos
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('inscripciones.index') }}" 
+                       class="block px-6 py-3 hover:bg-gray-700 {{ request()->is('inscripciones*') ? 'bg-gray-800' : '' }}">
+                        📝 Inscripciones
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('notificaciones.index') }}" 
+                       class="block px-6 py-3 hover:bg-gray-700 {{ request()->is('notificaciones*') ? 'bg-gray-800' : '' }}">
+                        🔔 Notificaciones
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('reportes.index') }}" 
+                       class="block px-6 py-3 hover:bg-gray-700 {{ request()->is('reportes*') ? 'bg-gray-800' : '' }}">
+                        📑 Reportes
+                    </a>
+                </li>
+
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="w-full text-left px-6 py-3 hover:bg-red-700 bg-red-600 mt-5">
+                            🚪 Cerrar Sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+        @yield('content')
+    </main>
+
+</div>
+
+</body>
 </html>
