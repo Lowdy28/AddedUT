@@ -199,7 +199,10 @@ return [
     |
     */
 
-    'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    'driver' => 'file',        // para desarrollo
+    'domain' => null,
+    'secure' => false,         // si estás en localhost
+    'same_site' => 'lax',
 
     /*
     |--------------------------------------------------------------------------

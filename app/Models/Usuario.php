@@ -12,43 +12,25 @@ class Usuario extends Authenticatable
 
     protected $table = 'usuarios';
     protected $primaryKey = 'id_usuario';
+    public $incrementing = true;
+    protected $keyType = 'int';
     public $timestamps = false;
 
     protected $fillable = [
         'nombre',
-        'correo',
+        'email',
         'password',
         'rol',
+        'activo',
         'fecha_registro',
-        'activo'
     ];
 
     protected $hidden = [
         'password',
     ];
 
-    public function getAuthIdentifierName()
+    public function getAuthPassword()
     {
-        return 'correo';
-    }
-
-    public function eventosImpartidos()
-    {
-        return $this->hasMany(Evento::class, 'id_profesor');
-    }
-
-    public function eventosCreados()
-    {
-        return $this->hasMany(Evento::class, 'creado_por');
-    }
-
-    public function inscripciones()
-    {
-        return $this->hasMany(Inscripcion::class, 'id_usuario');
-    }
-
-    public function notificaciones()
-    {
-        return $this->hasMany(Notificacion::class, 'id_usuario');
+        return $this->password;
     }
 }

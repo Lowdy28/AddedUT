@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+    
 <head>
     <meta charset="UTF-8">
     <title>Inicio de Sesión | AddeUT</title>
@@ -94,6 +95,7 @@
             padding: 8px;
             border-radius: 8px;
             margin-top: 10px;
+            font-size: 0.9rem;
         }
 
         .link-registro {
@@ -112,7 +114,9 @@
             font-family: 'Poppins', sans-serif;
         }
     </style>
+
 </head>
+
 <body>
 
     <div class="header">
@@ -123,7 +127,7 @@
     <div class="container">
         <h1>Iniciar Sesión</h1>
 
-        <form action="{{ route('login.submit') }}" method="POST">
+        <form action="{{ route('login') }}" method="POST">
             @csrf
 
             <label for="email">Correo electrónico:</label>
@@ -135,9 +139,10 @@
             <button type="submit">Ingresar</button>
         </form>
 
-        @error('email')
-            <div class="mensaje-error">{{ $message }}</div>
-        @enderror
+        <!-- Errores -->
+        @if($errors->any())
+            <div class="mensaje-error">{{ $errors->first() }}</div>
+        @endif
 
         <a href="{{ route('registro') }}" class="link-registro">¿No tienes cuenta? Regístrate aquí</a>
     </div>

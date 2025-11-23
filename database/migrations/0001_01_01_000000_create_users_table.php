@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Tabla principal de usuarios
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -23,14 +22,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Tabla de tokens de reseteo de contraseña
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // Tabla de sesiones (opcional, si usas sesiones en DB)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index()->constrained('users')->nullOnDelete();

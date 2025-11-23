@@ -15,6 +15,7 @@
         <form @submit.prevent="submitCreate($event)">
             @csrf
 
+            <!-- Nombre -->
             <div class="mb-4">
                 <label for="nombre_create" class="font-semibold" style="color:#111 !important;">Nombre</label>
                 <input type="text" name="nombre" id="nombre_create" required
@@ -22,13 +23,15 @@
                        style="color:#111 !important; background:#f9fafb !important; border:1px solid #d1d5db !important;" />
             </div>
 
+            <!-- Email -->
             <div class="mb-4">
-                <label for="correo_create" class="font-semibold" style="color:#111 !important;">Correo</label>
-                <input type="email" name="correo" id="correo_create" required
+                <label for="email_create" class="font-semibold" style="color:#111 !important;">Email</label>
+                <input type="email" name="email" id="email_create" required
                        class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm"
                        style="color:#111 !important; background:#f9fafb !important; border:1px solid #d1d5db !important;" />
             </div>
 
+            <!-- Rol -->
             <div class="mb-4">
                 <label for="rol_create" class="font-semibold" style="color:#111 !important;">Rol</label>
                 <select name="rol" id="rol_create"
@@ -40,6 +43,7 @@
                 </select>
             </div>
 
+            <!-- Contraseña -->
             <div class="mb-6">
                 <label for="password_create" class="font-semibold" style="color:#111 !important;">Contraseña</label>
                 <input type="password" name="password" id="password_create" required
@@ -47,6 +51,7 @@
                        style="color:#111 !important; background:#f9fafb !important; border:1px solid #d1d5db !important;" />
             </div>
 
+            <!-- Botones -->
             <div class="flex justify-end gap-4">
                 <button type="button" @click="closeAll()"
                         class="px-6 py-2 rounded-lg bg-red-500 text-black font-semibold shadow hover:bg-red-600 transition"
