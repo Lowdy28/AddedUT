@@ -14,7 +14,7 @@ class UsuarioController extends Controller
 
         $usuarios = Usuario::when($buscar, function ($q) use ($buscar) {
                 $q->where('nombre', 'like', "%$buscar%")
-                  ->orWhere('correo', 'like', "%$buscar%")
+                  ->orWhere('email', 'like', "%$buscar%")
                   ->orWhere('rol', 'like', "%$buscar%");
             })
             ->orderBy('id_usuario', 'desc')
@@ -27,29 +27,24 @@ class UsuarioController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'correo' => 'required|email|unique:usuarios,correo',
+            'email' => 'required|email|unique:usuarios,email',
             'password' => 'required|min:6',
             'rol' => 'required',
-            'activo' => 'sometimes|boolean'
         ]);
 
         $usuario = Usuario::create([
             'nombre' => $request->nombre,
-            'correo' => $request->correo,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'rol' => $request->rol,
-            'activo' => $request->activo ?? 1,
+            'activo' => 1, // valor por defecto
         ]);
 
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Usuario creado correctamente',
-                'usuario' => $usuario
-            ]);
-        }
-
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuario creado correctamente',
+            'usuario' => $usuario
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -58,32 +53,27 @@ class UsuarioController extends Controller
 
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'correo' => "required|email|unique:usuarios,correo,$id,id_usuario",
+            'email' => "required|email|unique:usuarios,email,$id,id_usuario",
             'rol' => 'required',
-            'activo' => 'required|boolean',
+            'password' => 'nullable|min:6'
         ]);
 
         $usuario->nombre = $request->nombre;
-        $usuario->correo = $request->correo;
+        $usuario->email = $request->email;
         $usuario->rol = $request->rol;
-        $usuario->activo = $request->activo;
+        $usuario->activo = 1; // mantener activo por defecto
 
         if ($request->filled('password')) {
-            $request->validate(['password' => 'min:6']);
             $usuario->password = Hash::make($request->password);
         }
 
         $usuario->save();
 
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Usuario actualizado correctamente',
-                'usuario' => $usuario
-            ]);
-        }
-
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuario actualizado correctamente',
+            'usuario' => $usuario
+        ]);
     }
 
     public function destroy($id)
@@ -91,6 +81,9 @@ class UsuarioController extends Controller
         $usuario = Usuario::findOrFail($id);
         $usuario->delete();
 
-        return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuario eliminado correctamente'
+        ]);
     }
 }

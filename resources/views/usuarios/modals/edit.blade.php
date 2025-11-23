@@ -26,8 +26,8 @@
             </div>
 
             <div class="mb-4">
-                <label for="correo_edit" class="font-semibold" style="color:#111 !important;">Correo</label>
-                <input type="email" name="correo" id="correo_edit" x-model="editData.correo" required
+                <label for="email_edit" class="font-semibold" style="color:#111 !important;">email</label>
+                <input type="email" name="email" id="email_edit" x-model="editData.email" required
                        class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm"
                        style="color:#111 !important; background:#f9fafb !important; border:1px solid #d1d5db !important;" />
             </div>

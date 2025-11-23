@@ -4,44 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
 
 class LoginController extends Controller
 {
     // Mostrar formulario de login
     public function showLoginForm()
     {
-        // Apunta a resources/views/login.blade.php
-        return view('login');
+        return view('auth.login');
     }
 
     // Procesar login
     public function login(Request $request)
     {
-        // Validar datos del formulario
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // Intentar iniciar sesión
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard'); // Redirige después del login
+
+            $user = Auth::guard('web')->user();
+
+            // Redirigir según rol
+            return match($user->rol) {
+                'admin' => redirect()->route('dashboard.admin'),
+                'profesor' => redirect()->route('dashboard'),
+                'estudiante' => redirect()->route('dashboard'),
+                default => redirect()->route('dashboard')
+            };
         }
 
-        // Si falla el login
         return back()->withErrors([
-            'email' => 'Las credenciales no son correctas.',
+            'email' => 'Las credenciales no son correctas.'
         ])->onlyInput('email');
     }
 
-    // Cerrar sesión
+    // Logout
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

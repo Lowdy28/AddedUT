@@ -17,11 +17,11 @@ class InscripcionSeeder extends Seeder
         if ($eventos->isEmpty()) return;
 
         foreach ($estudiantes as $estudiante) {
-            Inscripcion::create([
-                'user_id' => $estudiante->id,
-                'evento_id' => $eventos->random()->id,
-                'estado' => 'confirmada',
-            ]);
+    Inscripcion::create([
+        'id_usuario' => $estudiante->id_usuario,
+        'id_evento' => $eventos->random()->id_evento,
+        'estado' => 'confirmada',
+    ]);
         }
     }
 }

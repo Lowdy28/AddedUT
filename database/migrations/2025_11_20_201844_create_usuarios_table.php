@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id('id_usuario');
             $table->string('nombre', 100);
-            $table->string('correo', 100)->unique();
+            $table->string('email', 100)->unique();
             $table->string('password');
             $table->enum('rol', ['estudiante', 'profesor', 'admin']);
             $table->timestamp('fecha_registro')->useCurrent();

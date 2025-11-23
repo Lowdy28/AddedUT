@@ -3,39 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class RegistroController extends Controller
 {
     public function mostrarFormulario()
     {
-        return view('registro');
+        return view('auth.register');
     }
 
     public function registrar(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'matricula' => 'required|string|max:20',
-            'area_academica' => 'required|string',
-            'cuatrimestre' => 'required|numeric|min:1|max:10',
-            'turno' => 'required|string',
-            'genero' => 'required|string',
-            'edad' => 'required|numeric|min:15|max:99',
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|string|min:6|confirmed',
+            'rol' => 'required|in:estudiante,profesor,admin',
         ]);
 
-        $data = $request->only([
-            'nombre',
-            'matricula',
-            'area_academica',
-            'cuatrimestre',
-            'turno',
-            'genero',
-            'edad'
+        $usuario = Usuario::create([
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'rol' => $request->rol,
+            'activo' => true,
         ]);
 
-        $registro = json_encode($data, JSON_PRETTY_PRINT);
-        file_put_contents(storage_path('app/registros_estudiantes.txt'), $registro.PHP_EOL, FILE_APPEND);
+        // Inicia sesión automáticamente después de registrarse
+        Auth::login($usuario);
 
-        return redirect()->back()->with('mensaje', '¡Registro guardado exitosamente!');
+        // Redirige según rol
+        $rol = $usuario->rol;
+        if ($rol === 'admin') return redirect()->route('dashboard');
+        if ($rol === 'profesor') return redirect()->route('profesor.dashboard');
+        if ($rol === 'estudiante') return redirect()->route('estudiante.dashboard');
+
+        return redirect()->route('dashboard');
     }
 }
