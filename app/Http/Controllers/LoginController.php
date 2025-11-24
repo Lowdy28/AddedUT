@@ -30,8 +30,8 @@ class LoginController extends Controller
             // Redirigir según rol
             return match($user->rol) {
                 'admin' => redirect()->route('dashboard.admin'),
-                'profesor' => redirect()->route('dashboard'),
-                'estudiante' => redirect()->route('dashboard'),
+                'profesor' => redirect()->route('profesor.dashboard'),
+                'estudiante' => redirect()->route('estudiante.dashboard'),
                 default => redirect()->route('dashboard')
             };
         }

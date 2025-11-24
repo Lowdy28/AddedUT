@@ -18,34 +18,30 @@ class EventoSeeder extends Seeder
             return;
         }
 
-        $talleres = [
-            ['nombre' => 'Música para todos', 'categoria' => 'Cultural'],
-            ['nombre' => 'Taller de Teatro', 'categoria' => 'Cultural'],
-            ['nombre' => 'Clases de Dibujo', 'categoria' => 'Cultural'],
-            ['nombre' => 'Baile Contemporáneo', 'categoria' => 'Cultural'],
-            ['nombre' => 'Fotografía Creativa', 'categoria' => 'Cultural'],
-            ['nombre' => 'Coro Comunitario', 'categoria' => 'Cultural'],
-            ['nombre' => 'Yoga y Bienestar', 'categoria' => 'Deportivo'],
-            ['nombre' => 'Taekwondo Infantil', 'categoria' => 'Deportivo'],
-            ['nombre' => 'Fútbol Juvenil', 'categoria' => 'Deportivo'],
-            ['nombre' => 'Voleibol Recreativo', 'categoria' => 'Deportivo'],
-            ['nombre' => 'Pintura y Expresión', 'categoria' => 'Cultural'],
-            ['nombre' => 'Cine y Crítica', 'categoria' => 'Cultural'],
+        $eventos = [
+            ['nombre' => 'Bailes de Salón', 'categoria' => 'Cultural'],
+            ['nombre' => 'Música', 'categoria' => 'Cultural'],
+            ['nombre' => 'Oratoria y Dibujo', 'categoria' => 'Cultural'],
+            ['nombre' => 'Teatro', 'categoria' => 'Cultural'],
+
+            ['nombre' => 'Ajedrez', 'categoria' => 'Deportivo'],
+            ['nombre' => 'Basquetbol', 'categoria' => 'Deportivo'],
+            ['nombre' => 'Fútbol americano', 'categoria' => 'Deportivo'],
+            ['nombre' => 'Fútbol rápido y 7', 'categoria' => 'Deportivo'],
+            ['nombre' => 'Fútbol soccer', 'categoria' => 'Deportivo'],
+            ['nombre' => 'Taekwondo', 'categoria' => 'Deportivo'],
+            ['nombre' => 'Voleibol', 'categoria' => 'Deportivo'],
         ];
 
-        foreach ($talleres as $taller) {
+        foreach ($eventos as $evento) {
             Evento::create([
-                'nombre'        => $taller['nombre'],
-                'descripcion'   => "Descripción de {$taller['nombre']}",
-                'categoria'     => $taller['categoria'],
-
+                'nombre'        => $evento['nombre'],
+                'descripcion'   => "Descripción de {$evento['nombre']}",
+                'categoria'     => $evento['categoria'],
                 'cupos'         => rand(10, 50),
-
                 'creado_por'    => $profesores->random()->id_usuario,
-
                 'fecha_inicio'  => Carbon::now()->addDays(rand(1, 30))->format('Y-m-d'),
                 'fecha_fin'     => Carbon::now()->addDays(rand(31, 90))->format('Y-m-d'),
-
             ]);
         }
 
