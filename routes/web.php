@@ -53,6 +53,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 //Reportes
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
     Route::get('/reportes/export/{tipo}/{formato}', [ReporteController::class, 'export'])
         ->name('reportes.export');
@@ -60,5 +61,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes/data/actividades', [ReporteController::class, 'actividadesData']);
     Route::get('/reportes/data/eventos', [ReporteController::class, 'eventosData']);
     Route::get('/reportes/data/inscripciones', [ReporteController::class, 'inscripcionesData']);
+    
 });
 
