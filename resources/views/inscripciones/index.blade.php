@@ -37,7 +37,7 @@
                         <!-- Editar -->
                         <button 
                             @click="openEdit({
-                                id_inscripcion: '{{ $i->id_inscripcion }}',
+                                id_inscripcion: {{ $i->id_inscripcion }},
                                 estado: '{{ $i->estado }}'
                             })"
                             class="bg-yellow-400 text-black px-3 py-1 rounded shadow hover:bg-yellow-500 transition">
@@ -65,9 +65,9 @@
     <!-- Importar modales -->
     @include('inscripciones.modal.create')
     @include('inscripciones.modal.edit')
-    @include('inscripciones.modal.delete')
 
 </div>
+
 <script>
 function inscripcionesController() {
     return {
@@ -86,9 +86,89 @@ function inscripcionesController() {
             this.modalEdit = true;
         },
 
+        submitEdit() {
+            const formData = new FormData();
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+            formData.append('_method', 'PUT');
+            formData.append('estado', this.editData.estado);
+            
+            const id = this.editData.id_inscripcion;
+            
+            fetch(`/inscripciones/${id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    this.closeAll();
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Actualizado!',
+                        text: 'El estado de la inscripción ha sido actualizado correctamente',
+                        confirmButtonColor: '#10b981',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    throw new Error('Error al actualizar');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Error!',
+                    text: 'Hubo un problema al actualizar la inscripción',
+                    confirmButtonColor: '#ef4444',
+                });
+            });
+        },
+
         openDelete(id) {
             this.deleteId = id;
-            this.modalDelete = true;
+            this.confirmarEliminar();
+        },
+
+        confirmarEliminar() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede deshacer",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Crear formulario dinámicamente
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/inscripciones/${this.deleteId}`;
+                    
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken;
+                    
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    
+                    form.appendChild(csrfInput);
+                    form.appendChild(methodInput);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
         },
 
         closeAll() {

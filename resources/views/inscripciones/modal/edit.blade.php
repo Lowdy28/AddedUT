@@ -17,8 +17,7 @@
             Editar Inscripción
         </h2>
 
-        <form method="POST" 
-              :action="`/inscripciones/${editData.id_inscripcion}`">
+        <form @submit.prevent="submitEdit()" x-ref="editForm">
             @csrf
             @method('PUT')
 
@@ -37,14 +36,57 @@
             <div class="flex justify-end gap-4">
                 <button type="button" 
                         @click="closeAll()"
-                        class="px-6 py-3 rounded-lg bg-gray-400 text-white font-semibold shadow-lg hover:bg-gray-500 transition">
+                        class="px-6 py-3 rounded-lg bg-red-600 text-white font-bold shadow-lg hover:bg-red-700 transition">
                     Cancelar
                 </button>
                 <button type="submit"
-                        class="px-6 py-3 rounded-lg bg-green-600 text-white font-semibold shadow-lg hover:bg-green-700 transition">
+                        class="px-6 py-3 rounded-lg bg-green-600 text-white font-bold shadow-lg hover:bg-green-700 transition">
                     Guardar Cambios
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+function submitEdit() {
+    const form = this.$refs.editForm;
+    const formData = new FormData(form);
+    const id = this.editData.id_inscripcion;
+    
+    fetch(`/inscripciones/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+        },
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            this.closeAll();
+            Swal.fire({
+                icon: 'success',
+                title: '¡Actualizado!',
+                text: 'El estado de la inscripción ha sido actualizado correctamente',
+                confirmButtonColor: '#10b981',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            throw new Error('Error al actualizar');
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'Hubo un problema al actualizar la inscripción',
+            confirmButtonColor: '#ef4444',
+        });
+    });
+}
+</script>

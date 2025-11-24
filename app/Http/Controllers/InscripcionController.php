@@ -18,6 +18,8 @@ class InscripcionController extends Controller
 
         // 🔥 NECESARIO PARA LOS MODALES (create y edit)
         $usuarios = Usuario::where('activo', true)->get();
+        
+        // Traer todos los eventos (sin filtro de fecha para evitar el error)
         $eventos = Evento::all();
 
         return view('inscripciones.index', compact('inscripciones','usuarios','eventos'));
@@ -25,10 +27,8 @@ class InscripcionController extends Controller
 
     public function create()
     {
-        // (Puedes dejarlo así aunque no lo uses si los modales están en index)
         $usuarios = Usuario::where('activo', true)->get();
         $eventos = Evento::all();
-
         return view('inscripciones.create', compact('usuarios','eventos'));
     }
 
@@ -48,11 +48,13 @@ class InscripcionController extends Controller
                 return back()->withErrors('Evento no encontrado.');
             }
 
-            if ($evento->cupo_disponible <= 0) {
+            // Verificar cupo disponible
+            if ($evento->cupos <= 0) {
                 DB::rollBack();
                 return back()->withErrors('No hay cupo disponible en este evento.');
             }
 
+            // Checar si ya está inscrito
             $exists = Inscripcion::where('id_usuario', $data['id_usuario'])
                         ->where('id_evento', $data['id_evento'])
                         ->exists();
@@ -62,13 +64,15 @@ class InscripcionController extends Controller
                 return back()->withErrors('El usuario ya está inscrito en este evento.');
             }
 
+            // Crear inscripcion
             Inscripcion::create([
                 'id_usuario' => $data['id_usuario'],
                 'id_evento' => $data['id_evento'],
                 'estado' => 'confirmada'
             ]);
 
-            $evento->decrement('cupo_disponible', 1);
+            // Decrementar cupo
+            $evento->decrement('cupos', 1);
 
             DB::commit();
 
@@ -80,69 +84,49 @@ class InscripcionController extends Controller
         }
     }
 
-    // 🔥 MODIFICADO SEGÚN TU SOLICITUD
-    public function show(Inscripcion $inscripcion)
+    public function show($id)
     {
-        return redirect()->route('inscripciones.index');
+        $inscripcion = Inscripcion::with(['usuario','evento'])->findOrFail($id);
+        return view('inscripciones.show', compact('inscripcion'));
     }
 
-    public function edit(Inscripcion $inscripcion)
+    public function edit($id)
     {
+        $inscripcion = Inscripcion::findOrFail($id);
         $usuarios = Usuario::where('activo', true)->get();
         $eventos = Evento::all();
-
         return view('inscripciones.edit', compact('inscripcion','usuarios','eventos'));
     }
 
-    public function update(Request $request, Inscripcion $inscripcion)
+    public function update(Request $request, $id)
     {
+        $inscripcion = Inscripcion::findOrFail($id);
+        
         $data = $request->validate([
-            'estado' => 'required|string|max:20',
+            'estado' => 'required|string|in:confirmada,pendiente,cancelada',
         ]);
 
-        $inscripcion->update($data);
+        $inscripcion->estado = $data['estado'];
+        $inscripcion->save();
 
-        return redirect()->route('inscripciones.index')->with('success', 'Inscripción actualizada.');
+        return redirect()->route('inscripciones.index')->with('success', 'Estado actualizado correctamente.');
     }
 
-    public function destroy(Inscripcion $inscripcion)
+    public function destroy($id)
     {
+        $inscripcion = Inscripcion::findOrFail($id);
+        
         DB::transaction(function () use ($inscripcion) {
             $evento = Evento::lockForUpdate()->find($inscripcion->id_evento);
-
+            
+            // Incrementar cupo al eliminar inscripción
             if ($evento) {
-                $evento->increment('cupo_disponible', 1);
+                $evento->increment('cupos', 1);
             }
-
+            
             $inscripcion->delete();
         });
 
         return redirect()->route('inscripciones.index')->with('success', 'Inscripción eliminada.');
     }
-
-    public function updateEstado(Request $request, $id)
-{
-    $request->validate([
-        'estado' => 'required|string|max:20'
-    ]);
-
-    $inscripcion = Inscripcion::find($id);
-
-    if (!$inscripcion) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Inscripción no encontrada.'
-        ], 404);
-    }
-
-    $inscripcion->estado = $request->estado;
-    $inscripcion->save();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Estado actualizado correctamente.',
-        'data' => $inscripcion
-    ]);
-}
-
 }

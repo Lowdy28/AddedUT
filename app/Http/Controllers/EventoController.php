@@ -11,7 +11,7 @@ class EventoController extends Controller
 {
     public function index()
     {
-        $eventos = Evento::orderBy('fecha_inicio','asc')->paginate(15);
+        $eventos = Evento::latest('created_at')->paginate(15);
         return view('eventos.index', compact('eventos'));
     }
 
