@@ -9,6 +9,9 @@ use Carbon\Carbon;
 
 class EventoSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $profesores = Usuario::where('rol', 'profesor')->get();
@@ -34,14 +37,18 @@ class EventoSeeder extends Seeder
         ];
 
         foreach ($eventos as $evento) {
+            
+            $randomCupos = rand(10, 50);
+
             Evento::create([
-                'nombre'        => $evento['nombre'],
-                'descripcion'   => "Descripción de {$evento['nombre']}",
-                'categoria'     => $evento['categoria'],
-                'cupos'         => rand(10, 50),
-                'creado_por'    => $profesores->random()->id_usuario,
-                'fecha_inicio'  => Carbon::now()->addDays(rand(1, 30))->format('Y-m-d'),
-                'fecha_fin'     => Carbon::now()->addDays(rand(31, 90))->format('Y-m-d'),
+                'nombre'          => $evento['nombre'],
+                'descripcion'     => "Descripción de {$evento['nombre']}",
+                'categoria'       => $evento['categoria'],
+                'cupos'           => $randomCupos,
+                'cupo_disponible' => $randomCupos,
+                'creado_por'      => $profesores->random()->id_usuario,
+                'fecha_inicio'    => Carbon::now()->addDays(rand(1, 30))->format('Y-m-d'),
+                'fecha_fin'       => Carbon::now()->addDays(rand(31, 90))->format('Y-m-d'),
             ]);
         }
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('eventos', function (Blueprint $table) {
         if (!Schema::hasColumn('eventos', 'cupo_disponible')) {
-            $table->integer('cupo_disponible')->nullable()->after('cupos');
+            $table->integer('cupo_disponible')->after('cupos');
         }
     });
 
