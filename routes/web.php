@@ -46,12 +46,14 @@ Route::middleware(['auth:web'])->group(function () {
 
     // AJAX para usuarios
     Route::get('/usuarios/buscar/ajax', [UsuarioController::class, 'buscarAjax'])->name('usuarios.buscar.ajax');
+
+    //Reportes
+    Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
 });
 
 //Reportes
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
     Route::get('/reportes/export/{tipo}/{formato}', [ReporteController::class, 'export'])
         ->name('reportes.export');
     Route::get('/reportes/data/usuarios', [ReporteController::class, 'usuariosData']);
