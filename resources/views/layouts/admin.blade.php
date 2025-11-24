@@ -147,6 +147,11 @@
             .main { margin-left:0; padding:1rem; }
         }
     </style>
+    <style>
+    [x-cloak] { 
+        display: none !important; 
+    }
+</style>
 </head>
 
 <body class="{{ (session('sidebar_collapsed') ? 'sidebar-collapsed' : '') }}">

@@ -20,6 +20,7 @@ class Inscripcion extends Model
         'estado'
     ];
 
+    // Relaciones
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
