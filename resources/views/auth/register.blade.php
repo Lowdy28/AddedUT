@@ -23,7 +23,7 @@
 <body>
 
 <div class="header">
-    <img src="{{ asset('imagenes/logo_AddedUT.png') }}" alt="Logo AddedUT">
+    <img src="{{ asset('imagenes/Logo AddedUT.png') }}" alt="Logo AddedUT">
     <h2>AddedUT</h2>
 </div>
 

@@ -120,7 +120,7 @@
 <body>
 
     <div class="header">
-        <img src="{{ asset('imagenes/logo_AddedUT.png') }}" alt="Logo AddeUT">
+        <img src="{{ asset('imagenes/Logo AddedUT.png') }}" alt="Logo AddeUT">
         <h2>AddeUT</h2>
     </div>
 
