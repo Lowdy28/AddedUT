@@ -3,80 +3,81 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
-use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class EventoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $eventos = Evento::latest('created_at')->paginate(15);
-        return view('eventos.index', compact('eventos'));
-    }
+        $buscar = $request->input('buscar');
 
-    public function create()
-    {
-        $profesores = Usuario::where('rol','profesor')->get();
-        return view('eventos.create', compact('profesores'));
+        $eventos = Evento::with('creador')
+            ->when($buscar, function ($q) use ($buscar) {
+                $q->where('nombre', 'like', "%$buscar%")
+                  ->orWhere('categoria', 'like', "%$buscar%");
+            })
+            ->orderBy('fecha_inicio', 'asc')
+            ->paginate(15);
+
+        return view('eventos.index', compact('eventos'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre_evento' => 'required|string|max:150',
+            'nombre' => 'required|string|max:150',
             'descripcion' => 'nullable|string',
             'categoria' => 'nullable|string|max:50',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'cupo_maximo' => 'required|integer|min:1',
-            'lugar' => 'nullable|string|max:100',
-            'id_profesor' => 'nullable|exists:usuarios,id_usuario',
-            'creado_por' => 'nullable|exists:usuarios,id_usuario',
+            'cupos' => 'required|integer|min:1',
         ]);
 
-        $data['cupo_disponible'] = $data['cupo_maximo'];
-        $evento = Evento::create($data);
+        $evento = Evento::create([
+            'nombre' => $data['nombre'],
+            'descripcion' => $data['descripcion'] ?? 'Sin descripción',
+            'categoria' => $data['categoria'] ?? 'General',
+            'cupos' => $data['cupos'],
+            'creado_por' => Auth::id(),
+            'fecha_inicio' => $data['fecha_inicio'],
+            'fecha_fin' => $data['fecha_fin'],
+        ]);
 
-        return redirect()->route('eventos.index')->with('success', 'Evento creado.');
+        return response()->json(['message' => 'Evento creado correctamente']);
     }
 
     public function show(Evento $evento)
     {
-        $evento->load('inscripciones.usuario');
         return view('eventos.show', compact('evento'));
-    }
-
-    public function edit(Evento $evento)
-    {
-        $profesores = Usuario::where('rol','profesor')->get();
-        return view('eventos.edit', compact('evento','profesores'));
     }
 
     public function update(Request $request, Evento $evento)
     {
         $data = $request->validate([
-            'nombre_evento' => 'required|string|max:150',
+            'nombre' => 'required|string|max:150',
             'descripcion' => 'nullable|string',
             'categoria' => 'nullable|string|max:50',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'cupo_maximo' => 'required|integer|min:1',
-            'lugar' => 'nullable|string|max:100',
-            'id_profesor' => 'nullable|exists:usuarios,id_usuario',
+            'cupos' => 'required|integer|min:1',
         ]);
 
-        $inscritas = $evento->inscripciones()->count();
-        $data['cupo_disponible'] = max(0, $data['cupo_maximo'] - $inscritas);
+        $evento->update([
+            'nombre' => $data['nombre'],
+            'descripcion' => $data['descripcion'] ?? 'Sin descripción',
+            'categoria' => $data['categoria'] ?? 'General',
+            'cupos' => $data['cupos'],
+            'fecha_inicio' => $data['fecha_inicio'],
+            'fecha_fin' => $data['fecha_fin'],
+        ]);
 
-        $evento->update($data);
-
-        return redirect()->route('eventos.index')->with('success', 'Evento actualizado.');
+        return response()->json(['message' => 'Evento actualizado correctamente']);
     }
 
     public function destroy(Evento $evento)
     {
         $evento->delete();
-        return redirect()->route('eventos.index')->with('success', 'Evento eliminado.');
+        return response()->json(['message' => 'Evento eliminado correctamente']);
     }
 }
