@@ -23,20 +23,45 @@
         <div class="flex justify-end gap-4">
             <button type="button" 
                     @click="closeAll()"
-                    class="px-6 py-3 rounded-lg bg-gray-400 text-white font-semibold shadow-lg hover:bg-gray-500 transition">
+                    class="px-6 py-3 rounded-lg bg-red-600 text-white font-bold shadow-lg hover:bg-red-700 transition">
                 Cancelar
             </button>
 
-            <form :action="`/inscripciones/${deleteId}`" 
-                  method="POST" 
-                  class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="px-6 py-3 rounded-lg bg-red-600 text-white font-semibold shadow-lg hover:bg-red-700 transition">
-                    Eliminar
-                </button>
-            </form>
+            <button type="button"
+                    @click="confirmarEliminar()"
+                    class="px-6 py-3 rounded-lg bg-red-600 text-white font-bold shadow-lg hover:bg-red-700 transition">
+                Eliminar
+            </button>
         </div>
+
+        <!-- Formulario oculto para eliminar -->
+        <form :id="'delete-form-' + deleteId" 
+              :action="`/inscripciones/${deleteId}`" 
+              method="POST" 
+              style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
     </div>
 </div>
+
+<script>
+function confirmarEliminar() {
+    const deleteId = Alpine.store ? Alpine.raw(this.deleteId) : this.deleteId;
+    
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + deleteId).submit();
+        }
+    });
+}
+</script>
