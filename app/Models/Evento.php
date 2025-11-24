@@ -14,27 +14,20 @@ class Evento extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nombre_evento',
+        'nombre',           // ← Esta columna
         'descripcion',
         'categoria',
         'fecha_inicio',
         'fecha_fin',
-        'cupo_maximo',
-        'cupo_disponible',
+        'cupos',           // ← Esta columna
         'lugar',
-        'id_profesor',
         'creado_por',
         'fecha_creacion'
     ];
 
-    public function profesor()
-    {
-        return $this->belongsTo(Usuario::class, 'id_profesor');
-    }
-
     public function creador()
     {
-        return $this->belongsTo(Usuario::class, 'creado_por');
+        return $this->belongsTo(Usuario::class, 'creado_por', 'id_usuario');
     }
 
     public function inscripciones()
