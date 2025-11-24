@@ -14,7 +14,6 @@
         <form @submit.prevent="submitCreate($event)">
             @csrf
 
-            <!-- Nombre -->
             <div class="mb-4">
                 <label for="nombre_create" class="font-semibold text-gray-900">Nombre</label>
                 <input type="text" id="nombre_create" x-model="createData.nombre" required
@@ -22,7 +21,6 @@
                        class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
             </div>
 
-            <!-- Descripción -->
             <div class="mb-4">
                 <label for="descripcion_create" class="font-semibold text-gray-900">Descripción</label>
                 <textarea id="descripcion_create" rows="3"
@@ -31,7 +29,6 @@
                           class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900"></textarea>
             </div>
 
-            <!-- Categoría -->
             <div class="mb-4">
                 <label for="categoria_create" class="font-semibold text-gray-900">Categoría</label>
                 <select id="categoria_create" x-model="createData.categoria" required
@@ -43,7 +40,6 @@
                 </select>
             </div>
 
-            <!-- Cupos -->
             <div class="mb-4">
                 <label for="cupos_create" class="font-semibold text-gray-900">Cupos</label>
                 <input type="number" id="cupos_create" x-model="createData.cupos" required min="1"
@@ -51,18 +47,18 @@
                        class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
             </div>
 
-            <!-- Fecha Inicio -->
-            <div class="mb-4">
-                <label for="fecha_inicio_create" class="font-semibold text-gray-900">Fecha de Inicio</label>
-                <input type="date" id="fecha_inicio_create" x-model="createData.fecha_inicio" required
-                       class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
-            </div>
+            <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="fecha_inicio_create" class="font-semibold text-gray-900">Fecha de Inicio</label>
+                    <input type="date" id="fecha_inicio_create" x-model="createData.fecha_inicio" required
+                           class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
+                </div>
 
-            <!-- Fecha Fin -->
-            <div class="mb-4">
-                <label for="fecha_fin_create" class="font-semibold text-gray-900">Fecha de Fin</label>
-                <input type="date" id="fecha_fin_create" x-model="createData.fecha_fin" required
-                       class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
+                <div>
+                    <label for="fecha_fin_create" class="font-semibold text-gray-900">Fecha de Fin</label>
+                    <input type="date" id="fecha_fin_create" x-model="createData.fecha_fin" required
+                           class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
+                </div>
             </div>
 
             <div class="flex justify-end gap-4 mt-6">

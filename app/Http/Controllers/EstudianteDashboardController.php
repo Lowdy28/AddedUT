@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Evento;
+use App\Models\Inscripcion;
+use Illuminate\Support\Facades\Auth;
+
+class EstudianteDashboardController extends Controller
+{
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+
+        $eventos = Evento::orderBy('fecha_inicio', 'asc')
+                         ->paginate(12);
+
+        $misInscripciones = Inscripcion::where('id_usuario', $user->id_usuario)
+                                       ->with('evento')
+                                       ->orderBy('fecha_inscripcion','desc')
+                                       ->get();
+
+        return view('estudiante.dashboard', compact('eventos','misInscripciones'));
+    }
+}

@@ -248,6 +248,26 @@
     })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+@if(session('success'))
+<div class="bg-green-500 text-white px-6 py-4 rounded-lg mb-4 shadow-lg">
+    <div class="flex items-center">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        {{ session('success') }}
+    </div>
+</div>
+@endif
 
+@if($errors->any())
+<div class="bg-red-500 text-white px-6 py-4 rounded-lg mb-4 shadow-lg">
+    <div class="font-semibold mb-2">Error:</div>
+    <ul class="list-disc list-inside">
+        @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 </body>
 </html>
