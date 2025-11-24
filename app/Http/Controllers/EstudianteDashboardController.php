@@ -21,6 +21,8 @@ class EstudianteDashboardController extends Controller
                                        ->orderBy('fecha_inscripcion','desc')
                                        ->get();
 
-        return view('estudiante.dashboard', compact('eventos','misInscripciones'));
+        $inscritoEventIds = $misInscripciones->pluck('id_evento')->toArray();
+
+        return view('estudiante.dashboard', compact('eventos','misInscripciones', 'inscritoEventIds'));
     }
 }
