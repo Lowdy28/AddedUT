@@ -22,7 +22,7 @@
                     <p class="mb-1"><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($evento->fecha_inicio)->format('d/m/Y') }}</p>
                     <p class="mb-3"><strong>Cupos:</strong> {{ $evento->cupo_disponible ?? $evento->cupos }}</p>
 
-                    <form method="POST" action="{{ route('estudiante.inscripciones.store') }}">
+                    <form method="POST" action="{{ route('estudiante.inscripciones.store', $evento->id_evento) }}">
                         @csrf
                         <input type="hidden" name="id_usuario" value="{{ auth()->user()->id_usuario }}">
                         <input type="hidden" name="id_evento" value="{{ $evento->id_evento }}">

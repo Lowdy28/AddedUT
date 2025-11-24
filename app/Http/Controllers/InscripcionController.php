@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Inscripcion;
 use App\Models\Evento;
-use App\Models\Usuario;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class InscripcionController extends Controller
 {
@@ -16,10 +17,7 @@ class InscripcionController extends Controller
             ->orderBy('fecha_inscripcion','desc')
             ->paginate(20);
 
-        // 🔥 NECESARIO PARA LOS MODALES (create y edit)
-        $usuarios = Usuario::where('activo', true)->get();
-        
-        // Traer todos los eventos (sin filtro de fecha para evitar el error)
+        $usuarios = \App\Models\Usuario::where('activo', true)->get();
         $eventos = Evento::all();
 
         return view('inscripciones.index', compact('inscripciones','usuarios','eventos'));
@@ -27,63 +25,94 @@ class InscripcionController extends Controller
 
     public function create()
     {
-        $usuarios = Usuario::where('activo', true)->get();
+        $usuarios = \App\Models\Usuario::where('activo', true)->get();
         $eventos = Evento::all();
         return view('inscripciones.create', compact('usuarios','eventos'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Evento $evento = null)
     {
-        $data = $request->validate([
-            'id_usuario' => 'required|exists:usuarios,id_usuario',
-            'id_evento' => 'required|exists:eventos,id_evento',
-        ]);
+        $eventoParaInscribir = $evento ?? Evento::findOrFail($request->input('id_evento'));
+        $eventId = $eventoParaInscribir->id_evento;
+        $userId = Auth::id();
+        
+        // 1. Verificación de autenticación
+        if (!$userId) {
+             return back()->with('error', 'Error de Autenticación: Debes iniciar sesión para inscribirte.');
+        }
 
-        DB::beginTransaction();
+        $existeInscripcion = Inscripcion::where('id_usuario', $userId)
+                                       ->where('id_evento', $eventId)
+                                       ->exists();
+
+        if ($existeInscripcion) {
+            return back()->with('error', 'Ya estás inscrito en este evento.');
+        }
+
+        // 2. Validación de cupo
+        if (($eventoParaInscribir->cupo_disponible ?? 0) <= 0) {
+            return back()->with('error', 'Lo sentimos, los cupos para este evento se han agotado.');
+        }
+
         try {
-            $evento = Evento::lockForUpdate()->find($data['id_evento']);
+            DB::beginTransaction();
 
-            if (!$evento) {
-                DB::rollBack();
-                return back()->withErrors('Evento no encontrado.');
-            }
-
-            // Verificar cupo disponible
-            if ($evento->cupos <= 0) {
-                DB::rollBack();
-                return back()->withErrors('No hay cupo disponible en este evento.');
-            }
-
-            // Checar si ya está inscrito
-            $exists = Inscripcion::where('id_usuario', $data['id_usuario'])
-                        ->where('id_evento', $data['id_evento'])
-                        ->exists();
-
-            if ($exists) {
-                DB::rollBack();
-                return back()->withErrors('El usuario ya está inscrito en este evento.');
-            }
-
-            // Crear inscripcion
+            // 3. Creación de la inscripción (con fecha obligatoria)
             Inscripcion::create([
-                'id_usuario' => $data['id_usuario'],
-                'id_evento' => $data['id_evento'],
-                'estado' => 'confirmada'
+                'id_usuario' => $userId,
+                'id_evento' => $eventId,
+                'estado' => 'confirmada',
+                'fecha_inscripcion' => Carbon::now() 
             ]);
 
-            // Decrementar cupo
-            $evento->decrement('cupos', 1);
+            // 4. Decremento de cupo
+            $eventoParaInscribir->decrement('cupo_disponible'); 
 
             DB::commit();
 
-            return redirect()->route('inscripciones.index')->with('success', 'Inscripción realizada.');
+            // 5. Redirección CORREGIDA a showEstudiante
+            return redirect()->route('estudiante.eventos.showEstudiante', $eventoParaInscribir->id_evento)
+                             ->with('success', '¡Inscripción exitosa! El cupo ha sido reservado.');
 
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors('Error al inscribir: ' . $e->getMessage());
+            
+            // Mensaje de diagnóstico para ver el error exacto (FALLO CRÍTICO)
+            return back()->with('error', 'FALLO CRÍTICO (DB/Lógica): ' . $e->getMessage()); 
         }
     }
 
+    public function destroyByEvent(Evento $evento)
+    {
+        $userId = Auth::id();
+        
+        $inscripcion = Inscripcion::where('id_usuario', $userId)
+                                 ->where('id_evento', $evento->id_evento)
+                                 ->first();
+
+        if (!$inscripcion) {
+            return back()->with('error', 'No estás inscrito en este evento.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $inscripcion->delete();
+            // Incrementamos 'cupo_disponible'
+            $evento->increment('cupo_disponible'); 
+
+            DB::commit();
+
+            // Redirección CORREGIDA a showEstudiante
+            return redirect()->route('estudiante.eventos.showEstudiante', $evento->id_evento)
+                             ->with('success', 'Inscripción cancelada correctamente.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error al cancelar la inscripción: ' . $e->getMessage());
+        }
+    }
+    
     public function show($id)
     {
         $inscripcion = Inscripcion::with(['usuario','evento'])->findOrFail($id);
@@ -93,7 +122,7 @@ class InscripcionController extends Controller
     public function edit($id)
     {
         $inscripcion = Inscripcion::findOrFail($id);
-        $usuarios = Usuario::where('activo', true)->get();
+        $usuarios = \App\Models\Usuario::where('activo', true)->get();
         $eventos = Evento::all();
         return view('inscripciones.edit', compact('inscripcion','usuarios','eventos'));
     }
@@ -101,15 +130,9 @@ class InscripcionController extends Controller
     public function update(Request $request, $id)
     {
         $inscripcion = Inscripcion::findOrFail($id);
-        
-        $data = $request->validate([
-            'estado' => 'required|string|in:confirmada,pendiente,cancelada',
-        ]);
-
-        $inscripcion->estado = $data['estado'];
-        $inscripcion->save();
-
-        return redirect()->route('inscripciones.index')->with('success', 'Estado actualizado correctamente.');
+        $data = $request->validate(['estado' => 'required|string']);
+        $inscripcion->update($data);
+        return redirect()->route('inscripciones.index')->with('success', 'Estado actualizado.');
     }
 
     public function destroy($id)
@@ -118,12 +141,10 @@ class InscripcionController extends Controller
         
         DB::transaction(function () use ($inscripcion) {
             $evento = Evento::lockForUpdate()->find($inscripcion->id_evento);
-            
-            // Incrementar cupo al eliminar inscripción
             if ($evento) {
-                $evento->increment('cupos', 1);
+                // Aseguramos que esta versión de destroy también usa 'cupo_disponible' si se usa en producción.
+                $evento->increment('cupo_disponible'); 
             }
-            
             $inscripcion->delete();
         });
 
