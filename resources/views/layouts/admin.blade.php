@@ -161,7 +161,7 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="Sidebar">
         <div class="brand">
-            <img src="{{ asset('imagenes/logo.png') }}" alt="logo" style="max-width:140px; display:block; margin:0 auto 8px;">
+            <img src="{{ asset('imagenes/Logo AddedUT1.png') }}" alt="logo" style="max-width:140px; display:block; margin:0 auto 8px;">
             <div style="opacity:.9; font-size:.85rem;">AddedUT</div>
         </div>
 

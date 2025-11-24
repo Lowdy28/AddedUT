@@ -34,4 +34,9 @@ class Evento extends Model
     {
         return $this->hasMany(Inscripcion::class, 'id_evento');
     }
+
+    public function profesor()
+    {
+        return $this->belongsTo(Usuario::class, 'creado_por', 'id_usuario');
+    }
 }

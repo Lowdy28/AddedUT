@@ -209,7 +209,7 @@
 
 <body>
     <main>
-        <img src="{{ asset('imagenes/logo.png') }}" alt="Logo AddedUT" class="logo-img">
+        <img src="{{ asset('imagenes/Logo AddedUT1.png') }}" alt="Logo AddedUT" class="logo-img">
 
         <h1>Bienvenido a <span class="highlight">AddedUT</span></h1>
         <h2>Plataforma de Actividades Extracurriculares<br>Universidad Tecnológica de Tecámac</h2>
