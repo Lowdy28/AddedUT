@@ -11,6 +11,7 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EstudianteDashboardController;
 use App\Http\Controllers\EstudianteEventoController;
+use App\Http\Controllers\ProfesorDashboardController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -40,18 +41,17 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('usuarios', UsuarioController::class);
     Route::get('/usuarios/buscar/ajax', [UsuarioController::class, 'buscarAjax'])->name('usuarios.buscar.ajax');
 
-
     Route::resource('eventos', EventoController::class);
-
     Route::resource('inscripciones', InscripcionController::class);
-
     Route::resource('notificaciones', NotificacionController::class);
+
     Route::post('/notificaciones/{notificacion}/marcar-leida', 
         [NotificacionController::class, 'marcarLeida']
     )->name('notificaciones.marcarLeida');
 
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
+    // Rutas para estudiantes
     Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':estudiante'])->group(function () {
 
         Route::get('/estudiante/dashboard', 
@@ -86,6 +86,7 @@ Route::middleware(['auth:web'])->group(function () {
     });
 });
 
+// Rutas de reportes (main)
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/reportes/export/{tipo}/{formato}', [ReporteController::class, 'export'])
@@ -94,4 +95,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes/data/actividades', [ReporteController::class, 'actividadesData']);
     Route::get('/reportes/data/eventos', [ReporteController::class, 'eventosData']);
     Route::get('/reportes/data/inscripciones', [ReporteController::class, 'inscripcionesData']);
+});
+
+// Dashboard del profesor
+Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':profesor'])->group(function () {
+    Route::get('/profesor/dashboard', 
+        [ProfesorDashboardController::class, 'index']
+    )->name('profesor.dashboard');
 });
