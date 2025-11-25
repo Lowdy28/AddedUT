@@ -33,4 +33,8 @@ class Usuario extends Authenticatable
     {
         return $this->password;
     }
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class, 'id_usuario', 'id_usuario');
+    }
 }
