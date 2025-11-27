@@ -1,4 +1,4 @@
-<div x-show="modalCreate" 
+<div x-show="modalCreate"
      x-cloak
      @click.self="closeAll()"
      class="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm"
@@ -8,7 +8,7 @@
      x-transition:leave="transition duration-200"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-     
+
     <div class="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl"
          style="color:#111 !important;"
          @click.stop>
@@ -22,8 +22,8 @@
 
             <div class="mb-4">
                 <label class="font-semibold block mb-2">Usuario</label>
-                <select name="id_usuario" 
-                        required 
+                <select name="id_usuario"
+                        required
                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none">
                     <option value="" disabled selected>Seleccione un usuario</option>
                     @foreach ($usuarios as $u)
@@ -34,8 +34,8 @@
 
             <div class="mb-6">
                 <label class="font-semibold block mb-2">Evento</label>
-                <select name="id_evento" 
-                        required 
+                <select name="id_evento"
+                        required
                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none">
                     <option value="" disabled selected>Seleccione un evento</option>
                     @foreach ($eventos as $e)
@@ -47,8 +47,8 @@
             </div>
 
             <div class="flex justify-end gap-4">
-                <button type="button" 
-                        @click="closeAll()" 
+                <button type="button"
+                        @click="closeAll()"
                         class="px-6 py-3 rounded-lg bg-red-600 text-white font-bold shadow-lg hover:bg-red-700 transition">
                     Cancelar
                 </button>
@@ -60,3 +60,18 @@
         </form>
     </div>
 </div>
+
+@if (session('success'))
+<script>
+    // Se asume que has incluido la librería SweetAlert2 (Swal)
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session('success') }}', // Mostrar el mensaje de la sesión
+            showConfirmButton: false,
+            timer: 2500
+        });
+    });
+</script>
+@endif
