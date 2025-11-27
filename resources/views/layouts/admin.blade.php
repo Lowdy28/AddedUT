@@ -182,9 +182,6 @@
                 <span class="icon">📝</span> Inscripciones
             </a>
 
-            <a href="{{ route('notificaciones.index') }}" class="{{ request()->routeIs('notificaciones.*') ? 'active' : '' }}">
-                <span class="icon">🔔</span> Notificaciones
-            </a>
 
             <a href="{{ route('reportes.index') }}" class="{{ request()->routeIs('reportes.*') ? 'active' : '' }}">
                 <span class="icon">📑</span> Reportes
