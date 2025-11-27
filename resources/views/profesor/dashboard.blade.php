@@ -1,146 +1,154 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AddedUT - Mis Talleres</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/feather-icons"></script>
+@extends('layouts.profesor')
+@section('title', 'Mis Talleres')
 
-    <style>
-        /* --- Copié (y reduje) los estilos principales del layout de estudiante --- */
-        :root {
-            --color-uttec-blue-dark: #002D62;
-            --color-uttec-green: #00A86B;
-            --color-uttec-white: #FFFFFF;
-            --color-text-dark: #2c2c2c;
-            --color-text-light: #555555;
-            --color-accent-blue: #004C99;
-            --color-accent-red: #E74C3C;
-            --color-glass-light: rgba(255,255,255,0.9);
-            --shadow-card: 0 15px 45px rgba(0,45,98,0.15), 0 0 10px rgba(0,0,0,0.05) inset;
-            --color-footer-bg: #F4F6F9;
-        }
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Inter',sans-serif;background:var(--color-footer-bg);color:var(--color-text-dark);min-height:100vh;line-height:1.6;scroll-behavior:smooth;}
-        a{text-decoration:none;color:inherit}
-        .feather{width:20px;height:20px;stroke-width:2.5}
+@section('content')
 
-        header{position:fixed;top:0;left:0;width:100%;background:var(--color-glass-light);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,45,98,0.1);padding:0.8rem 3rem;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
-        .logo{font-size:2rem;font-weight:800;color:var(--color-uttec-blue-dark);display:flex;align-items:center;gap:10px}
-        .logo span{color:var(--color-uttec-green)}
-        nav{display:flex;align-items:center;gap:2rem}
-        nav a, nav button{color:var(--color-uttec-blue-dark);font-weight:600;padding:0.5rem 0;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px}
-        nav a:hover{color:var(--color-uttec-green)}
-        main{padding-top:100px;padding-bottom:5rem;max-width:1300px;margin:auto;padding-left:3rem;padding-right:3rem;min-height:calc(100vh - 80px)}
-        .card{background:var(--color-uttec-white);border-radius:12px;padding:1.25rem;border:1px solid rgba(0,45,98,0.05);box-shadow:var(--shadow-card)}
-        .card + .card{margin-top:1.25rem}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem}
-        .badge{display:inline-block;padding:0.25rem 0.6rem;border-radius:999px;font-weight:700}
-        footer{background:var(--color-uttec-white);color:var(--color-text-light);padding:3rem 0 1rem;border-top:5px solid var(--color-uttec-blue-dark);box-shadow:0 -5px 15px rgba(0,45,98,0.05)}
-        .footer-content{max-width:1300px;margin:0 auto;padding:0 3rem;display:flex;justify-content:space-between;gap:4rem;flex-wrap:wrap}
-        .footer-bottom{text-align:center;padding:1rem 0 0 0;margin-top:2rem;border-top:1px solid rgba(0,45,98,0.1);font-size:0.9rem;color:#888}
-        #scrollTopButton{display:none;position:fixed;bottom:30px;right:30px;z-index:99;border:none;background:var(--color-uttec-green);color:white;padding:15px;border-radius:50%;box-shadow:0 5px 15px rgba(0,168,107,0.6)}
-    </style>
-</head>
-<body>
-    <header>
-        <a href="{{ route(auth()->user()->rol === 'estudiante' ? 'estudiante.dashboard' : (auth()->user()->rol === 'profesor' ? 'profesor.dashboard' : 'dashboard')) }}" class="logo">
-            <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>
-            Added<span style="color:var(--color-uttec-green);">UT</span>
-        </a>
+{{-- Script simple para el modal --}}
+<script>
+    function toggleModal(modalID){
+        const modal = document.getElementById(modalID);
+        modal.classList.toggle("hidden");
+        modal.classList.toggle("flex");
+        document.body.style.overflow = modal.classList.contains("flex") ? "hidden" : "auto";
+    }
+</script>
 
-        <nav>
-            @if(auth()->user()->rol === 'estudiante')
-                <a href="{{ route('estudiante.dashboard') }}"><i data-feather="grid" class="feather"></i> Inicio</a>
-                <a href="{{ route('estudiante.eventos.index') }}"><i data-feather="calendar" class="feather"></i> Eventos</a>
-                <a href="{{ route('estudiante.profile.edit') }}"><i data-feather="user" class="feather"></i> Perfil</a>
-            @elseif(auth()->user()->rol === 'profesor')
-                <a href="{{ route('profesor.dashboard') }}"><i data-feather="grid" class="feather"></i> Inicio</a>
-                <a href="{{ route('eventos.index') }}"><i data-feather="calendar" class="feather"></i> Mis Eventos</a>
-                <a href="{{ route('profile.edit') }}"><i data-feather="user" class="feather"></i> Perfil</a>
-            @else
-                <a href="{{ route('dashboard') }}"><i data-feather="grid" class="feather"></i> Dashboard</a>
-            @endif
+{{-- Header al estilo de la captura --}}
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 flex items-center gap-3">
+            <i data-feather="layers" class="w-8 h-8 text-uttec-green"></i>
+            Gestión de Actividades
+        </h1>
+        <p class="text-gray-600 mt-2 text-lg">Administra tus talleres extracurriculares.</p>
+    </div>
+    
+    {{-- Botón de acción principal (Verde como en la captura) --}}
+    <button onclick="toggleModal('modal-crear')" class="btn-uttec-green px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-md">
+        <i data-feather="plus-square" class="w-5 h-5"></i>
+        Crear Nuevo Taller
+    </button>
+</div>
 
-            <form method="POST" action="{{ route('logout') }}" style="display:inline">
-                @csrf
-                <button type="submit" class="logout-btn"><i data-feather="log-out" class="feather"></i> Salir</button>
-            </form>
-        </nav>
-    </header>
 
-    <main>
-        <div class="events-header" style="margin-bottom:1.5rem">
-            <h2 style="font-size:2rem;color:var(--color-uttec-blue-dark)">Mis Talleres</h2>
+{{-- Grid de Tarjetas (Estilo Captura) --}}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    @forelse($talleres as $taller)
+        {{-- TARJETA BLANCA --}}
+        <div class="bg-white rounded-[20px] shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
+            
+            {{-- 1. Encabezado con "Imagen" y Badge --}}
+            <div class="h-48 bg-gradient-to-br from-blue-600 to-indigo-800 relative flex items-center justify-center p-4">
+                <div class="absolute top-4 left-4 bg-blue-900/80 text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg shadow-sm backdrop-blur-sm">
+                   Taller
+                </div>
+                {{-- Icono gigante de fondo si no hay imagen --}}
+                <i data-feather="image" class="w-20 h-20 text-white/20"></i>
+                <h3 class="absolute bottom-4 left-4 text-white text-xl font-bold drop-shadow-md line-clamp-2 pr-4">
+                    {{ $taller->nombre }}
+                </h3>
+            </div>
+
+            {{-- 2. Cuerpo de la tarjeta --}}
+            <div class="p-6">
+                {{-- Fechas y Ubicación --}}
+                <div class="flex flex-col gap-2 mb-4 text-sm text-gray-600 font-medium">
+                    <div class="flex items-center gap-2">
+                        <i data-feather="calendar" class="w-4 h-4 text-uttec-green"></i>
+                        <span>Inicio: {{ \Carbon\Carbon::parse($taller->fecha_inicio)->format('d M Y, H:i') }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-feather="map-pin" class="w-4 h-4 text-red-500"></i>
+                        <span>Campus UTTEC</span>
+                    </div>
+                </div>
+
+                {{-- Descripción --}}
+                <p class="text-gray-500 text-sm mb-6 line-clamp-3 leading-relaxed">
+                    {{ $taller->descripcion ?? 'Sin descripción detallada para esta actividad.' }}
+                </p>
+
+                {{-- 3. Pie de tarjeta (Acciones de Profesor) --}}
+                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                    
+                    {{-- Conteo de Cupos (Estilo badge verde claro de la captura) --}}
+                    <div class="flex items-center gap-2 bg-[#e6f4ed] text-uttec-green px-4 py-2 rounded-xl font-bold text-sm">
+                        <i data-feather="users" class="w-4 h-4"></i>
+                        <span>{{ $taller->inscritos->count() }} / {{ $taller->cupos }} Inscritos</span>
+                    </div>
+
+                    {{-- Botones Editar/Eliminar --}}
+                    <div class="flex items-center gap-1">
+                        <a href="{{ route('eventos.edit', $taller->id_evento) }}" class="p-2 text-gray-400 hover:text-yellow-500 hover:bg-yellow-50 rounded-lg transition" title="Editar">
+                            <i data-feather="edit-3" class="w-5 h-5"></i>
+                        </a>
+                        <form action="{{ route('eventos.destroy', $taller->id_evento) }}" method="POST" onsubmit="return confirm('¿Eliminar este taller?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar">
+                                <i data-feather="trash-2" class="w-5 h-5"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                 {{-- Botón pequeño para ver lista de alumnos --}}
+                 <div class="mt-4 text-center">
+                    <button onclick="toggleModal('modal-alumnos-{{$taller->id_evento}}')" class="text-sm text-uttec-green hover:underline font-medium w-full py-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                        Ver lista de alumnos <i data-feather="chevron-down" class="w-4 h-4 inline"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="grid">
-            @if($talleres->isEmpty())
-                <div class="card">Aún no has creado talleres.</div>
-            @else
-                @foreach($talleres as $taller)
-                    <div class="card">
-                        <div style="display:flex;justify-content:space-between;align-items:center">
-                            <div>
-                                <h3 style="margin-bottom:6px">{{ $taller->nombre }}</h3>
-                                <p style="margin-bottom:8px;color:#666">{{ $taller->descripcion ?? 'Sin descripción' }}</p>
-                                <div style="font-size:0.9rem;color:#444">
-                                    <strong>Inicio:</strong> {{ \Carbon\Carbon::parse($taller->fecha_inicio)->isoFormat('DD MMMM YYYY') }} |
-                                    <strong>Fin:</strong> {{ \Carbon\Carbon::parse($taller->fecha_fin)->isoFormat('DD MMMM YYYY') }}
-                                </div>
+        {{-- MODAL LISTA DE ALUMNOS (No lo incluí antes, pero debe seguir aquí) --}}
+        <div id="modal-alumnos-{{$taller->id_evento}}" class="fixed inset-0 z-[60] hidden items-end md:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div class="bg-white rounded-t-3xl md:rounded-3xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col animate-fade-in-up">
+                <div class="p-5 border-b flex justify-between items-center bg-gray-50">
+                    <h3 class="font-bold text-lg text-gray-800">Alumnos en: {{ Str::limit($taller->nombre, 20) }}</h3>
+                    <button onclick="toggleModal('modal-alumnos-{{$taller->id_evento}}')" class="text-gray-400 hover:text-gray-700 bg-white p-1 rounded-full shadow-sm"><i data-feather="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="p-5 overflow-y-auto">
+                    @forelse($taller->inscritos as $inscripcion)
+                        <div class="flex items-center gap-3 mb-3 p-2 hover:bg-gray-50 rounded-lg border border-transparent hover:border-gray-100 transition">
+                            <div class="w-8 h-8 rounded-full bg-uttec-green/10 text-uttec-green flex items-center justify-center font-bold text-sm">
+                                {{ substr($inscripcion->usuario->nombre, 0, 1) }}
                             </div>
-                            <div style="text-align:right">
-                                <div class="badge" style="background:rgba(0,168,107,0.1);color:var(--color-uttec-blue-dark)">Cupos: {{ $taller->cupos }}</div>
-                                <div style="margin-top:8px;color:#777">Inscritos: {{ $taller->inscritos->count() }}</div>
+                            <div>
+                                <p class="font-semibold text-sm text-gray-800">{{ $inscripcion->usuario->nombre }}</p>
+                                <p class="text-xs text-gray-500">{{ $inscripcion->usuario->email }}</p>
                             </div>
                         </div>
-
-                        <hr style="margin:12px 0">
-
-                        <h4 style="margin-bottom:8px">Alumnos inscritos</h4>
-                        @if($taller->inscritos->isEmpty())
-                            <p style="color:#777">Aún no hay alumnos inscritos.</p>
-                        @else
-                            <ul style="list-style:none;padding-left:0;margin:0">
-                                @foreach($taller->inscritos as $ins)
-                                    <li style="padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.03)">
-                                        <strong>{{ $ins->usuario->nombre }}</strong>
-                                        <div style="font-size:0.85rem;color:#666">{{ $ins->usuario->email }}</div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                @endforeach
-            @endif
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>Added<span style="color:var(--color-uttec-green);">UT</span></h4>
-                <p>Plataforma para la gestión de actividades extracurriculares en la Universidad Tecnológica de Tlaxcala (UTTEC).</p>
-            </div>
-            <div class="footer-col">
-                <h4>Enlaces Rápidos</h4>
-                <a href="{{ route('estudiante.eventos.index') }}">Eventos</a>
-            </div>
-            <div class="footer-col">
-                <h4>Contacto</h4>
-                <address>uttecamac@uttecamac.edu.mx<br>(01-55) 59-38-84-00</address>
+                    @empty
+                        <p class="text-center text-gray-500 py-4">No hay alumnos inscritos.</p>
+                    @endforelse
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            &copy; {{ date('Y') }} Universidad Tecnológica de Tecámac (UTTEC). Todos los derechos reservados.
+    @empty
+        {{-- Estado vacío (Empty State) --}}
+        <div class="col-span-full flex flex-col items-center justify-center py-24 bg-white rounded-[20px] shadow-sm border border-gray-200 text-center px-4">
+            <div class="bg-gray-100 p-4 rounded-full mb-4">
+                <i data-feather="inbox" class="w-12 h-12 text-gray-300"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">No tienes actividades creadas</h3>
+            <p class="text-gray-500 mb-6 max-w-md">Comienza a crear talleres para que los estudiantes puedan inscribirse.</p>
+            <button onclick="toggleModal('modal-crear')" class="btn-uttec-green px-6 py-2.5 rounded-full font-bold flex items-center gap-2 shadow">
+                Crear mi primera actividad
+            </button>
         </div>
-    </footer>
+    @endforelse
+</div>
 
-    <button onclick="topFunction()" id="scrollTopButton" title="Volver al inicio" style="display:none">
-        <i data-feather="arrow-up" class="feather"></i>
-    </button>
 
-    <script>feather.replace();let mybutton=document.getElementById("scrollTopButton");window.onscroll=function(){if(document.body.scrollTop>100||document.documentElement.scrollTop>100){mybutton.style.display='block'}else{mybutton.style.display='none'}};function topFunction(){document.body.scrollTop=0;document.documentElement.scrollTop=0}</script>
-</body>
-</html>
+{{-- Animación para los modales --}}
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-fade-in-up { animation: fadeInUp 0.3s ease-out forwards; }
+</style>
+
+{{-- CLAVE: Incluir el modal desde el nuevo archivo --}}
+@include('profesor.modals.create') 
+
+@endsection
