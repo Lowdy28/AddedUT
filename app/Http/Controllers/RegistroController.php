@@ -21,6 +21,7 @@ class RegistroController extends Controller
             'email' => 'required|email|unique:usuarios,email',
             'password' => 'required|string|min:6|confirmed',
             'rol' => 'required|in:estudiante,profesor,admin',
+            'terms' => 'accepted', // ← agregado para términos y condiciones
         ]);
 
         $usuario = Usuario::create([
