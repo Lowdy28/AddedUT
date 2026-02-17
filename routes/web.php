@@ -19,6 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/terminos', 'terminos')->name('terminos'); // ← agregado
+
 Route::get('/registro', [RegistroController::class, 'mostrarFormulario'])->name('registro');
 Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
 

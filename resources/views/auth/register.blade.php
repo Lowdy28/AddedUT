@@ -5,24 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario | AddedUT</title>
     
-    {{-- Fuentes: Inter (Consistent with Welcome) --}}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    {{-- Íconos (Feather Icons) --}}
     <script src="https://unpkg.com/feather-icons"></script>
 
     <style>
-        /* Variables UTTEC (IDÉNTICAS a Welcome/Login) */
         :root {
-            --color-uttec-blue-dark: #002D62; /* Azul Marino UTTEC */
-            --color-uttec-green: #00DC82; /* Verde Intenso UTTEC (Acción/Highlight) */
-            --color-text-light: #F1F1F1; /* Texto en fondo oscuro */
+            --color-uttec-blue-dark: #002D62;
+            --color-uttec-green: #00DC82;
+            --color-text-light: #F1F1F1;
             --color-overlay-dark: rgba(0, 45, 98, 0.75);
             --color-overlay-light: rgba(0, 168, 107, 0.6);
-            --color-glass-bg: rgba(255, 255, 255, 0.1); /* Fondo del contenedor de registro */
+            --color-glass-bg: rgba(255, 255, 255, 0.1);
             --color-error: #FF5252;
         }
 
-        /* Reset y Base */
         * {
             margin: 0;
             padding: 0;
@@ -30,7 +26,6 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Fondo del Body (IDÉNTICO a Welcome/Login) */
         body {
             background: linear-gradient(135deg, var(--color-overlay-dark), var(--color-overlay-light)),
                         url('{{ asset('imagenes/background.jpg') }}') center/cover no-repeat fixed;
@@ -42,10 +37,9 @@
             justify-content: center;
             position: relative;
             animation: fadeZoomIn 1.2s ease both; 
-            padding: 20px 0; /* Espacio para que el formulario largo quepa */
+            padding: 20px 0;
         }
 
-        /* --- Encabezado con Logo (IDÉNTICO a Welcome/Login) --- */
         .header {
             position: absolute;
             top: 25px;
@@ -75,14 +69,14 @@
             height: 30px;
             color: var(--color-uttec-green);
         }
+
         .logo-title span {
             color: var(--color-uttec-green);
         }
 
-        /* Contenedor principal (IDÉNTICO al estilo Glassmorphism) */
         .container {
             width: 100%;
-            max-width: 450px; /* Un poco más ancho para campos adicionales */
+            max-width: 450px;
             background: var(--color-glass-bg);
             padding: 40px;
             border-radius: 18px;
@@ -111,7 +105,8 @@
             opacity: 0.9;
         }
 
-        input, select {
+        /* 🔥 AQUÍ ESTÁ LA CORRECCIÓN */
+        input:not([type="checkbox"]), select {
             width: 100%;
             padding: 12px 15px;
             border-radius: 10px;
@@ -120,7 +115,7 @@
             color: var(--color-uttec-blue-dark);
             outline: none;
             transition: box-shadow 0.3s ease;
-            -webkit-appearance: none; /* Estilo uniforme para select en navegadores */
+            -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
@@ -128,18 +123,15 @@
         input:focus, select:focus {
             box-shadow: 0 0 0 3px var(--color-uttec-green);
         }
-        
-        /* Aseguramos que el select mantenga el mismo estilo */
+
         select {
              background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="%23002D62" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
              background-repeat: no-repeat;
              background-position: right 10px center;
-             padding-right: 30px; /* Espacio para la flecha */
+             padding-right: 30px;
              cursor: pointer;
         }
 
-
-        /* Botón de Registro (Verde UTTEC Intenso - Acción Principal) */
         button {
             width: 100%;
             padding: 14px;
@@ -194,26 +186,11 @@
             opacity: 1;
             color: var(--color-uttec-green);
         }
-        
-        /* Animaciones IDÉNTICAS al Welcome */
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes fadeZoomIn { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
-        
-        @media (max-width: 480px) {
-            .container {
-                max-width: 90%;
-                padding: 30px;
-            }
-        }
     </style>
 </head>
 
 <body>
 
-    {{-- Encabezado con logo estilizado AddedUT --}}
     <div class="header">
         <a href="/" class="logo-title"> 
             <i data-feather="book-open" class="feather"></i>
@@ -241,12 +218,20 @@
 
             <label for="rol">Rol:</label>
             <select name="rol" id="rol" required>
-                <option value="" disabled {{ old('rol') == '' ? 'selected' : '' }}>Seleccione su rol (Estudiante/Profesor)</option>
+                <option value="" disabled {{ old('rol') == '' ? 'selected' : '' }}>Seleccione su rol</option>
                 <option value="estudiante" {{ old('rol')=='estudiante' ? 'selected':'' }}>Estudiante</option>
                 <option value="profesor" {{ old('rol')=='profesor' ? 'selected':'' }}>Profesor</option>
-                {{-- Ocultar Admin de la selección pública --}}
-                {{-- <option value="admin" {{ old('rol')=='admin' ? 'selected':'' }}>Admin</option> --}}
             </select>
+
+            <div style="margin-top:20px; text-align:left; font-size:0.9rem;">
+                <input type="checkbox" name="terms" id="terms">
+                <label for="terms" style="display:inline; font-weight:400;">
+                    Acepto los 
+                     <a href="{{ route('terminos') }}" style="color: var(--color-uttec-green); font-weight:600;">
+                        Términos y Condiciones
+                    </a>
+                </label>
+            </div>
 
             <button type="submit">
                 <i data-feather="user-plus" style="width: 18px; stroke-width: 3;"></i> Registrar
@@ -266,7 +251,6 @@
     </div>
 
     <script>
-        // Inicializa Feather Icons
         feather.replace();
     </script>
 </body>
