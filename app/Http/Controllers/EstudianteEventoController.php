@@ -25,7 +25,7 @@ class EstudianteEventoController extends Controller
                                          ->pluck('id_evento')
                                          ->toArray();
 
-        return view('estudiante.eventos.index', compact('eventos', 'inscritoEventIds'));
+        return view('estudiante.dashboard', compact('eventos', 'inscritoEventIds'));
     }
 
     /**
@@ -36,12 +36,11 @@ class EstudianteEventoController extends Controller
      */
     public function show(Evento $evento)
     {
-        // ✅ CORRECCIÓN: Inicializar la variable por defecto
         $estaInscrito = false; 
         
-        $userId = Auth::id(); // Tomamos el ID del usuario logeado
+        $userId = Auth::id();
         
-        if ($userId) { // Usamos el ID para verificar si hay un usuario logeado
+        if ($userId) { 
             $estaInscrito = Inscripcion::where('id_usuario', $userId)
                                         ->where('id_evento', $evento->id_evento)
                                         ->exists();

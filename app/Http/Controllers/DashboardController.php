@@ -8,7 +8,6 @@ use App\Models\Inscripcion;
 
 class DashboardController extends Controller
 {
-    // Dashboard general (estudiantes y profesores)
     public function index()
     {
         return view('dashboard', [
@@ -24,6 +23,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'usuarios'      => Usuario::count(),
             'eventos'       => Evento::count(),
+            'totalNoticias' => \App\Models\Noticia::count(),
             'inscripciones' => Inscripcion::count(),
         ]);
     }

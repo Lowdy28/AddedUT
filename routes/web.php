@@ -12,6 +12,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EstudianteDashboardController;
 use App\Http\Controllers\EstudianteEventoController;
 use App\Http\Controllers\ProfesorDashboardController;
+use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\AdminNoticiaController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/terminos', 'terminos')->name('terminos'); // ← agregado
+Route::view('/terminos', 'terminos')->name('terminos');
 
 Route::get('/registro', [RegistroController::class, 'mostrarFormulario'])->name('registro');
 Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
@@ -31,7 +33,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth:web'])->group(function () {
 
-    // Dashboard general
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
 
@@ -47,13 +48,14 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('inscripciones', InscripcionController::class);
     Route::resource('notificaciones', NotificacionController::class);
 
+    Route::resource('noticias', NoticiaController::class)->except(['create','edit','show']);
+
     Route::post('/notificaciones/{notificacion}/marcar-leida', 
         [NotificacionController::class, 'marcarLeida']
     )->name('notificaciones.marcarLeida');
 
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
-    // Rutas para estudiantes
     Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':estudiante'])->group(function () {
 
         Route::get('/estudiante/dashboard', 
@@ -85,10 +87,20 @@ Route::middleware(['auth:web'])->group(function () {
 
         Route::patch('/estudiante/perfil', [ProfileController::class, 'update'])
             ->name('estudiante.profile.update');
+
+        Route::get('/estudiante/noticias', [NoticiaController::class, 'foro'])
+            ->name('estudiante.noticias.foro');
+        Route::get('/estudiante/noticias/{noticia}', [NoticiaController::class, 'show'])
+            ->name('estudiante.noticias.show');
+        Route::post('/estudiante/noticias/{noticia}/like', [NoticiaController::class, 'toggleLike'])
+            ->name('estudiante.noticias.like');
+        Route::post('/estudiante/noticias/{noticia}/comentar', [NoticiaController::class, 'comentar'])
+            ->name('estudiante.noticias.comentar');
+        Route::delete('/estudiante/noticias/comentario/{comentario}', [NoticiaController::class, 'eliminarComentario'])
+            ->name('estudiante.noticias.comentario.destroy');
     });
 });
 
-// Rutas de reportes (main)
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/reportes/export/{tipo}/{formato}', [ReporteController::class, 'export'])
@@ -99,7 +111,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes/data/inscripciones', [ReporteController::class, 'inscripcionesData']);
 });
 
-// Dashboard del profesor
+
+Route::resource('admin/noticias', AdminNoticiaController::class)->names('admin.noticias');
+
 Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':profesor'])->group(function () {
     Route::get('/profesor/dashboard', 
         [ProfesorDashboardController::class, 'index']
