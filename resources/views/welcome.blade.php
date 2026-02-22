@@ -253,7 +253,7 @@
         </div>
 
         <h1>Plataforma Oficial de Actividades</h1>
-        <h2>Fomentando el Desarrollo Integral en la UT Tecámac</h2>
+        <h2>Fomentando el Desarrollo Integral en la UTTEC </h2>
 
         {{-- BOTONES DE ALTO CONTRASTE --}}
       <div class="btn-container">
@@ -309,7 +309,7 @@
         {{-- CALL TO ACTION FINAL --}}
         <div class="final-call">
             <p>
-                ¡Únete a la comunidad activa de la UT Tecámac! 
+                ¡Únete a la comunidad activa de la Universidad Tecnológica de Tecámac! 
                 <span class="highlight">Inscríbete, gestiona y participa</span> en el desarrollo personal, social y profesional que AddedUT tiene para ti.
             </p>
         </div>
@@ -320,10 +320,8 @@
     </footer>
 
     <script>
-        // Inicializa Feather Icons
         feather.replace();
 
-        // Footer que desaparece al hacer scroll hacia abajo
         let lastScroll = 0;
         const footer = document.getElementById('page-footer');
 
