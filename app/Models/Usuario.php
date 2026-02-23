@@ -20,6 +20,7 @@ class Usuario extends Authenticatable
         'nombre',
         'email',
         'password',
+        'foto',
         'rol',
         'activo',
         'fecha_registro',

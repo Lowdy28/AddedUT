@@ -53,16 +53,22 @@
 <body>
 
     <header>
-        {{-- Ahora el logo apunta directo a Eventos --}}
         <a href="{{ route('estudiante.eventos.index') }}" class="logo">
             <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>
             Added<span>UT</span>
         </a>
         <nav>
-            {{-- Eliminamos Inicio, empezamos directo con Eventos --}}
             <a href="{{ route('estudiante.eventos.index') }}"><i data-feather="calendar" class="feather"></i> Eventos</a>
             <a href="{{ route('estudiante.noticias.foro') }}"><i data-feather="rss" class="feather"></i> Noticias</a>
-            <a href="{{ route('estudiante.profile.edit') }}"><i data-feather="user" class="feather"></i> Perfil</a>
+            <div class="flex items-center gap-4 pl-6 border-l border-gray-200">
+                <a href="{{ auth()->user()->rol === 'profesor' ? route('profesor.profile.edit') : route('estudiante.profile.edit') }}" 
+                    class="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-uttec-green transition {{ request()->routeIs('*.profile.*') ? 'text-uttec-green' : '' }}">
+                            
+                        <i data-feather="user" class="w-4 h-4"></i>
+                        {{ auth()->user()->nombre }}
+                            
+                        </a>
+                    </div>
             <form method="POST" action="{{ route('logout') }}" class="inline">
                 @csrf
                 <button type="submit" class="logout-btn"><i data-feather="log-out" class="feather"></i> Salir</button>
