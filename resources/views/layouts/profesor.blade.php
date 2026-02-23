@@ -74,10 +74,14 @@
                     
                     {{-- Perfil y Salir --}}
                     <div class="flex items-center gap-4 pl-6 border-l border-gray-200">
-                        <div class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <a href="{{ auth()->user()->rol === 'profesor' ? route('profesor.profile.edit') : route('estudiante.profile.edit') }}" 
+                        class="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-uttec-green transition {{ request()->routeIs('*.profile.*') ? 'text-uttec-green' : '' }}">
+                            
                             <i data-feather="user" class="w-4 h-4"></i>
                             {{ auth()->user()->nombre }}
-                        </div>
+                            
+                        </a>
+                    </div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-red-500 transition">

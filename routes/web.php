@@ -41,6 +41,10 @@ Route::middleware(['auth:web'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/profesor/profile', [ProfileController::class, 'edit'])->name('profesor.profile.edit');
+    Route::patch('/profesor/profile', [ProfileController::class, 'update'])->name('profesor.profile.update');
+    Route::delete('/profesor/profile', [ProfileController::class, 'destroy'])->name('profile.profile.destroy');
+
     Route::resource('usuarios', UsuarioController::class);
     Route::get('/usuarios/buscar/ajax', [UsuarioController::class, 'buscarAjax'])->name('usuarios.buscar.ajax');
 
