@@ -123,3 +123,18 @@ Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':profesor'])->g
         [ProfesorDashboardController::class, 'index']
     )->name('profesor.dashboard');
 });
+
+Route::post('/notificaciones/mark-all-read', function () {
+    Auth::user()->unreadNotifications->markAsRead();
+    return back();
+})->middleware('auth')->name('notificaciones.markAllRead');
+Route::post('/notificaciones/mark-all-read', function () {
+    $user = App\Models\User::find(auth()->id());
+    $user->unreadNotifications->markAsRead();
+    return response()->json(['success' => true]);
+})->middleware('auth')->name('notificaciones.markAllRead');
+Route::post('/notificaciones/mark-all-read', function () {
+    $user = App\Models\User::find(auth()->id());
+    $user->unreadNotifications->markAsRead();
+    return response()->json(['success' => true]);
+})->middleware('auth')->name('notificaciones.markAllRead');
