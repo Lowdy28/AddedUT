@@ -1,7 +1,0 @@
-build:
-    environment:
-        php:
-            version: 8.2
-    project_setup:
-        before:
-            - composer self-update --2
