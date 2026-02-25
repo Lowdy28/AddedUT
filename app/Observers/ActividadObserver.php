@@ -5,29 +5,60 @@ namespace App\Observers;
 use App\Models\Evento;
 use App\Models\User;
 use App\Notifications\CambioHorarioNotification;
-use Illuminate\Support\Facades\Log;
 
 class ActividadObserver
 {
     public function updated(Evento $evento)
     {
-        Log::info('¡El Observer de Eventos se ha activado!');
+        $estudiantes = User::where('rol', 'estudiante')->get();
+        $url = route('estudiante.eventos.show', $evento->id_evento);
 
-        if ($evento->wasChanged(['nombre', 'fecha_inicio'])) {
+        if ($evento->wasChanged('fecha_inicio')) {
+            $this->notificar($estudiantes, [
+                'titulo' => 'Cambio de horario: ' . $evento->nombre,
+                'mensaje' => 'Se ha modificado el horario del evento. Revisa los nuevos detalles.',
+                'tipo' => 'cambio',
+                'url' => $url,
+            ]);
+        }
 
-            $detalles = [
-                'titulo' => 'Evento Actualizado: ' . $evento->nombre,
-                'mensaje' => 'Se ha modificado la fecha o el nombre del evento.',
-                'tipo' => 'cambio'
-            ];
+        if ($evento->wasChanged('cupos')) {
+            $cuposNuevos = $evento->cupos;
+            $cuposAnteriores = $evento->getOriginal('cupos');
 
-            $estudiantes = User::where('rol', 'estudiante')->get();
-
-            foreach ($estudiantes as $estudiante) {
-                $estudiante->notify(new CambioHorarioNotification($detalles));
+            if ($cuposNuevos > $cuposAnteriores) {
+                $this->notificar($estudiantes, [
+                    'titulo' => '¡Nuevos cupos disponibles: ' . $evento->nombre . '!',
+                    'mensaje' => 'Se han abierto más cupos para este evento. ¡Date prisa!',
+                    'tipo' => 'cupos_disponibles',
+                    'url' => $url,
+                ]);
             }
 
-            Log::info('Notificaciones enviadas a ' . $estudiantes->count() . ' estudiantes.');
+            if ($cuposNuevos <= 0) {
+                $this->notificar($estudiantes, [
+                    'titulo' => 'Sin cupos: ' . $evento->nombre,
+                    'mensaje' => 'Este evento ya no tiene cupos disponibles.',
+                    'tipo' => 'sin_cupos',
+                    'url' => $url,
+                ]);
+            }
+        }
+
+        if ($evento->wasChanged(['nombre', 'descripcion', 'lugar'])) {
+            $this->notificar($estudiantes, [
+                'titulo' => 'Información actualizada: ' . $evento->nombre,
+                'mensaje' => 'Se ha actualizado información importante de este evento.',
+                'tipo' => 'info',
+                'url' => $url,
+            ]);
+        }
+    }
+
+    private function notificar($estudiantes, $detalles)
+    {
+        foreach ($estudiantes as $estudiante) {
+            $estudiante->notify(new CambioHorarioNotification($detalles));
         }
     }
 }
