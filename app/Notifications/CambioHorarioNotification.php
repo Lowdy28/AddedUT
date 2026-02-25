@@ -18,7 +18,6 @@ class CambioHorarioNotification extends Notification
 
     public function via($notifiable)
     {
-        // Guardamos en la base de datos para que aparezca en la campana
         return ['database'];
     }
 
@@ -27,7 +26,8 @@ class CambioHorarioNotification extends Notification
         return [
             'titulo' => $this->detalles['titulo'],
             'mensaje' => $this->detalles['mensaje'],
-            'tipo' => $this->detalles['tipo'], // 'cambio' o 'cancelada'
+            'tipo' => $this->detalles['tipo'],
+            'url' => $this->detalles['url'] ?? null,
         ];
     }
 }
