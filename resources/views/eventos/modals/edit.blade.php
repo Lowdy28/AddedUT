@@ -7,69 +7,96 @@
      x-transition:leave-start="opacity-100 scale-100"
      x-transition:leave-end="opacity-0 scale-90">
 
-    <div class="modal-content bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl relative">
+    <div class="modal-content bg-white rounded-2xl p-8 max-w-2xl w-full shadow-2xl relative overflow-y-auto max-h-[90vh]">
 
-        <h2 class="text-3xl font-extrabold mb-6" style="color:#004aad !important;">Editar Taller / Evento</h2>
+        <h2 class="text-2xl font-extrabold mb-6" style="color:#004aad !important;">
+            ✏️ Editar Taller / Evento
+        </h2>
 
         <form @submit.prevent="submitEdit($event, editData.id_evento)">
             @csrf
             @method('PUT')
 
+            {{-- Nombre --}}
             <div class="mb-4">
-                <label for="nombre_edit" class="font-semibold text-gray-900">Nombre</label>
-                <input type="text" id="nombre_edit" x-model="editData.nombre" required
-                       placeholder="Nombre del taller o evento"
-                       class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre <span class="text-red-500">*</span></label>
+                <input type="text" x-model="editData.nombre" required
+                       class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </div>
 
+            {{-- Descripción --}}
             <div class="mb-4">
-                <label for="descripcion_edit" class="font-semibold text-gray-900">Descripción</label>
-                <textarea id="descripcion_edit" rows="3"
-                          x-model="editData.descripcion"
-                          placeholder="Descripción del taller o evento (opcional)"
-                          class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900"></textarea>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Descripción</label>
+                <textarea rows="3" x-model="editData.descripcion"
+                          class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
             </div>
 
-            <div class="mb-4">
-                <label for="categoria_edit" class="font-semibold text-gray-900">Categoría</label>
-                <select id="categoria_edit" x-model="editData.categoria" required
-                        class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900">
-                    <option value="General">General</option>
-                    <option value="Académico">Académico</option>
-                    <option value="Cultural">Cultural</option>
-                    <option value="Deportivo">Deportivo</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label for="cupos_edit" class="font-semibold text-gray-900">Cupos</label>
-                <input type="number" id="cupos_edit" x-model="editData.cupos" required min="1"
-                       placeholder="Cantidad de cupos"
-                       class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
-            </div>
-
-            <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {{-- Categoría + Cupos --}}
+            <div class="mb-4 grid grid-cols-2 gap-4">
                 <div>
-                    <label for="fecha_inicio_edit" class="font-semibold text-gray-900">Fecha de Inicio</label>
-                    <input type="date" id="fecha_inicio_edit" x-model="editData.fecha_inicio" required
-                           class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Categoría <span class="text-red-500">*</span></label>
+                    <select x-model="editData.categoria" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="General">General</option>
+                        <option value="Académico">Académico</option>
+                        <option value="Cultural">Cultural</option>
+                        <option value="Deportivo">Deportivo</option>
+                    </select>
                 </div>
-
                 <div>
-                    <label for="fecha_fin_edit" class="font-semibold text-gray-900">Fecha de Fin</label>
-                    <input type="date" id="fecha_fin_edit" x-model="editData.fecha_fin" required
-                           class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 shadow-sm text-gray-900" />
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Cupos totales <span class="text-red-500">*</span></label>
+                    <input type="number" x-model="editData.cupos" required min="1"
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+            </div>
+
+            {{-- Fechas --}}
+            <div class="mb-4 grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha inicio <span class="text-red-500">*</span></label>
+                    <input type="date" x-model="editData.fecha_inicio" required
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha fin <span class="text-red-500">*</span></label>
+                    <input type="date" x-model="editData.fecha_fin" required
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+            </div>
+
+            {{-- Lugar --}}
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Lugar / Instalación</label>
+                <input type="text" x-model="editData.lugar"
+                       placeholder="Ej. Cancha principal, Aula 3B..."
+                       class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            {{-- Horario + Días --}}
+            <div class="mb-4 grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Horario</label>
+                    <input type="text" x-model="editData.horario"
+                           placeholder="Ej. 14:00 – 16:00 hrs"
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Días</label>
+                    <input type="text" x-model="editData.dias"
+                           placeholder="Ej. Lunes y Miércoles"
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
             </div>
 
             <div class="flex justify-end gap-4 mt-6">
                 <button type="button" @click="closeAll()"
-                        class="px-6 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition">
+                        class="px-6 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition">
                     Cancelar
                 </button>
                 <button type="submit"
-                        class="px-6 py-2 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 transition">
-                    Guardar
+                        class="px-6 py-2 rounded-lg text-white font-semibold transition"
+                        style="background-color:#00a86b !important;">
+                    💾 Guardar Cambios
                 </button>
             </div>
         </form>
