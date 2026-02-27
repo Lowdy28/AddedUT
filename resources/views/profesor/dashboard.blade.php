@@ -1,154 +1,244 @@
 @extends('layouts.profesor')
-@section('title', 'Mis Talleres')
+@section('title', 'Noticias')
 
 @section('content')
 
-{{-- Script simple para el modal --}}
-<script>
-    function toggleModal(modalID){
-        const modal = document.getElementById(modalID);
-        modal.classList.toggle("hidden");
-        modal.classList.toggle("flex");
-        document.body.style.overflow = modal.classList.contains("flex") ? "hidden" : "auto";
-    }
-</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-{{-- Header al estilo de la captura --}}
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-    <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 flex items-center gap-3">
-            <i data-feather="layers" class="w-8 h-8 text-uttec-green"></i>
-            Gestión de Actividades
-        </h1>
-        <p class="text-gray-600 mt-2 text-lg">Administra tus talleres extracurriculares.</p>
-    </div>
-    
-    {{-- Botón de acción principal (Verde como en la captura) --}}
-    <button onclick="toggleModal('modal-crear')" class="btn-uttec-green px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-md">
-        <i data-feather="plus-square" class="w-5 h-5"></i>
-        Crear Nuevo Taller
-    </button>
+<style>
+    :root {
+        --uttec-blue: #002D62;
+        --uttec-green: #00A86B;
+        --glass: rgba(255, 255, 255, 0.9);
+    }
+
+    .hero-slider {
+        width: 100%; height: 420px;
+        border-radius: 20px; overflow: hidden;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    }
+    .swiper-slide { position: relative; background: #000; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    .hero-content {
+        position: absolute; bottom: 0; left: 0;
+        padding: 2.5rem; width: 100%;
+        background: linear-gradient(transparent, rgba(0,0,0,0.82));
+        color: white;
+    }
+    .hero-content .tag {
+        background: var(--uttec-green); padding: 4px 14px;
+        border-radius: 50px; font-size: 0.78rem; font-weight: 700;
+    }
+    .hero-content h2 { font-size: 2.2rem; margin: 8px 0 0; font-weight: 800; line-height: 1.2; }
+
+    .categories-bar {
+        display: flex; gap: .75rem; overflow-x: auto;
+        padding: 4px 0 1.5rem; scrollbar-width: none;
+    }
+    .category-bubble {
+        padding: 8px 18px; border-radius: 50px; background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06); color: var(--uttec-blue);
+        font-weight: 600; white-space: nowrap; transition: .25s;
+        border: 1px solid transparent; font-size: .85rem; cursor: pointer;
+    }
+    .category-bubble:hover, .category-bubble.active {
+        background: var(--uttec-blue); color: white; transform: scale(1.05);
+    }
+
+    .noticias-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    .noticia-card {
+        background: white; border-radius: 18px; overflow: hidden;
+        transition: all .35s cubic-bezier(.175,.885,.32,1.275);
+        position: relative; border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    }
+    .noticia-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,45,98,.14);
+    }
+    .img-container { height: 210px; position: relative; overflow: hidden; }
+    .img-container img { width: 100%; height: 100%; object-fit: cover; transition: .5s; }
+    .noticia-card:hover .img-container img { transform: scale(1.08) rotate(1deg); }
+
+    .quick-actions {
+        position: absolute; top: 12px; right: 12px;
+        display: flex; flex-direction: column; gap: 7px;
+        transform: translateX(55px); transition: .3s;
+    }
+    .noticia-card:hover .quick-actions { transform: translateX(0); }
+    .action-btn {
+        width: 38px; height: 38px; border-radius: 50%;
+        background: var(--glass); display: flex; align-items: center;
+        justify-content: center; backdrop-filter: blur(5px);
+        color: var(--uttec-blue); border: none;
+        box-shadow: 0 3px 8px rgba(0,0,0,.12); cursor: pointer;
+        text-decoration: none;
+    }
+
+    .noticia-info { padding: 1.25rem 1.4rem; }
+    .noticia-info h3 { font-size: 1.05rem; color: var(--uttec-blue); font-weight: 700; margin-bottom: 7px; line-height: 1.35; }
+    .noticia-footer {
+        padding: .85rem 1.4rem; background: #f8fafc;
+        display: flex; justify-content: space-between; align-items: center;
+        border-top: 1px solid #f1f5f9;
+    }
+    .stats { display: flex; gap: 12px; color: #64748b; font-size: .82rem; }
+    .stats span { display: flex; align-items: center; gap: 3px; }
+</style>
+
+{{-- CABECERA --}}
+<div style="margin-bottom:1.75rem;">
+    <h1 style="font-size:1.8rem; font-weight:800; color:#1e3a8a; display:flex; align-items:center; gap:.5rem;">
+        <i data-feather="rss" style="width:24px; height:24px; color:#00a86b;"></i>
+        Noticias UTTEC
+    </h1>
+    <p style="color:#6b7280; font-size:.9rem; margin-top:.3rem;">Mantente al tanto de todo lo que pasa en la universidad</p>
 </div>
 
-
-{{-- Grid de Tarjetas (Estilo Captura) --}}
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    @forelse($talleres as $taller)
-        {{-- TARJETA BLANCA --}}
-        <div class="bg-white rounded-[20px] shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
-            
-            {{-- 1. Encabezado con "Imagen" y Badge --}}
-            <div class="h-48 bg-gradient-to-br from-blue-600 to-indigo-800 relative flex items-center justify-center p-4">
-                <div class="absolute top-4 left-4 bg-blue-900/80 text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg shadow-sm backdrop-blur-sm">
-                   Taller
-                </div>
-                {{-- Icono gigante de fondo si no hay imagen --}}
-                <i data-feather="image" class="w-20 h-20 text-white/20"></i>
-                <h3 class="absolute bottom-4 left-4 text-white text-xl font-bold drop-shadow-md line-clamp-2 pr-4">
-                    {{ $taller->nombre }}
-                </h3>
+{{-- CARRUSEL HERO --}}
+@if($noticias->count())
+<div class="swiper hero-slider">
+    <div class="swiper-wrapper">
+        @foreach($noticias->take(3) as $destacada)
+        <div class="swiper-slide">
+            @if($destacada->imagen)
+                <img src="{{ asset('storage/' . $destacada->imagen) }}" class="hero-img">
+            @else
+                <div class="hero-img" style="background:linear-gradient(135deg,#1e3a8a,#00a86b);"></div>
+            @endif
+            <div class="hero-content">
+                <span class="tag">{{ $destacada->categoria }}</span>
+                <h2>{{ $destacada->titulo }}</h2>
+                <a href="{{ route('profesor.noticias.show', $destacada->id_noticia) }}"
+                   style="display:inline-block; margin-top:.75rem; padding:.45rem 1.2rem; background:white; color:#1e3a8a; border-radius:50px; font-weight:700; font-size:.85rem; text-decoration:none;">
+                    Leer noticia →
+                </a>
             </div>
+        </div>
+        @endforeach
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+@endif
 
-            {{-- 2. Cuerpo de la tarjeta --}}
-            <div class="p-6">
-                {{-- Fechas y Ubicación --}}
-                <div class="flex flex-col gap-2 mb-4 text-sm text-gray-600 font-medium">
-                    <div class="flex items-center gap-2">
-                        <i data-feather="calendar" class="w-4 h-4 text-uttec-green"></i>
-                        <span>Inicio: {{ \Carbon\Carbon::parse($taller->fecha_inicio)->format('d M Y, H:i') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i data-feather="map-pin" class="w-4 h-4 text-red-500"></i>
-                        <span>Campus UTTEC</span>
-                    </div>
+{{-- CATEGORÍAS --}}
+<div class="categories-bar">
+    <button class="category-bubble active" onclick="filtrarCategoria(this, '')">Todas</button>
+    <button class="category-bubble" onclick="filtrarCategoria(this, 'Académico')">Académico</button>
+    <button class="category-bubble" onclick="filtrarCategoria(this, 'Deportes')">Deportes</button>
+    <button class="category-bubble" onclick="filtrarCategoria(this, 'Eventos')">Eventos</button>
+    <button class="category-bubble" onclick="filtrarCategoria(this, 'Cultura')">Cultura</button>
+</div>
+
+{{-- GRID DE NOTICIAS --}}
+<div class="noticias-grid" id="noticias-grid">
+    @forelse($noticias as $noticia)
+    @php $yaLiked = $noticia->likeDelUsuario($userId); @endphp
+
+    <div class="noticia-card" data-categoria="{{ $noticia->categoria }}">
+        <div class="img-container">
+            @if($noticia->imagen)
+                <img src="{{ asset('storage/' . $noticia->imagen) }}" alt="{{ $noticia->titulo }}">
+            @else
+                <div style="width:100%; height:100%; background:linear-gradient(135deg,#e2e8f0,#cbd5e1); display:flex; align-items:center; justify-content:center;">
+                    <i data-feather="image" style="color:#94a3b8; width:36px; height:36px;"></i>
                 </div>
+            @endif
 
-                {{-- Descripción --}}
-                <p class="text-gray-500 text-sm mb-6 line-clamp-3 leading-relaxed">
-                    {{ $taller->descripcion ?? 'Sin descripción detallada para esta actividad.' }}
-                </p>
-
-                {{-- 3. Pie de tarjeta (Acciones de Profesor) --}}
-                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                    
-                    {{-- Conteo de Cupos (Estilo badge verde claro de la captura) --}}
-                    <div class="flex items-center gap-2 bg-[#e6f4ed] text-uttec-green px-4 py-2 rounded-xl font-bold text-sm">
-                        <i data-feather="users" class="w-4 h-4"></i>
-                        <span>{{ $taller->inscritos->count() }} / {{ $taller->cupos }} Inscritos</span>
-                    </div>
-
-                    {{-- Botones Editar/Eliminar --}}
-                    <div class="flex items-center gap-1">
-                        <a href="{{ route('eventos.edit', $taller->id_evento) }}" class="p-2 text-gray-400 hover:text-yellow-500 hover:bg-yellow-50 rounded-lg transition" title="Editar">
-                            <i data-feather="edit-3" class="w-5 h-5"></i>
-                        </a>
-                        <form action="{{ route('eventos.destroy', $taller->id_evento) }}" method="POST" onsubmit="return confirm('¿Eliminar este taller?');">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar">
-                                <i data-feather="trash-2" class="w-5 h-5"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                 {{-- Botón pequeño para ver lista de alumnos --}}
-                 <div class="mt-4 text-center">
-                    <button onclick="toggleModal('modal-alumnos-{{$taller->id_evento}}')" class="text-sm text-uttec-green hover:underline font-medium w-full py-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                        Ver lista de alumnos <i data-feather="chevron-down" class="w-4 h-4 inline"></i>
-                    </button>
-                </div>
+            <div class="quick-actions">
+                <button class="action-btn" onclick="toggleLike(this, {{ $noticia->id_noticia }})" title="Me gusta">
+                    <i data-feather="heart" style="{{ $yaLiked ? 'fill:#ef4444; color:#ef4444;' : '' }} width:16px; height:16px;"></i>
+                </button>
+                <a href="{{ route('profesor.noticias.show', $noticia->id_noticia) }}" class="action-btn" title="Ver noticia">
+                    <i data-feather="message-circle" style="width:16px; height:16px;"></i>
+                </a>
             </div>
         </div>
 
-        {{-- MODAL LISTA DE ALUMNOS (No lo incluí antes, pero debe seguir aquí) --}}
-        <div id="modal-alumnos-{{$taller->id_evento}}" class="fixed inset-0 z-[60] hidden items-end md:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div class="bg-white rounded-t-3xl md:rounded-3xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col animate-fade-in-up">
-                <div class="p-5 border-b flex justify-between items-center bg-gray-50">
-                    <h3 class="font-bold text-lg text-gray-800">Alumnos en: {{ Str::limit($taller->nombre, 20) }}</h3>
-                    <button onclick="toggleModal('modal-alumnos-{{$taller->id_evento}}')" class="text-gray-400 hover:text-gray-700 bg-white p-1 rounded-full shadow-sm"><i data-feather="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="p-5 overflow-y-auto">
-                    @forelse($taller->inscritos as $inscripcion)
-                        <div class="flex items-center gap-3 mb-3 p-2 hover:bg-gray-50 rounded-lg border border-transparent hover:border-gray-100 transition">
-                            <div class="w-8 h-8 rounded-full bg-uttec-green/10 text-uttec-green flex items-center justify-center font-bold text-sm">
-                                {{ substr($inscripcion->usuario->nombre, 0, 1) }}
-                            </div>
-                            <div>
-                                <p class="font-semibold text-sm text-gray-800">{{ $inscripcion->usuario->nombre }}</p>
-                                <p class="text-xs text-gray-500">{{ $inscripcion->usuario->email }}</p>
-                            </div>
-                        </div>
-                    @empty
-                        <p class="text-center text-gray-500 py-4">No hay alumnos inscritos.</p>
-                    @endforelse
-                </div>
-            </div>
+        <div class="noticia-info">
+            <small style="color:#00a86b; font-weight:700; font-size:.75rem; text-transform:uppercase; letter-spacing:.04em;">
+                {{ $noticia->categoria }}
+            </small>
+            <h3>{{ $noticia->titulo }}</h3>
+            <p style="color:#6b7280; font-size:.85rem; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                {{ Str::limit(strip_tags($noticia->contenido), 100) }}
+            </p>
         </div>
+
+        <div class="noticia-footer">
+            <div class="stats">
+                <span><i data-feather="heart" style="width:13px; height:13px;"></i> {{ $noticia->totalLikes() }}</span>
+                <span><i data-feather="message-square" style="width:13px; height:13px;"></i> {{ $noticia->comentarios->count() }}</span>
+            </div>
+            <a href="{{ route('profesor.noticias.show', $noticia->id_noticia) }}"
+               style="color:#1e3a8a; font-weight:700; font-size:.82rem; display:flex; align-items:center; gap:3px; text-decoration:none;">
+                Ver más <i data-feather="chevron-right" style="width:14px; height:14px;"></i>
+            </a>
+        </div>
+    </div>
+
     @empty
-        {{-- Estado vacío (Empty State) --}}
-        <div class="col-span-full flex flex-col items-center justify-center py-24 bg-white rounded-[20px] shadow-sm border border-gray-200 text-center px-4">
-            <div class="bg-gray-100 p-4 rounded-full mb-4">
-                <i data-feather="inbox" class="w-12 h-12 text-gray-300"></i>
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">No tienes actividades creadas</h3>
-            <p class="text-gray-500 mb-6 max-w-md">Comienza a crear talleres para que los estudiantes puedan inscribirse.</p>
-            <button onclick="toggleModal('modal-crear')" class="btn-uttec-green px-6 py-2.5 rounded-full font-bold flex items-center gap-2 shadow">
-                Crear mi primera actividad
-            </button>
+        <div style="grid-column:1/-1; text-align:center; padding:3rem; background:white; border-radius:16px;">
+            <i data-feather="inbox" style="width:40px; height:40px; color:#94a3b8; display:block; margin:0 auto 1rem;"></i>
+            <p style="color:#6b7280;">No hay noticias publicadas por el momento.</p>
         </div>
     @endforelse
 </div>
 
+{{-- Paginación --}}
+<div style="margin-top:2rem;">
+    {{ $noticias->links() }}
+</div>
 
-{{-- Animación para los modales --}}
-<style>
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px) scale(0.95); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .animate-fade-in-up { animation: fadeInUp 0.3s ease-out forwards; }
-</style>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.hero-slider', {
+        loop: true,
+        autoplay: { delay: 5000 },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+    });
+    feather.replace();
+});
 
-{{-- CLAVE: Incluir el modal desde el nuevo archivo --}}
-@include('profesor.modals.create') 
+function filtrarCategoria(btn, categoria) {
+    document.querySelectorAll('.category-bubble').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.noticia-card').forEach(card => {
+        const mostrar = !categoria || card.dataset.categoria === categoria;
+        card.style.display = mostrar ? '' : 'none';
+    });
+}
+
+function toggleLike(btn, noticiaId) {
+    fetch(`/profesor/noticias/${noticiaId}/like`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        const icon = btn.querySelector('svg');
+        if (data.liked) {
+            icon.style.fill = '#ef4444';
+            icon.style.color = '#ef4444';
+            btn.style.transform = 'scale(1.3)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 200);
+        } else {
+            icon.style.fill = '';
+            icon.style.color = '';
+        }
+    });
+}
+</script>
 
 @endsection

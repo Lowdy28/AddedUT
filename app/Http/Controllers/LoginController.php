@@ -8,17 +8,15 @@ use App\Models\Usuario;
 
 class LoginController extends Controller
 {
-    // Mostrar formulario de login
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // Procesar login
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
@@ -27,12 +25,11 @@ class LoginController extends Controller
 
             $user = Auth::guard('web')->user();
 
-            // Redirigir según rol
             return match($user->rol) {
-                'admin' => redirect()->route('dashboard.admin'),
-                'profesor' => redirect()->route('profesor.dashboard'),
+                'admin'      => redirect()->route('dashboard.admin'),
+                'profesor'   => redirect()->route('profesor.dashboard'),   
                 'estudiante' => redirect()->route('estudiante.dashboard'),
-                default => redirect()->route('dashboard')
+                default      => redirect()->route('dashboard')
             };
         }
 
@@ -41,7 +38,6 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    // Logout
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();

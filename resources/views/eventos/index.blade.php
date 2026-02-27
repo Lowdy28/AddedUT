@@ -52,6 +52,12 @@
                         <td class="px-4 py-3">{{ $ev->fecha_inicio ? \Carbon\Carbon::parse($ev->fecha_inicio)->format('d M, Y') : '—' }}</td>
                         <td class="px-4 py-3">
                             <div class="flex justify-center gap-2">
+                                {{-- Botón Ver → ahora abre modal en lugar de redirigir --}}
+                                <button @click="openShow({{ $ev->load('creador') }})"
+                                    class="bg-blue-600 text-white px-3 py-1 rounded shadow hover:bg-blue-700 transition">
+                                    Ver
+                                </button>
+
                                 <button @click="openEdit({{ $ev }})"
                                     class="bg-yellow-400 text-gray-900 px-3 py-1 rounded shadow hover:bg-yellow-500 transition">
                                     Editar
@@ -61,11 +67,6 @@
                                     class="bg-red-600 text-white px-3 py-1 rounded shadow hover:bg-red-700 transition">
                                     Eliminar
                                 </button>
-
-                                <a href="{{ route('eventos.show', $ev->id_evento) }}"
-                                   class="bg-blue-600 text-white px-3 py-1 rounded shadow hover:bg-blue-700 transition inline-flex items-center justify-center">
-                                   Ver
-                                </a>
                             </div>
                         </td>
                     </tr>
@@ -87,8 +88,9 @@
     {{-- Modales --}}
     @include('eventos.modals.create')
     @include('eventos.modals.edit')
+    @include('eventos.modals.show')
 
-    <!-- Delete Modal -->
+ 
     <div x-show="modalDelete" x-cloak
          class="modal-overlay"
          x-transition:enter="transition duration-300"
@@ -115,49 +117,63 @@
 
 </div>
 
-{{-- AlpineJS Handler completo --}}
+{{-- AlpineJS Handler --}}
 <script>
 function eventosHandler() {
     return {
         modalCreate: false,
-        modalEdit: false,
+        modalEdit:   false,
         modalDelete: false,
+        modalShow:   false,   
 
-        createData: { nombre: '', descripcion: '', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' },
-        editData: { id_evento: '', nombre: '', descripcion: '', categoria: '', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' },
-        deleteId: null,
+        createData: { nombre: '', descripcion: '', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '', id_profesor: '' },
+        editData:   { id_evento: '', nombre: '', descripcion: '', categoria: '', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' },
+        showData:   {},       
+        deleteId:   null,
 
-        openCreate() { 
-            this.createData = { nombre: '', descripcion: '', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' };
-            this.modalCreate = true; 
+        openCreate() {
+            this.createData = { nombre: '', descripcion: '', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '', id_profesor: '' };
+            this.modalCreate = true;
         },
-        
-        openEdit(ev) { 
-            this.editData = JSON.parse(JSON.stringify(ev)); 
-            this.modalEdit = true; 
+
+        openEdit(ev) {
+            this.editData = JSON.parse(JSON.stringify(ev));
+            this.modalEdit = true;
         },
-        
-        openDelete(id) { 
-            this.deleteId = id; 
-            this.modalDelete = true; 
+
+   
+        openShow(ev) {
+            this.showData = JSON.parse(JSON.stringify(ev));
+            this.modalShow = true;
         },
-        
-        closeAll() { 
-            this.modalCreate = false; 
-            this.modalEdit = false; 
-            this.modalDelete = false; 
+
+        openDelete(id) {
+            this.deleteId = id;
+            this.modalDelete = true;
+        },
+
+        closeAll() {
+            this.modalCreate = false;
+            this.modalEdit   = false;
+            this.modalDelete = false;
+            this.modalShow   = false;  
+        },
+
+     
+        formatFecha(dateStr) {
+            if (!dateStr) return '—';
+            const [y, m, d] = dateStr.split('-');
+            const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+            return `${d} ${meses[parseInt(m)-1]}, ${y}`;
         },
 
         async submitCreate(event) {
-            const payload = { ...this.createData };
+            const formData = new FormData(document.getElementById('form-create'));
             try {
                 const res = await fetch("{{ route('eventos.store') }}", {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(payload)
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: formData
                 });
                 const json = await res.json();
                 if (!res.ok) throw new Error(json.message || 'Error desconocido');

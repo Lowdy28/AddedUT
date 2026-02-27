@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,20 @@ class EventoController extends Controller
             ->orderBy('fecha_inicio', 'asc')
             ->paginate(15);
 
-        return view('eventos.index', compact('eventos'));
+      
+        $profesoresOcupados = Evento::whereNotNull('creado_por')
+            ->pluck('creado_por')
+            ->unique()
+            ->toArray();
+
+      
+        $profesoresDisponibles = Usuario::where('rol', 'profesor')
+            ->where('activo', 1)
+            ->whereNotIn('id_usuario', $profesoresOcupados)
+            ->orderBy('nombre')
+            ->get();
+
+        return view('eventos.index', compact('eventos', 'profesoresDisponibles'));
     }
 
     public function store(Request $request): JsonResponse
@@ -40,12 +54,16 @@ class EventoController extends Controller
                 'lugar'        => 'nullable|string|max:150',
                 'horario'      => 'nullable|string|max:100',
                 'dias'         => 'nullable|string|max:150',
+                'id_profesor'  => 'nullable|integer|exists:usuarios,id_usuario',
             ]);
 
             $rutaImagen = null;
             if ($request->hasFile('imagen')) {
                 $rutaImagen = $request->file('imagen')->store('eventos', 'public');
             }
+
+           
+            $creadoPor = !empty($data['id_profesor']) ? $data['id_profesor'] : Auth::id();
 
             $evento = Evento::create([
                 'nombre'          => $data['nombre'],
@@ -54,7 +72,7 @@ class EventoController extends Controller
                 'imagen'          => $rutaImagen,
                 'cupos'           => $data['cupos'],
                 'cupo_disponible' => $data['cupos'],
-                'creado_por'      => Auth::id(),
+                'creado_por'      => $creadoPor,
                 'fecha_inicio'    => $data['fecha_inicio'],
                 'fecha_fin'       => $data['fecha_fin'],
                 'lugar'           => $data['lugar'] ?? null,
@@ -76,6 +94,7 @@ class EventoController extends Controller
 
     public function show(Evento $evento)
     {
+      
         return view('eventos.show', compact('evento'));
     }
 
@@ -97,15 +116,14 @@ class EventoController extends Controller
 
             $rutaImagen = $evento->imagen;
             if ($request->hasFile('imagen')) {
-                // Eliminar la imagen anterior si existe
                 if ($rutaImagen && Storage::disk('public')->exists($rutaImagen)) {
                     Storage::disk('public')->delete($rutaImagen);
                 }
                 $rutaImagen = $request->file('imagen')->store('eventos', 'public');
             }
 
-            $diferencia       = $data['cupos'] - $evento->cupos;
-            $nuevoCupoDisp    = max(0, ($evento->cupo_disponible ?? $evento->cupos) + $diferencia);
+            $diferencia    = $data['cupos'] - $evento->cupos;
+            $nuevoCupoDisp = max(0, ($evento->cupo_disponible ?? $evento->cupos) + $diferencia);
 
             $evento->update([
                 'nombre'          => $data['nombre'],

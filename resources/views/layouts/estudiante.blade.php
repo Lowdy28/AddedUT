@@ -55,7 +55,7 @@
         .notif-footer { padding: 10px; text-align: center; border-top: 1px solid #eee; }
         .notif-footer a { font-size: 0.8rem; color: var(--color-uttec-green); font-weight: 700; }
 
-        /* RIPPLE */
+       
         .ripple-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -76,7 +76,7 @@
             0%   { transform: scale(0); opacity: 1; }
             100% { transform: scale(25); opacity: 1; }
         }
-        /* FIN RIPPLE */
+     
 
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -99,7 +99,7 @@
 <div class="ripple-overlay" id="rippleOverlay"></div>
 
 @php
-    $authUser = App\Models\User::find(auth()->id());
+    $authUser = App\Models\Usuario::find(auth()->id());
 @endphp
 
     <header>
@@ -171,8 +171,14 @@
                 </div>
 
                 <a href="{{ $authUser->rol === 'profesor' ? route('profesor.profile.edit') : route('estudiante.profile.edit') }}"
-                    style="display:flex; align-items:center; gap:6px; font-weight:600; color: var(--color-uttec-blue-dark); font-size: 0.95rem;">
-                    <i data-feather="user" style="width:18px; height:18px;"></i>
+                    style="display:flex; align-items:center; gap:8px; font-weight:600; color: var(--color-uttec-blue-dark); font-size: 0.95rem;">
+                    @php
+                        $fotoUrl = !empty($authUser->foto)
+                            ? asset('storage/' . $authUser->foto)
+                            : 'https://ui-avatars.com/api/?name=' . urlencode($authUser->nombre) . '&background=002D62&color=fff&size=64';
+                    @endphp
+                    <img src="{{ $fotoUrl }}" alt="Foto"
+                         style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid var(--color-uttec-blue-dark);">
                     {{ $authUser->nombre }}
                 </a>
             </div>

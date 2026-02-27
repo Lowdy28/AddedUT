@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Evento;
 use App\Models\Inscripcion;
+use App\Models\Noticia;
 use Illuminate\Support\Facades\Auth;
 
 class ProfesorDashboardController extends Controller
@@ -13,18 +14,31 @@ class ProfesorDashboardController extends Controller
     {
         $profesorId = Auth::id();
 
-        // 🔥 Obtener solo los talleres creados por este profesor
-        $talleres = Evento::where('creado_por', $profesorId)
-                          ->orderBy('fecha_inicio', 'asc')
-                          ->get();
+       
+        $noticias = Noticia::with(['autor', 'likes', 'comentarios'])
+            ->where('publicada', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        // 🔥 Para cada taller, obtener sus inscripciones (alumnos)
+        $userId = $profesorId;
+
+        return view('profesor.dashboard', compact('noticias', 'userId'));
+    }
+
+    public function miTaller()
+    {
+        $profesorId = Auth::id();
+
+        $talleres = Evento::where('creado_por', $profesorId)
+            ->orderBy('fecha_inicio', 'asc')
+            ->get();
+
         foreach ($talleres as $taller) {
             $taller->inscritos = Inscripcion::where('id_evento', $taller->id_evento)
-                                            ->with('usuario') // Para acceder al nombre del alumno
-                                            ->get();
+                ->with('usuario')
+                ->get();
         }
 
-        return view('profesor.dashboard', compact('talleres'));
+        return view('profesor.taller', compact('talleres'));
     }
 }

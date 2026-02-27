@@ -48,13 +48,15 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('usuarios', UsuarioController::class);
     Route::get('/usuarios/buscar/ajax', [UsuarioController::class, 'buscarAjax'])->name('usuarios.buscar.ajax');
 
-    Route::resource('eventos', EventoController::class);
+    Route::resource('eventos', EventoController::class)->only([
+        'index', 'store', 'show', 'update', 'destroy'
+    ]);
     Route::resource('inscripciones', InscripcionController::class);
     Route::resource('notificaciones', NotificacionController::class);
 
     Route::resource('noticias', NoticiaController::class)->except(['create','edit','show']);
 
-    Route::post('/notificaciones/{notificacion}/marcar-leida', 
+    Route::post('/notificaciones/{notificacion}/marcar-leida',
         [NotificacionController::class, 'marcarLeida']
     )->name('notificaciones.marcarLeida');
 
@@ -62,27 +64,27 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':estudiante'])->group(function () {
 
-        Route::get('/estudiante/dashboard', 
+        Route::get('/estudiante/dashboard',
             [EstudianteDashboardController::class, 'index']
         )->name('estudiante.dashboard');
 
-        Route::get('/estudiante/eventos', 
+        Route::get('/estudiante/eventos',
             [EstudianteEventoController::class, 'index']
         )->name('estudiante.eventos.index');
 
-        Route::get('/estudiante/eventos/{evento}', 
+        Route::get('/estudiante/eventos/{evento}',
             [EstudianteEventoController::class, 'show']
         )->name('estudiante.eventos.show');
 
-        Route::get('/estudiante/mis-inscripciones', 
+        Route::get('/estudiante/mis-inscripciones',
             [EstudianteEventoController::class, 'myEvents']
         )->name('estudiante.inscripciones.mine');
 
-        Route::post('/estudiante/inscripciones/{evento}', 
+        Route::post('/estudiante/inscripciones/{evento}',
             [InscripcionController::class, 'store']
         )->name('estudiante.inscripciones.store');
 
-        Route::delete('/estudiante/inscripciones/{evento}', 
+        Route::delete('/estudiante/inscripciones/{evento}',
             [InscripcionController::class, 'destroyByEvent']
         )->name('estudiante.inscripciones.destroy');
 
@@ -103,6 +105,22 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/estudiante/noticias/comentario/{comentario}', [NoticiaController::class, 'eliminarComentario'])
             ->name('estudiante.noticias.comentario.destroy');
     });
+
+    Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':profesor'])->group(function () {
+
+        Route::get('/profesor/dashboard',
+            [ProfesorDashboardController::class, 'index']
+        )->name('profesor.dashboard');
+
+        Route::get('/profesor/mi-taller',
+            [ProfesorDashboardController::class, 'miTaller']
+        )->name('profesor.taller');
+
+        Route::post('/profesor/noticias/{noticia}/like', [NoticiaController::class, 'toggleLike'])
+            ->name('profesor.noticias.like');
+        Route::get('/profesor/noticias/{noticia}', [NoticiaController::class, 'show'])
+            ->name('profesor.noticias.show');
+    });
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -117,12 +135,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::resource('admin/noticias', AdminNoticiaController::class)->names('admin.noticias');
-
-Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':profesor'])->group(function () {
-    Route::get('/profesor/dashboard', 
-        [ProfesorDashboardController::class, 'index']
-    )->name('profesor.dashboard');
-});
 
 Route::post('/notificaciones/mark-all-read', function () {
     $user = App\Models\User::find(auth()->id());
