@@ -123,12 +123,12 @@ function eventosHandler() {
         modalEdit: false,
         modalDelete: false,
 
-        createData: { nombre: '', descripcion: 'Sin descripción', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '' },
-        editData: { id_evento: '', nombre: '', descripcion: '', categoria: '', cupos: 1, fecha_inicio: '', fecha_fin: '' },
+        createData: { nombre: '', descripcion: '', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' },
+        editData: { id_evento: '', nombre: '', descripcion: '', categoria: '', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' },
         deleteId: null,
 
         openCreate() { 
-            this.createData = { nombre: '', descripcion: 'Sin descripción', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '' };
+            this.createData = { nombre: '', descripcion: '', categoria: 'General', cupos: 1, fecha_inicio: '', fecha_fin: '', lugar: '', horario: '', dias: '' };
             this.modalCreate = true; 
         },
         

@@ -37,8 +37,14 @@
             padding: .45rem .65rem;
         }
 
-        label {
+        /* Labels blancos SOLO fuera del modal (en la página principal) */
+        .main label {
             color: #fff !important;
+            font-weight: 600;
+        }
+        /* Dentro del modal los labels son oscuros para leerse sobre fondo blanco */
+        .modal-content label {
+            color: #374151 !important;
             font-weight: 600;
         }
 

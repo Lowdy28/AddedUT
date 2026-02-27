@@ -3,21 +3,7 @@
 
 @section('content')
 @php
-
-    $imageMap = [
-                'Bailes de Salón' => 'imagenes/baile.jpg',
-                'Música' => 'imagenes/musica.jpg',
-                'Oratoria y Dibujo' => 'imagenes/dibujo.jpg',
-                'Teatro' => 'imagenes/teatro.jpg',
-                'Ajedrez' => 'imagenes/ajedrez.jpg',
-                'Basquetbol' => 'imagenes/basquet.jpg',
-                'Fútbol americano' => 'imagenes/americano.jpg',
-                'Fútbol rápido y 7' => 'imagenes/frapido.jpg',
-                'Fútbol soccer' => 'imagenes/soccer.jpg',
-                'Taekwondo' => 'imagenes/taekwdo.jpg',
-                'Voleibol' => 'imagenes/volei.jpg',
-            ];
-            $imagePath = $imageMap[$evento->nombre] ?? 'imagenes/default.jpg'; 
+    $imagenUrl = $evento->imagen_url;
 
     // 2. Diccionario de Descripciones y Detalles Específicos
     $detallesExtra = [
@@ -169,7 +155,7 @@
         
         {{-- IMAGEN PERFECTAMENTE PROPORCIONADA --}}
         <div class="event-header-image">
-            <img src="{{ asset($imagePath) }}" alt="{{ $evento->nombre }}" onerror="this.src='{{ asset('imagenes/uttec.jpeg') }}'">
+            <img src="{{ $imagenUrl }}" alt="{{ $evento->nombre }}" onerror="this.src='{{ asset('imagenes/uttec.jpeg') }}'">
         </div>
 
         <span class="detail-category-tag">{{ $evento->categoria }}</span>

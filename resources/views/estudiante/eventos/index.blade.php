@@ -33,19 +33,7 @@
 <div class="events-grid">
     @forelse ($eventos as $evento)
         @php
-        $imageMap = [ 
-            'Oratoria y Dibujo' => 'imagenes/dibujo.jpg', 'Dibujo' => 'imagenes/dibujo.jpg', 
-            'Teatro' => 'imagenes/teatro.jpg', 'Ajedrez' => 'imagenes/ajedrez.jpg',
-            'Fútbol Americano' => 'imagenes/americano.jpg', 'Americano' => 'imagenes/americano.jpg',
-            'Baile' => 'imagenes/baile.jpg', 'Danza' => 'imagenes/baile.jpg',
-            'Básquetbol' => 'imagenes/basquet.jpg', 'Basquetbol' => 'imagenes/basquet.jpg',
-            'Fútbol Rápido' => 'imagenes/frapido.jpg', 'Futbol Rapido' => 'imagenes/frapido.jpg',
-            'Fútbol' => 'imagenes/futbol.jpg', 'Futbol' => 'imagenes/futbol.jpg', 'Soccer' => 'imagenes/soccer.jpg',
-            'Música' => 'imagenes/musica.jpg', 'Musica' => 'imagenes/musica.jpg',
-            'Taekwondo' => 'imagenes/taekwdo.jpg', 'Voleibol' => 'imagenes/volei.jpg'
-        ];
-        $imagePath = $imageMap[$evento->nombre] ?? 'imagenes/uttec.jpeg'; 
-            
+            $imagenUrl = $evento->imagen_url;
             $inscritoEventIds = $inscritoEventIds ?? [];
             $isEnrolled = in_array($evento->id_evento, $inscritoEventIds);
         @endphp
@@ -53,7 +41,7 @@
         <a href="{{ route('estudiante.eventos.show', $evento->id_evento) }}" class="event-card-tilt">
             <div class="event-image-wrapper">
                 <span class="event-category-tag">{{ $evento->categoria }}</span>
-                <img src="{{ asset($imagePath) }}" alt="{{ $evento->nombre }}" class="event-image" onerror="this.src='{{ asset('imagenes/uttec.jpeg') }}'">
+                <img src="{{ $imagenUrl }}" alt="{{ $evento->nombre }}" class="event-image" onerror="this.src='{{ asset('imagenes/uttec.jpeg') }}'">
             </div>
             
             <div class="event-details">
