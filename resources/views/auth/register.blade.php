@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
 <style>
-/* ══════════════════════════════════════
-   BASE
-══════════════════════════════════════ */
 :root {
     --navy:  #002D62;
     --navy2: #001a3d;
@@ -35,16 +32,13 @@ body {
 }
 a { text-decoration:none; color:inherit; }
 
-/* ══════════════════════════════════════
-   PANEL IZQUIERDO — sticky 100vh
-══════════════════════════════════════ */
+/* PANEL IZQUIERDO */
 .pl {
     display:none; flex:1;
     position:sticky; top:0; height:100vh;
     flex-shrink:0; overflow:hidden;
 }
 @media(min-width:900px){ .pl { display:block; } }
-
 .pl-bg {
     position:absolute; inset:0;
     background:url('{{ asset('imagenes/background.jpg') }}') center/cover no-repeat;
@@ -53,14 +47,9 @@ a { text-decoration:none; color:inherit; }
     animation:bgZ 22s ease-in-out infinite alternate;
 }
 @keyframes bgZ { from{transform:scale(1.06)} to{transform:scale(1.13)} }
-
 .pl-overlay {
     position:absolute; inset:0;
-    background:linear-gradient(145deg,
-        rgba(0,16,32,.96) 0%,
-        rgba(0,40,90,.75) 50%,
-        rgba(0,60,40,.65) 100%
-    );
+    background:linear-gradient(145deg, rgba(0,16,32,.96) 0%, rgba(0,40,90,.75) 50%, rgba(0,60,40,.65) 100%);
 }
 .pl-grid {
     position:absolute; inset:0;
@@ -69,14 +58,11 @@ a { text-decoration:none; color:inherit; }
     animation:gridD 28s linear infinite;
 }
 @keyframes gridD { to{transform:translate(34px,34px)} }
-
 .orb { position:absolute; border-radius:50%; pointer-events:none; filter:blur(70px); }
 .orb-a { width:280px; height:280px; background:var(--green); opacity:.1; top:5%; left:-80px; animation:orbF 9s ease-in-out infinite; }
 .orb-b { width:220px; height:220px; background:#004C99; opacity:.2; bottom:8%; right:-60px; animation:orbF 12s ease-in-out infinite reverse; }
 .orb-c { width:140px; height:140px; background:var(--green); opacity:.07; top:55%; left:35%; animation:orbF 7s ease-in-out infinite 3s; }
 @keyframes orbF { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-28px)} }
-
-/* Contenido panel — centrado */
 .pl-body {
     position:absolute; inset:0; z-index:3;
     display:flex; flex-direction:column;
@@ -84,8 +70,6 @@ a { text-decoration:none; color:inherit; }
     padding:2.8rem 3rem;
     gap:2rem;
 }
-
-/* Logo */
 .pl-logo {
     display:flex; align-items:center; gap:10px;
     font-family:'Plus Jakarta Sans', sans-serif;
@@ -100,7 +84,6 @@ a { text-decoration:none; color:inherit; }
 }
 .pl-logo .iw svg { width:18px; height:18px; stroke:#fff; }
 .pl-logo .dot { color:var(--green); }
-
 .pl-heading h2 {
     font-family:'Plus Jakarta Sans', sans-serif;
     font-size:clamp(1.9rem, 2.6vw, 2.6rem);
@@ -116,8 +99,6 @@ a { text-decoration:none; color:inherit; }
 }
 @keyframes shimmer { from{background-position:0%} to{background-position:200%} }
 .pl-heading p { font-size:.93rem; color:var(--muted); line-height:1.7; max-width:320px; }
-
-/* Pasos */
 .pl-steps { display:flex; flex-direction:column; gap:1.1rem; }
 .step {
     display:flex; align-items:flex-start; gap:13px;
@@ -128,19 +109,10 @@ a { text-decoration:none; color:inherit; }
     transition:background .3s, border-color .3s;
 }
 .step:hover { background:rgba(0,220,130,.05); border-color:rgba(0,220,130,.15); }
-.step-num {
-    width:28px; height:28px; border-radius:50%; flex-shrink:0;
-    background:rgba(0,220,130,.12); border:1px solid var(--bdr);
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Plus Jakarta Sans', sans-serif;
-    font-size:.72rem; font-weight:800; color:var(--green);
-}
 .step-ico { width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
 .step-ico svg { width:16px; height:16px; stroke:var(--green); }
 .step-text { font-size:.86rem; color:rgba(241,245,249,.72); line-height:1.5; padding-top:.2rem; }
 .step-text strong { color:var(--white); font-weight:700; }
-
-/* Beneficios */
 .pl-perks { display:flex; flex-wrap:wrap; gap:.6rem; }
 .perk {
     display:inline-flex; align-items:center; gap:6px;
@@ -149,8 +121,6 @@ a { text-decoration:none; color:inherit; }
     font-size:.74rem; font-weight:700; color:rgba(241,245,249,.75);
 }
 .perk svg { width:12px; height:12px; stroke:var(--green); }
-
-/* Badge seguro */
 .pl-badge {
     display:inline-flex; align-items:center; gap:8px;
     background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
@@ -162,9 +132,7 @@ a { text-decoration:none; color:inherit; }
 @keyframes bdotA { 0%,100%{opacity:1} 50%{opacity:.3} }
 .pl-badge svg { width:13px; height:13px; stroke:var(--green); }
 
-/* ══════════════════════════════════════
-   PANEL DERECHO — formulario scrollable
-══════════════════════════════════════ */
+/* PANEL DERECHO */
 .pr {
     width:100%; max-width:520px;
     background:var(--navy3);
@@ -181,8 +149,6 @@ a { text-decoration:none; color:inherit; }
     pointer-events:none; z-index:0;
 }
 .pr > * { position:relative; z-index:1; }
-
-/* Logo móvil */
 .mob-logo {
     display:flex; align-items:center; gap:10px;
     font-family:'Plus Jakarta Sans', sans-serif;
@@ -198,8 +164,6 @@ a { text-decoration:none; color:inherit; }
 .mob-logo .iw svg { width:15px; height:15px; stroke:#fff; }
 .mob-logo .dot { color:var(--green); }
 @media(min-width:900px){ .mob-logo { display:none; } }
-
-/* Eyebrow */
 .eyebrow {
     display:inline-flex; align-items:center; gap:7px;
     background:rgba(0,220,130,.1); border:1px solid var(--bdr);
@@ -208,11 +172,8 @@ a { text-decoration:none; color:inherit; }
     letter-spacing:1.4px; text-transform:uppercase; margin-bottom:1.1rem;
 }
 .eyebrow-dot { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 7px var(--green); animation:bdotA 2s infinite; }
-
 .form-h { font-family:'Plus Jakarta Sans', sans-serif; font-size:clamp(1.65rem,3vw,2.1rem); font-weight:800; letter-spacing:-.5px; line-height:1.15; margin-bottom:.45rem; }
 .form-sub { font-size:.9rem; color:var(--muted); margin-bottom:1.8rem; line-height:1.6; }
-
-/* Error */
 .ferr {
     display:flex; align-items:center; gap:9px;
     background:rgba(255,82,82,.1); border:1px solid rgba(255,82,82,.35);
@@ -222,14 +183,10 @@ a { text-decoration:none; color:inherit; }
 }
 .ferr svg { width:16px; height:16px; flex-shrink:0; }
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
-
-/* Grupos */
 .fgrp { margin-bottom:1rem; }
 .flbl { font-size:.78rem; font-weight:700; color:rgba(241,245,249,.72); margin-bottom:.48rem; display:block; }
 .frow { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
 @media(max-width:480px){ .frow { grid-template-columns:1fr; } }
-
-/* Inputs */
 .fwrap { position:relative; display:flex; align-items:center; }
 .ficon {
     position:absolute; left:.9rem; z-index:1;
@@ -238,7 +195,6 @@ a { text-decoration:none; color:inherit; }
 }
 .ficon svg { width:15px; height:15px; }
 .fwrap:focus-within .ficon { color:var(--green); }
-
 .finput {
     width:100%; padding:.82rem 1rem .82rem 2.55rem;
     background:rgba(255,255,255,.05);
@@ -255,17 +211,6 @@ a { text-decoration:none; color:inherit; }
     box-shadow:0 0 0 3px rgba(0,220,130,.1);
 }
 .finput.err { border-color:var(--err); box-shadow:0 0 0 3px rgba(255,82,82,.1); }
-
-select.finput {
-    cursor:pointer;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='rgba(241,245,249,0.35)' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
-    background-repeat:no-repeat;
-    background-position:right .9rem center;
-    background-color:rgba(255,255,255,.05);
-    padding-right:2.4rem;
-}
-select.finput option { background:#001833; color:var(--white); }
-
 .ftoggle {
     position:absolute; right:.85rem;
     background:none; border:none; cursor:pointer;
@@ -275,13 +220,55 @@ select.finput option { background:#001833; color:var(--white); }
 .ftoggle:hover { color:var(--white); }
 .ftoggle svg { width:15px; height:15px; }
 
-/* Fortaleza contraseña */
+/* === ROL BADGE — deteccion automatica === */
+.rol-badge-wrap {
+    margin-top:.55rem;
+    min-height: 30px;
+    display:flex;
+    align-items:center;
+}
+.rol-badge {
+    display:inline-flex; align-items:center; gap:7px;
+    border-radius:50px; padding:.3rem .9rem;
+    font-size:.75rem; font-weight:700;
+    border:1px solid;
+    transition:all .25s ease;
+    animation:fadeIn .2s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+.rol-badge.estudiante {
+    background:rgba(0,220,130,.12);
+    border-color:rgba(0,220,130,.35);
+    color:#00DC82;
+}
+.rol-badge.profesor {
+    background:rgba(0,76,153,.2);
+    border-color:rgba(0,140,255,.35);
+    color:#5fb3ff;
+}
+.rol-badge.invalido {
+    background:rgba(255,82,82,.1);
+    border-color:rgba(255,82,82,.3);
+    color:#FF8080;
+}
+.rol-badge svg { width:12px; height:12px; }
+
+/* Hint debajo del email */
+.email-hint {
+    margin-top:.45rem;
+    font-size:.73rem;
+    color:rgba(241,245,249,.3);
+    line-height:1.5;
+}
+.email-hint span { color:rgba(0,220,130,.7); font-weight:600; }
+
+/* Contraseña */
 .pwd-str { margin-top:.5rem; }
 .str-bars { display:flex; gap:4px; margin-bottom:.28rem; }
 .str-bar { flex:1; height:3px; border-radius:2px; background:rgba(255,255,255,.09); transition:background .3s; }
-.s-weak   { background:#FF5252; }
-.s-mid    { background:#FFD60A; }
-.s-good   { background:#00DC82; }
+.s-weak { background:#FF5252; }
+.s-mid  { background:#FFD60A; }
+.s-good { background:#00DC82; }
 .str-lbl { font-size:.7rem; color:var(--muted); }
 
 /* Checkbox */
@@ -303,7 +290,7 @@ select.finput option { background:#001833; color:var(--white); }
 .check-lbl a { color:var(--green); font-weight:700; }
 .check-lbl a:hover { text-decoration:underline; }
 
-/* Botón */
+/* Boton */
 .btn-go {
     width:100%; padding:.93rem;
     background:var(--green); color:var(--navy);
@@ -319,11 +306,13 @@ select.finput option { background:#001833; color:var(--white); }
     background:#00f090;
     box-shadow:0 14px 36px rgba(0,220,130,.5);
 }
+.btn-go:disabled {
+    opacity:.45; cursor:not-allowed;
+    transform:none; box-shadow:none;
+}
 .btn-go svg { width:18px; height:18px; }
-
 .sep { display:flex; align-items:center; gap:12px; margin:1.4rem 0; color:rgba(241,245,249,.18); font-size:.74rem; }
 .sep::before, .sep::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.06); }
-
 .ffoot { text-align:center; font-size:.87rem; color:var(--muted); }
 .ffoot a { color:var(--green); font-weight:700; }
 .ffoot a:hover { text-decoration:underline; }
@@ -334,7 +323,6 @@ select.finput option { background:#001833; color:var(--white); }
 }
 .fback:hover { color:var(--white); }
 .fback svg { width:13px; height:13px; }
-
 .sec-hint {
     display:flex; align-items:center; gap:7px;
     font-size:.73rem; color:rgba(241,245,249,.28); margin-top:1.5rem;
@@ -342,17 +330,15 @@ select.finput option { background:#001833; color:var(--white); }
     justify-content:center;
 }
 .sec-hint svg { width:13px; height:13px; stroke:rgba(0,220,130,.5); }
-
 .pr { animation:slideIn .55s cubic-bezier(.22,1,.36,1) both; }
 @keyframes slideIn { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
-
 @media(max-width:900px){ .pr { max-width:100%; padding:3rem 2rem 4rem; } }
 @media(max-width:480px){ .pr { padding:2.5rem 1.5rem 3.5rem; } }
 </style>
 </head>
 <body>
 
-<!-- ── PANEL IZQUIERDO ── -->
+<!-- PANEL IZQUIERDO -->
 <div class="pl">
     <div class="pl-bg"></div>
     <div class="pl-overlay"></div>
@@ -360,53 +346,44 @@ select.finput option { background:#001833; color:var(--white); }
     <div class="orb orb-a"></div>
     <div class="orb orb-b"></div>
     <div class="orb orb-c"></div>
-
     <div class="pl-body">
-
         <a href="/" class="pl-logo">
             <div class="iw"><i data-feather="book-open"></i></div>
             Added<span class="dot">UT</span>
         </a>
-
         <div class="pl-heading">
             <h2>Empieza tu<br>camino <em>hoy.</em></h2>
-            <p>Crea tu cuenta y accede a todas las actividades extracurriculares de la UTTEC.</p>
+            <p>Crea tu cuenta con tu correo institucional y accede a todas las actividades extracurriculares de la UTTEC.</p>
         </div>
-
-        <!-- Pasos -->
         <div class="pl-steps">
             <div class="step">
-                <div class="step-ico"><i data-feather="user-plus"></i></div>
-                <div class="step-text"><strong>Crea tu cuenta</strong> con datos institucionales en menos de 2 minutos.</div>
+                <div class="step-ico"><i data-feather="mail"></i></div>
+                <div class="step-text"><strong>Usa tu correo institucional</strong> — tu matricula determina tu rol automaticamente.</div>
             </div>
             <div class="step">
                 <div class="step-ico"><i data-feather="search"></i></div>
-                <div class="step-text"><strong>Explora</strong> el catálogo de actividades disponibles en la UTTEC.</div>
+                <div class="step-text"><strong>Explora</strong> el catalogo de actividades disponibles en la UTTEC.</div>
             </div>
             <div class="step">
                 <div class="step-ico"><i data-feather="check-circle"></i></div>
-                <div class="step-text"><strong>Inscríbete</strong> y construye tu perfil extracurricular completo.</div>
+                <div class="step-text"><strong>Inscribete</strong> y construye tu perfil extracurricular completo.</div>
             </div>
         </div>
-
-        <!-- Perks -->
         <div class="pl-perks">
             <span class="perk"><i data-feather="zap"></i> Gratis</span>
             <span class="perk"><i data-feather="shield"></i> Seguro</span>
-            <span class="perk"><i data-feather="smartphone"></i> Desde cualquier dispositivo</span>
-            <span class="perk"><i data-feather="clock"></i> 2 min de registro</span>
+            <span class="perk"><i data-feather="smartphone"></i> Cualquier dispositivo</span>
+            <span class="perk"><i data-feather="clock"></i> 2 min</span>
         </div>
-
         <div class="pl-badge">
             <div class="bdot"></div>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
-            Plataforma oficial · UTTEC · Conexión segura
+            Plataforma oficial · UTTEC · Conexion segura
         </div>
-
     </div>
 </div>
 
-<!-- ── PANEL DERECHO ── -->
+<!-- PANEL DERECHO -->
 <div class="pr">
 
     <a href="/" class="mob-logo">
@@ -416,7 +393,7 @@ select.finput option { background:#001833; color:var(--white); }
 
     <span class="eyebrow"><span class="eyebrow-dot"></span> Es gratis</span>
     <h1 class="form-h">Crea tu cuenta<br>en AddedUT</h1>
-    <p class="form-sub">Completa tus datos y únete a la comunidad UTTEC.</p>
+    <p class="form-sub">Ingresa tu correo institucional — tu rol se detecta automaticamente.</p>
 
     @if($errors->any())
     <div class="ferr">
@@ -425,7 +402,7 @@ select.finput option { background:#001833; color:var(--white); }
     </div>
     @endif
 
-    <form action="{{ route('registro') }}" method="POST">
+    <form action="{{ route('registro.post') }}" method="POST" id="formRegistro">
         @csrf
 
         <!-- Nombre -->
@@ -440,7 +417,7 @@ select.finput option { background:#001833; color:var(--white); }
             </div>
         </div>
 
-        <!-- Email -->
+        <!-- Correo institucional -->
         <div class="fgrp">
             <label class="flbl" for="email">Correo institucional</label>
             <div class="fwrap">
@@ -448,14 +425,29 @@ select.finput option { background:#001833; color:var(--white); }
                 <input class="finput {{ $errors->has('email') ? 'err' : '' }}"
                     type="email" name="email" id="email"
                     placeholder="matricula@uttec.edu.mx"
-                    value="{{ old('email') }}" required>
+                    value="{{ old('email') }}"
+                    required
+                    autocomplete="off"
+                    oninput="detectarRol(this.value)">
             </div>
+
+            <!-- Hint de formato -->
+            <div class="email-hint" id="emailHint">
+                Estudiantes: <span>2523260044@uttec.edu.mx</span> &nbsp;|&nbsp;
+                Profesores: <span>P2301@uttec.edu.mx</span>
+            </div>
+
+            <!-- Badge de rol detectado -->
+            <div class="rol-badge-wrap" id="rolBadgeWrap"></div>
+
+            <!-- Campo oculto que lleva el rol al servidor (informativo, el server lo revalida) -->
+            <input type="hidden" name="rol_detectado" id="rolDetectado" value="">
         </div>
 
-        <!-- Contraseñas en 2 cols -->
+        <!-- Contrasenas -->
         <div class="frow">
             <div class="fgrp">
-                <label class="flbl" for="pwd">Contraseña</label>
+                <label class="flbl" for="pwd">Contrasena</label>
                 <div class="fwrap">
                     <span class="ficon"><i data-feather="lock"></i></span>
                     <input class="finput {{ $errors->has('password') ? 'err' : '' }}"
@@ -474,7 +466,6 @@ select.finput option { background:#001833; color:var(--white); }
                     <span class="str-lbl" id="str-lbl"></span>
                 </div>
             </div>
-
             <div class="fgrp">
                 <label class="flbl" for="pwd2">Confirmar</label>
                 <div class="fwrap">
@@ -487,37 +478,24 @@ select.finput option { background:#001833; color:var(--white); }
             </div>
         </div>
 
-        <!-- Rol -->
-        <div class="fgrp">
-            <label class="flbl" for="rol">¿Cuál es tu rol?</label>
-            <div class="fwrap">
-                <span class="ficon"><i data-feather="briefcase"></i></span>
-                <select class="finput" name="rol" id="rol" required style="padding-left:2.55rem">
-                    <option value="" disabled {{ old('rol')=='' ? 'selected' : '' }}>Selecciona tu rol</option>
-                    <option value="estudiante" {{ old('rol')=='estudiante' ? 'selected':'' }}>👨‍🎓 Estudiante</option>
-                    <option value="profesor"   {{ old('rol')=='profesor'   ? 'selected':'' }}>👨‍🏫 Profesor</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Términos -->
+        <!-- Terminos -->
         <div class="check-wrap">
             <input type="checkbox" class="check-box" name="terms" id="terms" required>
             <label class="check-lbl" for="terms">
-                Acepto los <a href="{{ route('terminos') }}" target="_blank">Términos y Condiciones</a> de la plataforma AddedUT.
+                Acepto los <a href="{{ route('terminos') }}" target="_blank">Terminos y Condiciones</a> de la plataforma AddedUT.
             </label>
         </div>
 
-        <button type="submit" class="btn-go">
+        <button type="submit" class="btn-go" id="btnSubmit">
             <i data-feather="user-plus"></i>
-            Crear mi cuenta gratis
+            Crear mi cuenta
         </button>
     </form>
 
     <div class="sep">o</div>
 
     <div class="ffoot" style="margin-bottom:.6rem">
-        ¿Ya tienes cuenta? <a href="{{ route('login') }}">Inicia sesión aquí</a>
+        Ya tienes cuenta? <a href="{{ route('login') }}">Inicia sesion aqui</a>
     </div>
     <div class="ffoot">
         <a href="/" class="fback"><i data-feather="arrow-left"></i> Volver al inicio</a>
@@ -525,7 +503,7 @@ select.finput option { background:#001833; color:var(--white); }
 
     <div class="sec-hint">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        Tu información está protegida con cifrado seguro
+        Tu informacion esta protegida con cifrado seguro
     </div>
 
 </div>
@@ -533,16 +511,17 @@ select.finput option { background:#001833; color:var(--white); }
 <script>
 feather.replace();
 
-const eyeSVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const eyeSVG    = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
 const eyeOffSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
 function togglePwd(id, btn) {
-    const el = document.getElementById(id);
+    const el   = document.getElementById(id);
     const show = el.type === 'password';
-    el.type = show ? 'text' : 'password';
+    el.type    = show ? 'text' : 'password';
     btn.innerHTML = show ? eyeOffSVG : eyeSVG;
 }
 
+/* ── Indicador de fortaleza de contrasena ── */
 function checkStr(v) {
     const bars = [1,2,3,4].map(i => document.getElementById('b'+i));
     const lbl  = document.getElementById('str-lbl');
@@ -553,14 +532,92 @@ function checkStr(v) {
     if (/[^A-Za-z0-9]/.test(v)) s++;
     const cfg = [
         ['',''],
-        ['s-weak','🔴 Débil'],
-        ['s-mid','🟡 Regular'],
-        ['s-mid','🟡 Buena'],
-        ['s-good','🟢 Excelente'],
+        ['s-weak','Debil'],
+        ['s-mid','Regular'],
+        ['s-mid','Buena'],
+        ['s-good','Excelente'],
     ];
     bars.forEach((b,i) => { b.className = 'str-bar' + (i < s ? ' '+cfg[s][0] : ''); });
     lbl.textContent = cfg[s][1];
 }
+
+function detectarRol(emailVal) {
+    const wrap  = document.getElementById('rolBadgeWrap');
+    const input = document.getElementById('rolDetectado');
+    const hint  = document.getElementById('emailHint');
+    const btn   = document.getElementById('btnSubmit');
+
+    const emailLower = emailVal.trim().toLowerCase();
+
+    if (!emailLower.includes('@')) {
+        wrap.innerHTML = '';
+        input.value    = '';
+        hint.style.display = 'block';
+        btn.disabled   = false;
+        return;
+    }
+
+    const partes    = emailLower.split('@');
+    const matricula = partes[0];
+    const dominio   = partes[1] || '';
+
+    hint.style.display = 'none';
+
+    if (dominio && dominio !== 'uttec.edu.mx') {
+        mostrarBadge(wrap, 'invalido', 'x-circle',
+            'Solo se acepta @uttec.edu.mx');
+        input.value  = '';
+        btn.disabled = true;
+        return;
+    }
+
+    if (dominio !== 'uttec.edu.mx') {
+        wrap.innerHTML = '';
+        input.value    = '';
+        btn.disabled   = false;
+        return;
+    }
+
+    if (/^\d{10}$/.test(matricula)) {
+        mostrarBadge(wrap, 'estudiante', 'user',
+            'Estudiante detectado — matricula ' + matricula);
+        input.value  = 'estudiante';
+        btn.disabled = false;
+
+    } else if (/^[a-zA-Z]+\d{2,}$/.test(matricula)) {
+        mostrarBadge(wrap, 'profesor', 'briefcase',
+            'Profesor detectado — clave ' + matricula.toUpperCase());
+        input.value  = 'profesor';
+        btn.disabled = false;
+
+    } else {
+        mostrarBadge(wrap, 'invalido', 'alert-circle',
+            'Formato de matricula no reconocido');
+        input.value  = '';
+        btn.disabled = true;
+    }
+}
+
+function mostrarBadge(wrap, tipo, icono, texto) {
+    const iconosSVG = {
+        'user':          `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        'briefcase':     `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+        'alert-circle':  `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+        'x-circle':      `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+    };
+    wrap.innerHTML = `
+        <span class="rol-badge ${tipo}">
+            ${iconosSVG[icono] || ''}
+            ${texto}
+        </span>`;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const emailInput = document.getElementById('email');
+    if (emailInput && emailInput.value) {
+        detectarRol(emailInput.value);
+    }
+});
 </script>
 </body>
 </html>
