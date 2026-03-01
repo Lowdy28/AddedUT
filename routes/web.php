@@ -14,6 +14,7 @@ use App\Http\Controllers\EstudianteEventoController;
 use App\Http\Controllers\ProfesorDashboardController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\AdminNoticiaController;
+use App\Http\Controllers\RecomendacionController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -121,6 +122,12 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/profesor/noticias/{noticia}', [NoticiaController::class, 'show'])
             ->name('profesor.noticias.show');
     });
+
+    Route::post('/estudiante/recomendacion/intereses', [RecomendacionController::class, 'guardarIntereses']
+            )->name('estudiante.recomendacion.guardar');
+
+    Route::post('/estudiante/recomendacion/omitir', [RecomendacionController::class, 'omitir']
+            )->name('estudiante.recomendacion.omitir');
 });
 
 Route::middleware(['auth'])->group(function () {
