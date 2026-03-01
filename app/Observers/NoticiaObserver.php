@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Noticia;
+use App\Models\LikeNoticia;
 use App\Models\User;
 use App\Notifications\CambioHorarioNotification;
 
@@ -15,10 +16,10 @@ class NoticiaObserver
 
         foreach ($estudiantes as $estudiante) {
             $estudiante->notify(new CambioHorarioNotification([
-                'titulo' => '¡' . $noticia->titulo . '!',
+                'titulo'  => '¡' . $noticia->titulo . '!',
                 'mensaje' => 'Hay una nueva noticia en la universidad. ¡Échale un vistazo!',
-                'tipo' => 'noticia',
-                'url' => $url,
+                'tipo'    => 'noticia',
+                'url'     => $url,
             ]));
         }
     }

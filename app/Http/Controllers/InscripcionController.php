@@ -83,35 +83,35 @@ class InscripcionController extends Controller
     }
 
     public function destroyByEvent(Evento $evento)
-    {
-        $userId = Auth::id();
-        
-        $inscripcion = Inscripcion::where('id_usuario', $userId)
-                                 ->where('id_evento', $evento->id_evento)
-                                 ->first();
+{
+    $userId = Auth::id();
 
-        if (!$inscripcion) {
-            return back()->with('error', 'No estás inscrito en este evento.');
-        }
+    $inscripcion = Inscripcion::where('id_usuario', $userId)
+                             ->where('id_evento', $evento->id_evento)
+                             ->first();
 
-        try {
-            DB::beginTransaction();
-
-            $inscripcion->delete();
-            // Incrementamos 'cupo_disponible'
-            $evento->increment('cupo_disponible'); 
-
-            DB::commit();
-
-            // Redirección CORREGIDA a showEstudiante
-            return redirect()->route('estudiante.eventos.showEstudiante', $evento->id_evento)
-                             ->with('success', 'Inscripción cancelada correctamente.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Error al cancelar la inscripción: ' . $e->getMessage());
-        }
+    if (!$inscripcion) {
+        return back()->with('error', 'No estás inscrito en este evento.');
     }
+
+    try {
+        DB::beginTransaction();
+
+        $inscripcion->load('evento');
+
+        $inscripcion->delete();
+        $evento->increment('cupo_disponible');
+
+        DB::commit();
+
+        return redirect()->route('estudiante.eventos.show', $evento->id_evento)
+                         ->with('success', 'Inscripción cancelada correctamente.');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Error al cancelar la inscripción: ' . $e->getMessage());
+    }
+}
     
     public function show($id)
     {

@@ -99,7 +99,7 @@
 <div class="ripple-overlay" id="rippleOverlay"></div>
 
 @php
-    $authUser = App\Models\Usuario::find(auth()->id());
+    $authUser = App\Models\User::find(auth()->id());
 @endphp
 
     <header>
