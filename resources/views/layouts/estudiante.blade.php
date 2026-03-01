@@ -98,12 +98,10 @@
 
 <div class="ripple-overlay" id="rippleOverlay"></div>
 @include('estudiante.modals.cuestionario-recomendacion', ['mostrarCuestionario' => $mostrarCuestionario ?? false])
-
 @php
-    $authUser          = App\Models\Usuario::find(auth()->id());
+    $authUser = App\Models\Usuario::find(auth()->id());
     $mostrarCuestionario = $mostrarCuestionario ?? false;
 @endphp
-
     <header>
         <a href="{{ route('estudiante.eventos.index') }}" class="logo">
             <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>

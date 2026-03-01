@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class NotificacionController extends Controller
 {
-    public function index()
-    {
-        $notificaciones = Notificacion::with('usuario')->orderBy('fecha_envio','desc')->paginate(25);
-        return view('notificaciones.index', compact('notificaciones'));
-    }
+   public function index()
+{
+    $user = \App\Models\User::find(auth()->id());
+    $notificaciones = $user ? $user->notifications()->latest()->paginate(25) : collect();
+    return view('notificaciones.index', compact('notificaciones'));
+}
 
     public function create()
     {
