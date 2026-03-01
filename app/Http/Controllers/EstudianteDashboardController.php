@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Evento;
 use App\Models\Inscripcion;
+use App\Models\UserInteres;
 use Illuminate\Support\Facades\Auth;
 
 class EstudianteDashboardController extends Controller
@@ -13,16 +14,24 @@ class EstudianteDashboardController extends Controller
     {
         $user = Auth::user();
 
-        $eventos = Evento::orderBy('fecha_inicio', 'asc')
-                         ->paginate(12);
+        $eventos = Evento::orderBy('fecha_inicio', 'asc')->paginate(12);
 
         $misInscripciones = Inscripcion::where('id_usuario', $user->id_usuario)
                                        ->with('evento')
-                                       ->orderBy('fecha_inscripcion','desc')
+                                       ->orderBy('fecha_inscripcion', 'desc')
                                        ->get();
 
         $inscritoEventIds = $misInscripciones->pluck('id_evento')->toArray();
 
-        return view('estudiante.dashboard', compact('eventos','misInscripciones', 'inscritoEventIds'));
+        $interes = UserInteres::where('id_usuario', $user->id_usuario)->first();
+
+        $mostrarCuestionario = !$interes || !$interes->cuestionario_completado;
+
+        return view('estudiante.dashboard', compact(
+            'eventos',
+            'misInscripciones',
+            'inscritoEventIds',
+            'mostrarCuestionario'
+        ));
     }
 }
