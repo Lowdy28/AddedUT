@@ -55,33 +55,30 @@
         .notif-footer { padding: 10px; text-align: center; border-top: 1px solid #eee; }
         .notif-footer a { font-size: 0.8rem; color: var(--color-uttec-green); font-weight: 700; }
 
-       
-        .ripple-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
-        }
-        .ripple-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 168, 107, 0.6) 0%, rgba(0, 45, 98, 0.85) 60%, rgba(0, 45, 98, 1) 100%);
-            transform: scale(0);
-            animation: rippleExpand 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            pointer-events: none;
-        }
-        @keyframes rippleExpand {
-            0%   { transform: scale(0); opacity: 1; }
-            100% { transform: scale(25); opacity: 1; }
-        }
-     
+        .ripple-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+        .ripple-circle { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(0, 168, 107, 0.6) 0%, rgba(0, 45, 98, 0.85) 60%, rgba(0, 45, 98, 1) 100%); transform: scale(0); animation: rippleExpand 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
+        @keyframes rippleExpand { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(25); opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .chat-btn { position: fixed; bottom: 30px; left: 30px; z-index: 998; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #002D62, #004C99); border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 45, 98, 0.5); display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .chat-btn:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(0, 45, 98, 0.7); }
+        .chat-btn svg { width: 26px; height: 26px; color: white; }
+        .chat-panel { position: fixed; bottom: 100px; left: 30px; width: 340px; height: 450px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.18); border: 1px solid #eee; display: none; z-index: 997; flex-direction: column; overflow: hidden; animation: slideIn 0.25s ease-out; }
+        .chat-panel.active { display: flex; }
+        .chat-panel-header { background: linear-gradient(135deg, #002D62, #004C99); padding: 14px 16px; color: white; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { max-width: 80%; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; line-height: 1.4; }
+        .chat-msg.bot { background: #f0f7f4; border: 1px solid #d4edda; color: #333; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chat-msg.user { background: #002D62; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-msg.typing { background: #f0f7f4; border: 1px solid #d4edda; align-self: flex-start; color: #aaa; font-style: italic; }
+        .chat-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 8px; flex-shrink: 0; }
+        .chat-input-area input { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 14px; font-size: 0.82rem; outline: none; font-family: 'Inter', sans-serif; }
+        .chat-input-area input:focus { border-color: #00A86B; }
+        .chat-send-btn { background: #00A86B; border: none; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+        .chat-send-btn:hover { background: #008f5b; }
+        .chat-send-btn svg { width: 16px; height: 16px; color: white; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         footer { background: var(--color-uttec-white); color: var(--color-text-light); padding: 3rem 0 1rem 0; border-top: 5px solid var(--color-uttec-blue-dark); box-shadow: 0 -5px 15px rgba(0, 45, 98, 0.05); }
         .footer-content { max-width: 1300px; margin: 0 auto; padding: 0 3rem; display: flex; justify-content: space-between; gap: 4rem; flex-wrap: wrap; }
@@ -97,11 +94,13 @@
 <body>
 
 <div class="ripple-overlay" id="rippleOverlay"></div>
-@include('estudiante.modals.cuestionario-recomendacion', ['mostrarCuestionario' => $mostrarCuestionario ?? false])
+
 @php
-    $authUser = App\Models\Usuario::find(auth()->id());
-    $mostrarCuestionario = $mostrarCuestionario ?? false;
+    $authUser = App\Models\User::find(auth()->id());
 @endphp
+
+@include('estudiante.modals.cuestionario-recomendacion', ['mostrarCuestionario' => $mostrarCuestionario ?? false])
+
     <header>
         <a href="{{ route('estudiante.eventos.index') }}" class="logo">
             <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>
@@ -222,6 +221,31 @@
         <i data-feather="arrow-up"></i>
     </button>
 
+    {{-- CHATBOT --}}
+    <button class="chat-btn" id="chatBtn" title="Asistente IA">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+    </button>
+
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-panel-header">
+            <span>🤖 Asistente AddedUT</span>
+            <button id="chatClose" style="background:none; border:none; color:white; cursor:pointer; font-size:1.2rem; line-height:1;">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg bot">¡Hola! 👋 Soy el asistente de AddedUT. Puedo ayudarte con información sobre talleres, eventos e inscripciones. ¿En qué te puedo ayudar?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." maxlength="500">
+            <button class="chat-send-btn" id="chatSend">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
     @stack('scripts')
 
     <script>
@@ -292,6 +316,72 @@
                         window.location.href = url;
                     }, 550);
                 });
+            });
+
+            // CHATBOT
+            const chatBtn   = document.getElementById('chatBtn');
+            const chatPanel = document.getElementById('chatPanel');
+            const chatClose = document.getElementById('chatClose');
+            const chatInput = document.getElementById('chatInput');
+            const chatSend  = document.getElementById('chatSend');
+            const chatMsgs  = document.getElementById('chatMessages');
+
+            function agregarMensaje(texto, tipo) {
+                const div = document.createElement('div');
+                div.classList.add('chat-msg', tipo);
+                div.textContent = texto;
+                chatMsgs.appendChild(div);
+                chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                return div;
+            }
+
+            function enviarMensaje() {
+                const texto = chatInput.value.trim();
+                if (!texto) return;
+
+                agregarMensaje(texto, 'user');
+                chatInput.value = '';
+
+                const typing = agregarMensaje('Escribiendo...', 'typing');
+
+                fetch('{{ route("estudiante.chatbot") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ mensaje: texto })
+                })
+                .then(r => r.json())
+                .then(function (data) {
+                    typing.remove();
+                    agregarMensaje(data.respuesta, 'bot');
+                })
+                .catch(function () {
+                    typing.remove();
+                    agregarMensaje('Error al conectar con el asistente. Intenta de nuevo.', 'bot');
+                });
+            }
+
+            chatBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                chatPanel.classList.toggle('active');
+            });
+
+            chatClose.addEventListener('click', function () {
+                chatPanel.classList.remove('active');
+            });
+
+            chatSend.addEventListener('click', enviarMensaje);
+
+            chatInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') enviarMensaje();
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!chatPanel.contains(e.target) && e.target !== chatBtn) {
+                    chatPanel.classList.remove('active');
+                }
             });
         });
     </script>
