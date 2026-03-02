@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfesorDashboardController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\AdminNoticiaController;
 use App\Http\Controllers\RecomendacionController;
+use App\Http\Controllers\ChatbotController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -105,6 +106,8 @@ Route::middleware(['auth:web'])->group(function () {
             ->name('estudiante.noticias.comentar');
         Route::delete('/estudiante/noticias/comentario/{comentario}', [NoticiaController::class, 'eliminarComentario'])
             ->name('estudiante.noticias.comentario.destroy');
+            Route::post('/estudiante/chatbot', [ChatbotController::class, 'chat'])
+    ->name('estudiante.chatbot');
     });
 
     Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':profesor'])->group(function () {
@@ -148,3 +151,4 @@ Route::post('/notificaciones/mark-all-read', function () {
     $user->unreadNotifications->markAsRead();
     return response()->json(['success' => true]);
 })->middleware('auth')->name('notificaciones.markAllRead');
+
