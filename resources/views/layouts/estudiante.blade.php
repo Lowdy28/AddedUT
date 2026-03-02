@@ -33,37 +33,40 @@
         .logo span { color: var(--color-uttec-green); }
         nav { display: flex; align-items: center; gap: 2rem; }
         nav a, nav button { color: var(--color-uttec-blue-dark); font-weight: 600; padding: 0.5rem 0; position: relative; transition: color 0.3s ease; background: none; border: none; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 6px; }
-        nav a::after, nav button::after { content: ''; position: absolute; width: 0; height: 3px; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--color-uttec-green); transition: width 0.3s ease, background 0.3s ease; }
+        nav a::after, nav button::after { content: ''; position: absolute; width: 0; height: 3px; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--color-uttec-green); transition: width 0.3s ease; }
         nav a:hover, nav button:hover { color: var(--color-uttec-green); }
         nav a:hover::after, nav button:hover::after { width: 100%; }
         .logout-btn { color: var(--color-text-dark) !important; margin-left: 1rem; }
         .logout-btn:hover { color: var(--color-accent-red) !important; }
 
+        /* NOTIF WRAPPER */
         .notif-wrapper { position: relative; display: flex; align-items: center; }
-        .notif-badge { position: absolute; top: -2px; right: -2px; background: var(--color-accent-red); color: white; font-size: 10px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; }
-        .notif-dropdown { position: absolute; top: 45px; right: 0; width: 320px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #eee; display: none; z-index: 1000; overflow: hidden; }
-        .notif-dropdown.active { display: block; animation: slideIn 0.2s ease-out; }
-        .notif-header { padding: 12px 15px; background: #f8f9fa; border-bottom: 1px solid #eee; font-weight: 700; color: var(--color-uttec-blue-dark); font-size: 0.9rem; }
-        .notif-list { max-height: 350px; overflow-y: auto; }
-        .notif-item { padding: 12px 15px; border-bottom: 1px solid #f1f1f1; transition: background 0.2s; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; color: inherit; text-decoration: none; position: relative; overflow: hidden; }
-        .notif-item:hover { background: #f0f7f4; }
-        .notif-item.unread { border-left: 4px solid var(--color-uttec-green); background: #f9fdfb; }
-        .notif-icon { margin-top: 3px; }
-        .notif-text b { display: block; font-size: 0.85rem; color: #333; margin-bottom: 2px; }
-        .notif-text p { font-size: 0.8rem; color: #666; line-height: 1.3; margin: 0; }
-        .notif-time { font-size: 0.7rem; color: #aaa; margin-top: 5px; display: block; }
-        .notif-footer { padding: 10px; text-align: center; border-top: 1px solid #eee; }
-        .notif-footer a { font-size: 0.8rem; color: var(--color-uttec-green); font-weight: 700; }
+        .notif-badge { position: absolute; top: -4px; right: -4px; background: var(--color-accent-red); color: white; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid white; }
 
-        .ripple-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
-        .ripple-circle { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(0, 168, 107, 0.6) 0%, rgba(0, 45, 98, 0.85) 60%, rgba(0, 45, 98, 1) 100%); transform: scale(0); animation: rippleExpand 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
-        @keyframes rippleExpand { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(25); opacity: 1; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* PANEL ESTILO NETFLIX */
+        .notif-panel { position: absolute; top: calc(100% + 14px); right: 0; width: 360px; background: rgba(15, 20, 45, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); display: none; z-index: 1000; overflow: hidden; }
+        .notif-panel.active { display: block; }
+        .notif-panel-header { padding: 14px 16px 10px; font-weight: 800; font-size: .95rem; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
+        .notif-list { max-height: 380px; overflow-y: auto; }
+        .notif-list::-webkit-scrollbar { width: 4px; }
+        .notif-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+        .notif-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background .2s; }
+        .notif-row:hover { background: rgba(255,255,255,0.06); }
+        .notif-row.unread { background: rgba(0,168,107,0.07); }
+        .notif-row.unread:hover { background: rgba(0,168,107,0.12); }
+        .notif-row-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
+        .notif-row-body { flex: 1; min-width: 0; }
+        .notif-row-title { font-size: .83rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .notif-row-msg { font-size: .77rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
+        .notif-row-time { font-size: .7rem; color: rgba(255,255,255,0.35); margin-top: 4px; }
+        .notif-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #00A86B; flex-shrink: 0; margin-top: 6px; }
+        .notif-empty { padding: 30px; text-align: center; color: rgba(255,255,255,0.4); font-size: .85rem; }
 
+        /* CHATBOT */
         .chat-btn { position: fixed; bottom: 30px; left: 30px; z-index: 998; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #002D62, #004C99); border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 45, 98, 0.5); display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .chat-btn:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(0, 45, 98, 0.7); }
         .chat-btn svg { width: 26px; height: 26px; color: white; }
-        .chat-panel { position: fixed; bottom: 100px; left: 30px; width: 340px; height: 450px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.18); border: 1px solid #eee; display: none; z-index: 997; flex-direction: column; overflow: hidden; animation: slideIn 0.25s ease-out; }
+        .chat-panel { position: fixed; bottom: 100px; left: 30px; width: 340px; height: 450px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.18); border: 1px solid #eee; display: none; z-index: 997; flex-direction: column; overflow: hidden; }
         .chat-panel.active { display: flex; }
         .chat-panel-header { background: linear-gradient(135deg, #002D62, #004C99); padding: 14px 16px; color: white; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; }
         .chat-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
@@ -78,8 +81,6 @@
         .chat-send-btn:hover { background: #008f5b; }
         .chat-send-btn svg { width: 16px; height: 16px; color: white; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         footer { background: var(--color-uttec-white); color: var(--color-text-light); padding: 3rem 0 1rem 0; border-top: 5px solid var(--color-uttec-blue-dark); box-shadow: 0 -5px 15px rgba(0, 45, 98, 0.05); }
         .footer-content { max-width: 1300px; margin: 0 auto; padding: 0 3rem; display: flex; justify-content: space-between; gap: 4rem; flex-wrap: wrap; }
         .footer-col { flex: 1; min-width: 250px; }
@@ -93,297 +94,253 @@
 </head>
 <body>
 
-<div class="ripple-overlay" id="rippleOverlay"></div>
-
-@php
-    $authUser = App\Models\User::find(auth()->id());
-@endphp
+@php $authUser = App\Models\User::find(auth()->id()); @endphp
 
 @include('estudiante.modals.cuestionario-recomendacion', ['mostrarCuestionario' => $mostrarCuestionario ?? false])
 
-    <header>
-        <a href="{{ route('estudiante.eventos.index') }}" class="logo">
-            <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>
-            Added<span>UT</span>
+<header>
+    <a href="{{ route('estudiante.eventos.index') }}" class="logo">
+        <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>
+        Added<span>UT</span>
+    </a>
+    <nav>
+        <a href="{{ route('estudiante.eventos.index') }}">
+            <i data-feather="calendar" class="feather"></i> Eventos
         </a>
-        <nav>
-            <a href="{{ route('estudiante.eventos.index') }}">
-                <i data-feather="calendar" class="feather"></i> Eventos
-            </a>
-            <a href="{{ route('estudiante.noticias.foro') }}">
-                <i data-feather="rss" class="feather"></i> Noticias
-            </a>
+        <a href="{{ route('estudiante.noticias.foro') }}">
+            <i data-feather="rss" class="feather"></i> Noticias
+        </a>
 
-            <div style="display:flex; align-items:center; gap: 20px; border-left: 1px solid #ddd; padding-left: 20px;">
+        <div style="display:flex; align-items:center; gap:20px; border-left:1px solid #ddd; padding-left:20px;">
 
-                <div class="notif-wrapper">
-                    <button id="layoutNotifBtn" style="background:none; border:none; cursor:pointer; position:relative; display:flex; align-items:center; padding: 4px;">
-                        <i data-feather="bell" style="color: var(--color-uttec-blue-dark); width:22px; height:22px; stroke-width:2.5;"></i>
-                        @if($authUser->unreadNotifications->count() > 0)
-                            <span class="notif-badge" id="layoutNotifBadge">{{ $authUser->unreadNotifications->count() }}</span>
-                        @endif
-                    </button>
+            <div class="notif-wrapper">
+                <button id="layoutNotifBtn" style="background:none; border:none; cursor:pointer; position:relative; display:flex; align-items:center; padding:4px;">
+                    <i data-feather="bell" style="color:var(--color-uttec-blue-dark); width:22px; height:22px; stroke-width:2.5;"></i>
+                    @if($authUser->unreadNotifications->count() > 0)
+                        <span class="notif-badge" id="layoutNotifBadge">{{ $authUser->unreadNotifications->count() }}</span>
+                    @endif
+                </button>
 
-                    <div class="notif-dropdown" id="layoutNotifDropdown">
-                        <div class="notif-header">🔔 Notificaciones</div>
-                        <div class="notif-list">
-                            @forelse($authUser->unreadNotifications as $notification)
-                                @php
-                                    $tipo  = $notification->data['tipo'] ?? 'info';
-                                    $url   = $notification->data['url'] ?? '#';
-                                    $icono = match($tipo) {
-                                        'cambio'            => 'clock',
-                                        'cupos_disponibles' => 'user-plus',
-                                        'sin_cupos'         => 'user-x',
-                                        'noticia'           => 'rss',
-                                        default             => 'info',
-                                    };
-                                    $color = match($tipo) {
-                                        'cambio'            => '#f39c12',
-                                        'cupos_disponibles' => '#00A86B',
-                                        'sin_cupos'         => '#e74c3c',
-                                        'noticia'           => '#004C99',
-                                        default             => '#888',
-                                    };
-                                @endphp
-                                <div class="notif-item unread notif-link" data-url="{{ $url }}">
-                                    <div class="notif-icon">
-                                        <i data-feather="{{ $icono }}" style="color: {{ $color }}; width:16px; height:16px;"></i>
-                                    </div>
-                                    <div class="notif-text">
-                                        <b>{{ $notification->data['titulo'] }}</b>
-                                        <p>{{ $notification->data['mensaje'] }}</p>
-                                        <span class="notif-time">{{ $notification->created_at->diffForHumans() }}</span>
-                                    </div>
+                <div class="notif-panel" id="layoutNotifDropdown">
+                    <div class="notif-panel-header">
+                        <span>🔔 Notificaciones</span>
+                    </div>
+                    <div class="notif-list">
+                        @forelse($authUser->unreadNotifications as $notification)
+                            @php
+                                $tipo  = $notification->data['tipo'] ?? 'info';
+                                $url   = $notification->data['url'] ?? '#';
+                                $icono = match($tipo) {
+                                    'cambio'            => '🕐',
+                                    'cupos_disponibles' => '🟢',
+                                    'sin_cupos'         => '🔴',
+                                    'noticia'           => '📰',
+                                    default             => '🔔',
+                                };
+                            @endphp
+                            <div class="notif-row unread notif-link" data-url="{{ $url }}">
+                                <div class="notif-row-icon">{{ $icono }}</div>
+                                <div class="notif-row-body">
+                                    <div class="notif-row-title">{{ $notification->data['titulo'] }}</div>
+                                    <div class="notif-row-msg">{{ $notification->data['mensaje'] }}</div>
+                                    <div class="notif-row-time">{{ $notification->created_at->diffForHumans() }}</div>
                                 </div>
-                            @empty
-                                <div style="padding: 20px; text-align:center; color:#aaa; font-size:0.85rem;">
-                                    <i data-feather="bell-off" style="display:block; margin: 0 auto 8px; width:24px; height:24px;"></i>
-                                    No tienes notificaciones nuevas
-                                </div>
-                            @endforelse
-                        </div>
-                        <div class="notif-footer">
-                            <a href="{{ route('estudiante.noticias.foro') }}">Ver todo el historial</a>
-                        </div>
+                                <div class="notif-unread-dot"></div>
+                            </div>
+                        @empty
+                            <div class="notif-empty">
+                                <div style="font-size:1.5rem; margin-bottom:6px;">🔕</div>
+                                Sin notificaciones nuevas
+                            </div>
+                        @endforelse
                     </div>
                 </div>
-
-                <a href="{{ $authUser->rol === 'profesor' ? route('profesor.profile.edit') : route('estudiante.profile.edit') }}"
-                    style="display:flex; align-items:center; gap:8px; font-weight:600; color: var(--color-uttec-blue-dark); font-size: 0.95rem;">
-                    @php
-                        $fotoUrl = !empty($authUser->foto)
-                            ? asset('storage/' . $authUser->foto)
-                            : 'https://ui-avatars.com/api/?name=' . urlencode($authUser->nombre) . '&background=002D62&color=fff&size=64';
-                    @endphp
-                    <img src="{{ $fotoUrl }}" alt="Foto"
-                         style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid var(--color-uttec-blue-dark);">
-                    {{ $authUser->nombre }}
-                </a>
             </div>
 
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="logout-btn">
-                    <i data-feather="log-out" class="feather"></i> Salir
-                </button>
-            </form>
-        </nav>
-    </header>
-
-    <main>
-        @yield('content')
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>Added<span>UT</span></h4>
-                <p>Plataforma para la gestión de actividades extracurriculares en la Universidad Tecnológica de Tlaxcala (UTTEC).</p>
-            </div>
-            <div class="footer-col">
-                <h4>Enlaces Rápidos</h4>
-                <a href="{{ route('estudiante.eventos.index') }}">Eventos y Actividades</a>
-                <a href="{{ route('estudiante.noticias.foro') }}">Foro de Noticias</a>
-                <a href="{{ route('estudiante.profile.edit') }}">Mi Perfil</a>
-            </div>
-            <div class="footer-col">
-                <h4>Contacto</h4>
-                <address>Carretera Federal México-Pachuca km 37.5, Tecámac Edo. Méx.</address>
-            </div>
+            <a href="{{ $authUser->rol === 'profesor' ? route('profesor.profile.edit') : route('estudiante.profile.edit') }}"
+                style="display:flex; align-items:center; gap:8px; font-weight:600; color:var(--color-uttec-blue-dark); font-size:0.95rem;">
+                @php
+                    $fotoUrl = !empty($authUser->foto)
+                        ? asset('storage/' . $authUser->foto)
+                        : 'https://ui-avatars.com/api/?name=' . urlencode($authUser->nombre) . '&background=002D62&color=fff&size=64';
+                @endphp
+                <img src="{{ $fotoUrl }}" alt="Foto" style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid var(--color-uttec-blue-dark);">
+                {{ $authUser->nombre }}
+            </a>
         </div>
-        <div class="footer-bottom">
-            &copy; {{ date('Y') }} Universidad Tecnológica de Tecámac (UTTEC). Todos los derechos reservados.
-        </div>
-    </footer>
 
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="scrollTopButton">
-        <i data-feather="arrow-up"></i>
-    </button>
-
-    {{-- CHATBOT --}}
-    <button class="chat-btn" id="chatBtn" title="Asistente IA">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-        </svg>
-    </button>
-
-    <div class="chat-panel" id="chatPanel">
-        <div class="chat-panel-header">
-            <span>🤖 Asistente AddedUT</span>
-            <button id="chatClose" style="background:none; border:none; color:white; cursor:pointer; font-size:1.2rem; line-height:1;">✕</button>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="chat-msg bot">¡Hola! 👋 Soy el asistente de AddedUT. Puedo ayudarte con información sobre talleres, eventos e inscripciones. ¿En qué te puedo ayudar?</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." maxlength="500">
-            <button class="chat-send-btn" id="chatSend">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
+        <form method="POST" action="{{ route('logout') }}" class="inline">
+            @csrf
+            <button type="submit" class="logout-btn">
+                <i data-feather="log-out" class="feather"></i> Salir
             </button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    @yield('content')
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-col">
+            <h4>Added<span>UT</span></h4>
+            <p>Plataforma para la gestión de actividades extracurriculares en la Universidad Tecnológica de Tecámac (UTTEC).</p>
+        </div>
+        <div class="footer-col">
+            <h4>Enlaces Rápidos</h4>
+            <a href="{{ route('estudiante.eventos.index') }}">Eventos y Actividades</a>
+            <a href="{{ route('estudiante.noticias.foro') }}">Foro de Noticias</a>
+            <a href="{{ route('estudiante.profile.edit') }}">Mi Perfil</a>
+        </div>
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <address>Carretera Federal México-Pachuca km 37.5, Tecámac Edo. Méx.</address>
         </div>
     </div>
+    <div class="footer-bottom">
+        &copy; {{ date('Y') }} Universidad Tecnológica de Tecámac (UTTEC). Todos los derechos reservados.
+    </div>
+</footer>
 
-    @stack('scripts')
+<button onclick="window.scrollTo({top:0, behavior:'smooth'})" id="scrollTopButton">
+    <i data-feather="arrow-up"></i>
+</button>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            feather.replace();
+<!-- CHATBOT -->
+<button class="chat-btn" id="chatBtn" title="Asistente IA">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+    </svg>
+</button>
 
-            window.onscroll = function () {
-                document.getElementById("scrollTopButton").style.display =
-                    (document.documentElement.scrollTop > 100) ? "block" : "none";
-            };
+<div class="chat-panel" id="chatPanel">
+    <div class="chat-panel-header">
+        <span>🤖 Asistente AddedUT</span>
+        <button id="chatClose" style="background:none; border:none; color:white; cursor:pointer; font-size:1.2rem; line-height:1;">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg bot">¡Hola! 👋 Soy el asistente de AddedUT. Puedo ayudarte con información sobre talleres, eventos e inscripciones. ¿En qué te puedo ayudar?</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." maxlength="500">
+        <button class="chat-send-btn" id="chatSend">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+        </button>
+    </div>
+</div>
 
-            const btn      = document.getElementById('layoutNotifBtn');
-            const dropdown = document.getElementById('layoutNotifDropdown');
-            const overlay  = document.getElementById('rippleOverlay');
-            let leidas = false;
+@stack('scripts')
 
-            if (btn && dropdown) {
-                btn.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('active');
-                    feather.replace();
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        feather.replace();
 
-                    if (dropdown.classList.contains('active') && !leidas) {
-                        leidas = true;
-                        fetch('{{ route("notificaciones.markAllRead") }}', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                                'Content-Type': 'application/json'
-                            }
-                        }).then(function () {
-                            const badge = document.getElementById('layoutNotifBadge');
-                            if (badge) badge.remove();
-                            document.querySelectorAll('.notif-item.unread').forEach(function (item) {
-                                item.classList.remove('unread');
-                            });
-                        });
-                    }
-                });
+        window.onscroll = function () {
+            document.getElementById("scrollTopButton").style.display =
+                (document.documentElement.scrollTop > 100) ? "block" : "none";
+        };
 
-                document.addEventListener('click', function (e) {
-                    if (!dropdown.contains(e.target) && e.target !== btn) {
-                        dropdown.classList.remove('active');
-                    }
-                });
-            }
+        // NOTIFICACIONES
+        const btn      = document.getElementById('layoutNotifBtn');
+        const dropdown = document.getElementById('layoutNotifDropdown');
+        let leidas = false;
 
-            document.querySelectorAll('.notif-link').forEach(function (item) {
-                item.addEventListener('click', function (e) {
-                    const url = this.getAttribute('data-url');
-                    if (!url || url === '#') return;
-
-                    const rect   = this.getBoundingClientRect();
-                    const clickX = rect.left + rect.width / 2;
-                    const clickY = rect.top + rect.height / 2;
-                    const size   = 80;
-
-                    const circle = document.createElement('div');
-                    circle.classList.add('ripple-circle');
-                    circle.style.width  = size + 'px';
-                    circle.style.height = size + 'px';
-                    circle.style.left   = (clickX - size / 2) + 'px';
-                    circle.style.top    = (clickY - size / 2) + 'px';
-
-                    overlay.appendChild(circle);
-
-                    setTimeout(function () {
-                        window.location.href = url;
-                    }, 550);
-                });
-            });
-
-            // CHATBOT
-            const chatBtn   = document.getElementById('chatBtn');
-            const chatPanel = document.getElementById('chatPanel');
-            const chatClose = document.getElementById('chatClose');
-            const chatInput = document.getElementById('chatInput');
-            const chatSend  = document.getElementById('chatSend');
-            const chatMsgs  = document.getElementById('chatMessages');
-
-            function agregarMensaje(texto, tipo) {
-                const div = document.createElement('div');
-                div.classList.add('chat-msg', tipo);
-                div.textContent = texto;
-                chatMsgs.appendChild(div);
-                chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                return div;
-            }
-
-            function enviarMensaje() {
-                const texto = chatInput.value.trim();
-                if (!texto) return;
-
-                agregarMensaje(texto, 'user');
-                chatInput.value = '';
-
-                const typing = agregarMensaje('Escribiendo...', 'typing');
-
-                fetch('{{ route("estudiante.chatbot") }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ mensaje: texto })
-                })
-                .then(r => r.json())
-                .then(function (data) {
-                    typing.remove();
-                    agregarMensaje(data.respuesta, 'bot');
-                })
-                .catch(function () {
-                    typing.remove();
-                    agregarMensaje('Error al conectar con el asistente. Intenta de nuevo.', 'bot');
-                });
-            }
-
-            chatBtn.addEventListener('click', function (e) {
+        if (btn && dropdown) {
+            btn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                chatPanel.classList.toggle('active');
-            });
+                dropdown.classList.toggle('active');
 
-            chatClose.addEventListener('click', function () {
-                chatPanel.classList.remove('active');
-            });
-
-            chatSend.addEventListener('click', enviarMensaje);
-
-            chatInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') enviarMensaje();
+                if (dropdown.classList.contains('active') && !leidas) {
+                    leidas = true;
+                    fetch('{{ route("notificaciones.markAllRead") }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(function () {
+                        const badge = document.getElementById('layoutNotifBadge');
+                        if (badge) badge.remove();
+                        document.querySelectorAll('.notif-unread-dot').forEach(d => d.remove());
+                        document.querySelectorAll('.notif-row.unread').forEach(r => r.classList.remove('unread'));
+                    });
+                }
             });
 
             document.addEventListener('click', function (e) {
-                if (!chatPanel.contains(e.target) && e.target !== chatBtn) {
-                    chatPanel.classList.remove('active');
+                if (!dropdown.contains(e.target) && e.target !== btn) {
+                    dropdown.classList.remove('active');
                 }
             });
+        }
+
+        document.querySelectorAll('.notif-link').forEach(function (item) {
+            item.addEventListener('click', function () {
+                const url = this.getAttribute('data-url');
+                if (!url || url === '#') return;
+                window.location.href = url;
+            });
         });
-    </script>
+
+        // CHATBOT
+        const chatBtn   = document.getElementById('chatBtn');
+        const chatPanel = document.getElementById('chatPanel');
+        const chatClose = document.getElementById('chatClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend  = document.getElementById('chatSend');
+        const chatMsgs  = document.getElementById('chatMessages');
+
+        function agregarMensaje(texto, tipo) {
+            const div = document.createElement('div');
+            div.classList.add('chat-msg', tipo);
+            div.textContent = texto;
+            chatMsgs.appendChild(div);
+            chatMsgs.scrollTop = chatMsgs.scrollHeight;
+            return div;
+        }
+
+        function enviarMensaje() {
+            const texto = chatInput.value.trim();
+            if (!texto) return;
+            agregarMensaje(texto, 'user');
+            chatInput.value = '';
+            const typing = agregarMensaje('Escribiendo...', 'typing');
+            fetch('{{ route("estudiante.chatbot") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ mensaje: texto })
+            })
+            .then(r => r.json())
+            .then(function (data) {
+                typing.remove();
+                agregarMensaje(data.respuesta, 'bot');
+            })
+            .catch(function () {
+                typing.remove();
+                agregarMensaje('Error al conectar con el asistente. Intenta de nuevo.', 'bot');
+            });
+        }
+
+        chatBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            chatPanel.classList.toggle('active');
+        });
+        chatClose.addEventListener('click', function () { chatPanel.classList.remove('active'); });
+        chatSend.addEventListener('click', enviarMensaje);
+        chatInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') enviarMensaje(); });
+        document.addEventListener('click', function (e) {
+            if (!chatPanel.contains(e.target) && e.target !== chatBtn) {
+                chatPanel.classList.remove('active');
+            }
+        });
+    });
+</script>
 </body>
 </html>
