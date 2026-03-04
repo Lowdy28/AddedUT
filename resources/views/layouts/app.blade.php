@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="Sat, 01 Jan 2000 00:00:00 GMT">
 
     <title>{{ config('app.name', 'Panel Admin') }}</title>
 
@@ -82,6 +85,12 @@
     </main>
 
 </div>
-
+    <script>
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted || (window.performance && window.performance.getEntriesByType('navigation')[0]?.type === 'back_forward')) {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 </html>

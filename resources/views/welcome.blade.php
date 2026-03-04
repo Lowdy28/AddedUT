@@ -1125,5 +1125,12 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') cerrarModal(null, true);
 });
 </script>
+    <script>
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted || (window.performance && window.performance.getEntriesByType('navigation')[0]?.type === 'back_forward')) {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 </html>
