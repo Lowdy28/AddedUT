@@ -69,9 +69,6 @@ class InscripcionController extends Controller
 
         DB::commit();
 
-        $inscripcion->load('evento');
-        $inscripcion->fireModelEvent('created', false);
-
         return redirect()->route('estudiante.eventos.show', $eventoParaInscribir->id_evento)
                          ->with('success', '¡Inscripción exitosa! El cupo ha sido reservado.');
 

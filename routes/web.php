@@ -80,6 +80,7 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
         Route::get('/reportes/data/actividades', [ReporteController::class, 'actividadesData']);
         Route::get('/reportes/data/eventos', [ReporteController::class, 'eventosData']);
         Route::get('/reportes/data/inscripciones', [ReporteController::class, 'inscripcionesData']);
+        Route::get('/reportes/data/noticias', [ReporteController::class, 'noticiasData']);
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
