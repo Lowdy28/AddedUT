@@ -350,5 +350,6 @@
             }
     });
 </script>
+    @include('components.toast-alerts')
 </body>
 </html>

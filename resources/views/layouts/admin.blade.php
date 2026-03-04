@@ -247,23 +247,6 @@
             color: rgba(255,255,255,0.4); font-size: .85rem;
         }
 
-        /* ── PERFIL TOPBAR ── */
-        .admin-profile {
-            display: flex; align-items: center; gap: 10px;
-            padding: 5px 10px; border-radius: 8px;
-            background: var(--glass); border: 1px solid var(--border);
-            cursor: pointer; transition: background .2s;
-            text-decoration: none; color: #fff;
-        }
-        .admin-profile:hover { background: var(--glass-hover); }
-        .admin-profile img {
-            width: 32px; height: 32px; border-radius: 50%;
-            object-fit: cover; border: 2px solid var(--green);
-        }
-        .admin-profile-info { text-align: left; }
-        .admin-profile-name { font-size: .83rem; font-weight: 700; line-height: 1.2; }
-        .admin-profile-role { font-size: .7rem; color: var(--text-muted); }
-
         /* ── PAGE CONTENT ── */
         .page-content { padding: 2rem 1.75rem; flex: 1; }
 
@@ -432,15 +415,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- PERFIL -->
-                <a href="{{ route('profile.edit') }}" class="admin-profile">
-                    <img src="{{ $fotoAdmin }}" alt="foto">
-                    <div class="admin-profile-info">
-                        <div class="admin-profile-name">{{ $adminUser->nombre ?? 'Admin' }}</div>
-                        <div class="admin-profile-role">Administrador</div>
-                    </div>
-                </a>
 
             </div>
         </div>
