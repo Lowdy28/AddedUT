@@ -67,8 +67,8 @@ class Evento extends Model
     public function getImagenUrlAttribute(): string
     {
         if (!empty($this->imagen)) {
-            return Storage::disk('public')->url($this->imagen);
-        }
+    return Storage::disk('public')->url($this->imagen);
+}
 
         if (isset(self::$mapaImagenes[$this->nombre])) {
             return asset(self::$mapaImagenes[$this->nombre]);
