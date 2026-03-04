@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminNoticiaController;
 use App\Http\Controllers\RecomendacionController;
 use App\Http\Controllers\ChatbotController;
 
+
 use Illuminate\Support\Facades\Route;
 
 // ── Pública ──────────────────────────────────────────────────────────────────
@@ -119,6 +120,7 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
 
         Route::get('/profesor/dashboard', [ProfesorDashboardController::class, 'index'])->name('profesor.dashboard');
         Route::get('/profesor/mi-taller', [ProfesorDashboardController::class, 'miTaller'])->name('profesor.taller');
+        Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('profesor.eventos.update');
 
         Route::get('/profesor/profile', [ProfileController::class, 'edit'])->name('profesor.profile.edit');
         Route::patch('/profesor/profile', [ProfileController::class, 'update'])->name('profesor.profile.update');
@@ -128,3 +130,6 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
         Route::get('/profesor/noticias/{noticia}', [NoticiaController::class, 'show'])->name('profesor.noticias.show');
     });
 });
+
+Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('profesor.eventos.update');
+Route::post('/eventos/{evento}', [EventoController::class, 'update'])->name('profesor.eventos.update.post');

@@ -301,127 +301,154 @@
     </div>
 @endif
 
-    {{-- MODAL EDITAR --}}
-    <div x-show="modalEdit" x-cloak
-         class="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-         x-transition:enter="transition duration-300"
-         x-transition:enter-start="opacity-0 scale-90"
-         x-transition:enter-end="opacity-100 scale-100"
-         x-transition:leave="transition duration-200"
-         x-transition:leave-start="opacity-100 scale-100"
-         x-transition:leave-end="opacity-0 scale-90">
+   {{-- MODAL EDITAR --}}
+<div x-show="modalEdit" x-cloak
+     class="fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 pt-20"
+     x-transition:enter="transition duration-300"
+     x-transition:enter-start="opacity-0 scale-90"
+     x-transition:enter-end="opacity-100 scale-100"
+     x-transition:leave="transition duration-200"
+     x-transition:leave-start="opacity-100 scale-100"
+     x-transition:leave-end="opacity-0 scale-90">
 
-        <div style="background:#fff; border-radius:1.25rem; width:95%; max-width:580px; max-height:92vh; overflow-y:auto; box-shadow:0 25px 60px rgba(0,0,0,.4);">
+    <div style="background:#fff; border-radius:1.25rem; width:95%; max-width:560px; max-height:85vh; overflow-y:auto; box-shadow:0 25px 60px rgba(0,0,0,.4);">
 
-            <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb); border-radius:1.25rem 1.25rem 0 0; padding:1.2rem 1.6rem; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h3 style="color:#fff; font-size:1.2rem; font-weight:800; margin:0;">✏️ Editar Taller</h3>
-                    <p style="color:rgba(255,255,255,.7); font-size:.8rem; margin:.15rem 0 0;">Solo tú puedes editar tu taller asignado</p>
+        <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb); border-radius:1.25rem 1.25rem 0 0; padding:1rem 1.4rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:10;">
+            <div>
+                <h3 style="color:#fff; font-size:1.1rem; font-weight:800; margin:0;">✏️ Editar Taller</h3>
+                <p style="color:rgba(255,255,255,.7); font-size:.75rem; margin:.1rem 0 0;">Solo tú puedes editar tu taller asignado</p>
+            </div>
+            <button @click="closeAll()" style="background:rgba(255,255,255,.15); border:none; border-radius:50%; width:30px; height:30px; color:#fff; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;">✕</button>
+        </div>
+
+        <form id="formEditTaller" @submit.prevent="submitEdit(editData.id_evento)" style="padding:1.2rem 1.4rem;">
+
+            {{-- IMAGEN --}}
+            <div style="margin-bottom:.9rem;">
+                <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.4rem;">Imagen del taller</label>
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <img id="previewImagen" :src="editData.imagen_url" alt="preview"
+                         style="width:80px; height:56px; object-fit:cover; border-radius:.5rem; border:2px solid #e5e7eb; flex-shrink:0;">
+                    <div style="flex:1;">
+                        <input type="file" id="inputImagen" name="imagen" accept="image/*"
+                               onchange="previewImg(this)"
+                               style="width:100%; font-size:.82rem; color:#374151; background:#f8fafc; border:1.5px dashed #d1d5db; border-radius:.6rem; padding:.45rem .7rem; cursor:pointer;">
+                        <p style="font-size:.7rem; color:#9ca3af; margin-top:.3rem;">JPG, PNG o WEBP · máx. 3MB · Deja vacío para no cambiar</p>
+                    </div>
                 </div>
-                <button @click="closeAll()" style="background:rgba(255,255,255,.15); border:none; border-radius:50%; width:32px; height:32px; color:#fff; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;">✕</button>
             </div>
 
-            <form @submit.prevent="submitEdit(editData.id_evento)" style="padding:1.4rem 1.6rem;">
+            <div style="margin-bottom:.9rem;">
+                <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Nombre *</label>
+                <input type="text" x-model="editData.nombre" required
+                       style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111; font-size:.92rem;"
+                       onfocus="this.style.borderColor='#1e3a8a'" onblur="this.style.borderColor='#d1d5db'" />
+            </div>
 
-                <div style="margin-bottom:.9rem;">
-                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Nombre *</label>
-                    <input type="text" x-model="editData.nombre" required
-                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111; font-size:.92rem;"
-                           onfocus="this.style.borderColor='#1e3a8a'" onblur="this.style.borderColor='#d1d5db'" />
-                </div>
+            <div style="margin-bottom:.9rem;">
+                <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Descripción</label>
+                <textarea x-model="editData.descripcion" rows="2"
+                          style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111; font-size:.92rem; resize:vertical;"
+                          onfocus="this.style.borderColor='#1e3a8a'" onblur="this.style.borderColor='#d1d5db'"></textarea>
+            </div>
 
-                <div style="margin-bottom:.9rem;">
-                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Descripción</label>
-                    <textarea x-model="editData.descripcion" rows="3"
-                              style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111; font-size:.92rem; resize:vertical;"
-                              onfocus="this.style.borderColor='#1e3a8a'" onblur="this.style.borderColor='#d1d5db'"></textarea>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem;">
+                <div>
+                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Categoría</label>
+                    <select x-model="editData.categoria" style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;">
+                        <option value="General">General</option>
+                        <option value="Academico">Académico</option>
+                        <option value="Cultural">Cultural</option>
+                        <option value="Deportivo">Deportivo</option>
+                    </select>
                 </div>
+                <div>
+                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Cupos *</label>
+                    <input type="number" x-model="editData.cupos" required min="1"
+                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
+                </div>
+            </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem;">
-                    <div>
-                        <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Categoría</label>
-                        <select x-model="editData.categoria" style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;">
-                            <option value="General">General</option>
-                            <option value="Academico">Académico</option>
-                            <option value="Cultural">Cultural</option>
-                            <option value="Deportivo">Deportivo</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Cupos *</label>
-                        <input type="number" x-model="editData.cupos" required min="1"
-                               style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
-                    </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem;">
+                <div>
+                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Fecha inicio *</label>
+                    <input type="date" x-model="editData.fecha_inicio" required
+                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
                 </div>
+                <div>
+                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Fecha fin *</label>
+                    <input type="date" x-model="editData.fecha_fin" required
+                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
+                </div>
+            </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem;">
-                    <div>
-                        <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Fecha inicio *</label>
-                        <input type="date" x-model="editData.fecha_inicio" required
-                               style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Fecha fin *</label>
-                        <input type="date" x-model="editData.fecha_fin" required
-                               style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
-                    </div>
-                </div>
+            <div style="margin-bottom:.9rem;">
+                <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Lugar</label>
+                <input type="text" x-model="editData.lugar" placeholder="Ej. Cancha principal, Aula 3B..."
+                       style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;"
+                       onfocus="this.style.borderColor='#1e3a8a'" onblur="this.style.borderColor='#d1d5db'" />
+            </div>
 
-                <div style="margin-bottom:.9rem;">
-                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Lugar</label>
-                    <input type="text" x-model="editData.lugar" placeholder="Ej. Cancha principal, Aula 3B..."
-                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;"
-                           onfocus="this.style.borderColor='#1e3a8a'" onblur="this.style.borderColor='#d1d5db'" />
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:1.2rem;">
+                <div>
+                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Horario</label>
+                    <input type="text" x-model="editData.horario" placeholder="14:00 – 16:00 hrs"
+                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
                 </div>
+                <div>
+                    <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Días</label>
+                    <input type="text" x-model="editData.dias" placeholder="Lunes y Miércoles"
+                           style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
+                </div>
+            </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:1.4rem;">
-                    <div>
-                        <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Horario</label>
-                        <input type="text" x-model="editData.horario" placeholder="14:00 – 16:00 hrs"
-                               style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:.75rem; font-weight:700; color:#1e3a8a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem;">Días</label>
-                        <input type="text" x-model="editData.dias" placeholder="Lunes y Miércoles"
-                               style="width:100%; padding:.6rem .9rem; border-radius:.6rem; border:1.5px solid #d1d5db; background:#f8fafc; color:#111;" />
-                    </div>
-                </div>
-
-                <div style="border-top:1px solid #e5e7eb; padding-top:1.1rem; display:flex; justify-content:flex-end; gap:.7rem;">
-                    <button type="button" @click="closeAll()"
-                            style="padding:.6rem 1.3rem; border-radius:.6rem; background:#f3f4f6; color:#374151; font-weight:700; border:1.5px solid #d1d5db; cursor:pointer; font-size:.88rem;">
-                        Cancelar
-                    </button>
-                    <button type="submit"
-                            style="padding:.6rem 1.6rem; border-radius:.6rem; background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; font-weight:700; border:none; cursor:pointer; font-size:.88rem; box-shadow:0 4px 14px rgba(30,58,138,.4);">
-                        💾 Guardar Cambios
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div style="border-top:1px solid #e5e7eb; padding-top:1rem; display:flex; justify-content:flex-end; gap:.7rem;">
+                <button type="button" @click="closeAll()"
+                        style="padding:.6rem 1.3rem; border-radius:.6rem; background:#f3f4f6; color:#374151; font-weight:700; border:1.5px solid #d1d5db; cursor:pointer; font-size:.88rem;">
+                    Cancelar
+                </button>
+                <button type="submit"
+                        style="padding:.6rem 1.6rem; border-radius:.6rem; background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; font-weight:700; border:none; cursor:pointer; font-size:.88rem; box-shadow:0 4px 14px rgba(30,58,138,.4);">
+                    💾 Guardar Cambios
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 
 </div>{{-- fin x-data --}}
 
 <script>
+function previewImg(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => document.getElementById('previewImagen').src = e.target.result;
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function profesorHandler() {
     return {
         modalEdit: false,
-        editData: { id_evento:'', nombre:'', descripcion:'', categoria:'', cupos:1, fecha_inicio:'', fecha_fin:'', lugar:'', horario:'', dias:'' },
+        editData: { id_evento:'', nombre:'', descripcion:'', categoria:'', cupos:1, fecha_inicio:'', fecha_fin:'', lugar:'', horario:'', dias:'', imagen_url:'' },
 
         openEdit(taller) {
             this.editData = {
-                id_evento:   taller.id_evento,
-                nombre:      taller.nombre,
-                descripcion: taller.descripcion || '',
-                categoria:   taller.categoria   || 'General',
-                cupos:       taller.cupos,
+                id_evento:    taller.id_evento,
+                nombre:       taller.nombre,
+                descripcion:  taller.descripcion || '',
+                categoria:    taller.categoria   || 'General',
+                cupos:        taller.cupos,
                 fecha_inicio: taller.fecha_inicio ? taller.fecha_inicio.substring(0,10) : '',
                 fecha_fin:    taller.fecha_fin    ? taller.fecha_fin.substring(0,10)    : '',
-                lugar:   taller.lugar   || '',
-                horario: taller.horario || '',
-                dias:    taller.dias    || '',
+                lugar:        taller.lugar   || '',
+                horario:      taller.horario || '',
+                dias:         taller.dias    || '',
+                imagen_url:   taller.imagen_url  || '{{ asset("imagenes/uttec.jpeg") }}',
             };
+            // limpiar input file anterior
+            const inp = document.getElementById('inputImagen');
+            if (inp) inp.value = '';
             this.modalEdit = true;
         },
 
@@ -429,11 +456,29 @@ function profesorHandler() {
 
         async submitEdit(id) {
             try {
+                const formData = new FormData();
+                formData.append('_method', 'PUT');
+                formData.append('nombre',       this.editData.nombre);
+                formData.append('descripcion',  this.editData.descripcion || '');
+                formData.append('categoria',    this.editData.categoria || 'General');
+                formData.append('cupos',        this.editData.cupos);
+                formData.append('fecha_inicio', this.editData.fecha_inicio);
+                formData.append('fecha_fin',    this.editData.fecha_fin);
+                formData.append('lugar',        this.editData.lugar || '');
+                formData.append('horario',      this.editData.horario || '');
+                formData.append('dias',         this.editData.dias || '');
+
+                const inputImg = document.getElementById('inputImagen');
+                if (inputImg && inputImg.files[0]) {
+                    formData.append('imagen', inputImg.files[0]);
+                }
+
                 const res = await fetch(`/eventos/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify(this.editData)
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: formData
                 });
+
                 const json = await res.json();
                 if (!res.ok) throw new Error(json.message || 'Error');
                 this.closeAll();

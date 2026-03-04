@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class ChatbotController extends Controller
 {
-    public function chat(Request $request)
+   public function responder(Request $request)
     {
         $request->validate(['mensaje' => 'required|string|max:500']);
 
