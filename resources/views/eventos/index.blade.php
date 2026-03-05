@@ -139,6 +139,12 @@ function eventosHandler() {
         openEdit(ev) {
             this.editData = JSON.parse(JSON.stringify(ev));
             this.modalEdit = true;
+            // Mostrar imagen actual en el modal
+            this.$nextTick(() => {
+                if (typeof mostrarImagenActual === 'function') {
+                    mostrarImagenActual(ev.imagen_url || null);
+                }
+            });
         },
 
    
@@ -185,15 +191,28 @@ function eventosHandler() {
         },
 
         async submitEdit(event, id) {
-            const payload = { ...this.editData };
             try {
+                // Usar FormData para poder enviar archivos (imagen)
+                const form = document.getElementById('form-edit');
+                const formData = new FormData(form);
+
+                // Agregar campos de Alpine que no tienen name en el form
+                formData.set('nombre',        this.editData.nombre        || '');
+                formData.set('descripcion',   this.editData.descripcion   || '');
+                formData.set('categoria',     this.editData.categoria     || '');
+                formData.set('cupos',         this.editData.cupos         || 1);
+                formData.set('fecha_inicio',  this.editData.fecha_inicio  || '');
+                formData.set('fecha_fin',     this.editData.fecha_fin     || '');
+                formData.set('lugar',         this.editData.lugar         || '');
+                formData.set('horario',       this.editData.horario       || '');
+                formData.set('dias',          this.editData.dias          || '');
+                // Laravel necesita _method=PUT cuando se usa FormData
+                formData.set('_method', 'PUT');
+
                 const res = await fetch(`/eventos/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(payload)
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: formData
                 });
                 const json = await res.json();
                 if (!res.ok) throw new Error(json.message || 'Error desconocido');

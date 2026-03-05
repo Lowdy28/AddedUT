@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AddedUT | Actividades Extracurriculares · UTTEC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1032,7 +1033,6 @@ if (statsEl) statsObs.observe(statsEl);
     const totalEl  = document.getElementById('car-total');
     if (!track || !slides.length) return;
 
-    // Cuántos slides mostrar según ancho
     function visibles() {
         if (window.innerWidth <= 600) return 1;
         if (window.innerWidth <= 900) return 2;
@@ -1043,7 +1043,6 @@ if (statsEl) statsObs.observe(statsEl);
     const total = slides.length;
     if (totalEl) totalEl.textContent = total;
 
-    // Crear dots
     for (let i = 0; i < total; i++) {
         const d = document.createElement('button');
         d.className = 'car-dot' + (i === 0 ? ' active' : '');
@@ -1061,7 +1060,6 @@ if (statsEl) statsObs.observe(statsEl);
         const slideW = slideEl.getBoundingClientRect().width + gap;
         track.style.transform = `translateX(-${cur * slideW}px)`;
 
-        // Actualizar dots
         dotsWrap.querySelectorAll('.car-dot').forEach((d, i) => {
             d.classList.toggle('active', i === cur);
         });
@@ -1079,10 +1077,8 @@ if (statsEl) statsObs.observe(statsEl);
         if (Math.abs(dx) > 50) goTo(dx < 0 ? cur + 1 : cur - 1);
     });
 
-    // Re-calcular al resize
     window.addEventListener('resize', () => goTo(cur));
 
-    // Auto-avance cada 4s
     let auto = setInterval(() => {
         const maxIdx = total - visibles();
         goTo(cur >= maxIdx ? 0 : cur + 1);
@@ -1109,7 +1105,6 @@ function abrirModal(nombre, categoria) {
     document.getElementById('modal-act-name2').textContent = nombre;
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Re-render feather dentro del modal
     feather.replace();
 }
 

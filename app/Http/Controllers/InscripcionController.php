@@ -43,16 +43,26 @@ class InscripcionController extends Controller
         return back()->with('error', 'Error de Autenticación: Debes iniciar sesión para inscribirte.');
     }
 
+    // Validar que el estudiante no esté ya inscrito en ESTE taller
     $existeInscripcion = Inscripcion::where('id_usuario', $userId)
                                    ->where('id_evento', $eventId)
                                    ->exists();
 
     if ($existeInscripcion) {
-        return back()->with('error', 'Ya estás inscrito en este evento.');
+        return back()->with('error', 'Ya estás inscrito en este taller.');
+    }
+
+    // Validar que el estudiante no tenga YA una inscripción activa en cualquier otro taller
+    $yaInscritoEnOtro = Inscripcion::where('id_usuario', $userId)->exists();
+
+    if ($yaInscritoEnOtro) {
+        return back()->with('error',
+            'Solo puedes estar inscrito en un taller a la vez. Cancela tu inscripción actual antes de unirte a otro.'
+        );
     }
 
     if (($eventoParaInscribir->cupo_disponible ?? 0) <= 0) {
-        return back()->with('error', 'Lo sentimos, los cupos para este evento se han agotado.');
+        return back()->with('error', 'Lo sentimos, los cupos para este taller se han agotado.');
     }
 
     try {

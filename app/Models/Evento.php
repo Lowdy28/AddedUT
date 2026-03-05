@@ -30,12 +30,11 @@ class Evento extends Model
         'fecha_creacion',
     ];
 
-    // Se incluye en la serialización JSON para que Alpine lo reciba en openEdit
+    // Se incluye en la serialización JSON para que Alpine/Blade lo reciban
     protected $appends = ['imagen_url'];
 
     /**
-     * Mapa de imágenes estáticas para los talleres del seeder.
-     * Se usa como fallback cuando el taller no tiene imagen subida.
+     * Mapa de imágenes estáticas (fallback cuando no hay imagen subida).
      */
     private static array $mapaImagenes = [
         'Bailes de Salón'   => 'imagenes/baile.jpg',
@@ -59,16 +58,22 @@ class Evento extends Model
     ];
 
     /**
-     * Devuelve siempre una URL de imagen válida:
-     *   1. Si el taller tiene imagen subida en storage → URL de storage
-     *   2. Si el nombre coincide con el mapa de imágenes estáticas → asset()
-     *   3. Fallback → imagen genérica UTTEC
+     * URL de imagen siempre válida:
+     *   1. Imagen subida en storage  → asset('storage/...')   ← usa asset() no Storage::url()
+     *   2. Nombre en el mapa estático → asset('imagenes/...')
+     *   3. Fallback                   → asset('imagenes/uttec.jpeg')
+     *
+     * Usamos asset('storage/' . $this->imagen) en lugar de Storage::disk('public')->url()
+     * para que la URL siempre use la URL base del servidor actual sin depender de APP_URL.
      */
     public function getImagenUrlAttribute(): string
     {
         if (!empty($this->imagen)) {
-    return Storage::disk('public')->url($this->imagen);
-}
+            // Verificar que el archivo realmente existe antes de devolverlo
+            if (Storage::disk('public')->exists($this->imagen)) {
+                return asset('storage/' . $this->imagen);
+            }
+        }
 
         if (isset(self::$mapaImagenes[$this->nombre])) {
             return asset(self::$mapaImagenes[$this->nombre]);
