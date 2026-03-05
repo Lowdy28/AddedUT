@@ -4,7 +4,7 @@
 @section('content')
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Nunito:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap');
+
 
 /* ══════════════════════════════════════
    PROGRESO DE LECTURA
@@ -21,7 +21,7 @@
    BASE
 ══════════════════════════════════════ */
 .nw * { box-sizing: border-box; }
-.nw { font-family: 'Nunito', sans-serif; }
+.nw { font-family: 'Inter', sans-serif; }
 
 /* Back */
 .back-link {
@@ -67,7 +67,7 @@
 .hero-cat {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--color-uttec-green); color: #fff;
-    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-family: 'Inter', sans-serif; font-weight: 800;
     font-size: .72rem; letter-spacing: 1.2px; text-transform: uppercase;
     padding: .4rem 1.1rem; border-radius: 4px;
     box-shadow: 0 4px 18px rgba(0,168,107,.5);
@@ -77,7 +77,7 @@
     display: inline-flex; align-items: center; gap: 5px;
     background: rgba(0,0,0,.4); backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,.18);
-    color: rgba(255,255,255,.9); font-family: 'Nunito', sans-serif;
+    color: rgba(255,255,255,.9); font-family: 'Inter', sans-serif;
     font-weight: 700; font-size: .75rem;
     padding: .32rem .85rem; border-radius: 50px;
 }
@@ -88,20 +88,20 @@
     padding: 2.2rem 3rem 2rem; z-index: 3;
 }
 .hero-h1 {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-size: clamp(2rem, 3.8vw, 3.1rem);
-    font-weight: 400; font-style: italic;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+    font-weight: 800; font-style: normal;
     color: #fff; line-height: 1.22;
-    text-shadow: 0 2px 28px rgba(0,0,0,.45);
+    text-shadow: 0 2px 28px rgba(0,0,0,.55);
     margin-bottom: 1rem; max-width: 790px;
-    letter-spacing: -.3px;
+    letter-spacing: -.5px;
 }
 .hero-meta { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
 .hero-meta-chip {
     display: flex; align-items: center; gap: 5px;
     background: rgba(255,255,255,.13); backdrop-filter: blur(8px);
     border: 1px solid rgba(255,255,255,.2);
-    color: rgba(255,255,255,.85); font-family: 'Nunito', sans-serif;
+    color: rgba(255,255,255,.85); font-family: 'Inter', sans-serif;
     font-size: .79rem; font-weight: 700;
     padding: .3rem .85rem; border-radius: 50px;
 }
@@ -122,8 +122,8 @@
    ARTÍCULO
 ══════════════════════════════════════ */
 .art-lead {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 1.18rem; font-weight: 400; font-style: italic;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem; font-weight: 400; font-style: normal;
     color: #444; line-height: 1.9;
     border-top: 3px solid var(--color-uttec-blue-dark);
     border-bottom: 1px solid #e8e8e8;
@@ -131,15 +131,15 @@
     margin-bottom: 2rem;
 }
 .art-body {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 1.06rem; line-height: 1.92; color: #1e1e1e;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.02rem; line-height: 1.85; color: #1e1e1e;
     white-space: pre-wrap; word-break: break-word;
 }
 /* Drop cap elegante */
 .art-body::first-letter {
-    font-family: 'Instrument Serif', serif;
-    font-size: 5.2rem; font-weight: 400;
-    float: left; line-height: .78;
+    font-family: 'Inter', sans-serif;
+    font-size: 4.5rem; font-weight: 800;
+    float: left; line-height: .82;
     margin: .06rem .16rem -.1rem 0;
     color: var(--color-uttec-blue-dark);
 }
@@ -155,7 +155,7 @@
     padding: 1.6rem 2rem;
 }
 .reacciones-lbl {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 800; font-size: .72rem; letter-spacing: 1.4px;
     text-transform: uppercase; color: #aaa; margin-bottom: 1.2rem;
 }
@@ -168,7 +168,7 @@
     padding: .75rem 1.05rem; cursor: pointer; min-width: 68px;
     transition: all .28s cubic-bezier(.34, 1.56, .64, 1);
     position: relative;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 .reac-btn:hover {
     transform: translateY(-5px) scale(1.07);
@@ -214,7 +214,7 @@
     display: flex; flex-direction: column; align-items: center; gap: 5px;
     background: #fff; border: 2px solid #e8e8e8; border-radius: 16px;
     padding: .75rem 1.05rem; cursor: pointer; min-width: 68px;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter', sans-serif;
     transition: all .28s cubic-bezier(.34,1.56,.64,1);
 }
 .like-pill:hover { transform: translateY(-5px) scale(1.07); box-shadow: 0 10px 26px rgba(0,0,0,.12); border-color: rgba(231,76,60,.3); }
@@ -231,7 +231,7 @@
 /* Chip de comentarios */
 .coms-chip {
     display: flex; align-items: center; gap: 6px;
-    font-family: 'Nunito', sans-serif; font-size: .85rem;
+    font-family: 'Inter', sans-serif; font-size: .85rem;
     color: #bbb; font-weight: 700; margin-top: .8rem;
 }
 
@@ -239,8 +239,8 @@
    COMENTARIOS
 ══════════════════════════════════════ */
 .coms-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 1.7rem; font-style: italic; font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.4rem; font-style: normal; font-weight: 800;
     color: var(--color-uttec-blue-dark);
     margin: 2.5rem 0 1.8rem;
     display: flex; align-items: center; gap: 14px;
@@ -259,7 +259,7 @@
     width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
     background: linear-gradient(145deg, var(--color-uttec-blue-dark), var(--color-uttec-green));
     color: #fff; display: flex; align-items: center; justify-content: center;
-    font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.05rem;
+    font-family: 'Inter', sans-serif; font-weight: 900; font-size: 1.05rem;
     box-shadow: 0 4px 14px rgba(0,45,98,.22);
 }
 .com-field {
@@ -274,7 +274,7 @@
 .com-ta {
     width: 100%; min-height: 90px; padding: 1rem 1.3rem;
     border: none; background: transparent; outline: none;
-    font-family: 'Lora', Georgia, serif; font-size: .95rem;
+    font-family: 'Inter', sans-serif; font-size: .93rem;
     color: #222; resize: none; line-height: 1.65; display: block;
 }
 .com-ta::placeholder { color: #bbb; font-style: italic; }
@@ -282,11 +282,11 @@
     padding: .5rem 1rem .85rem;
     display: flex; justify-content: space-between; align-items: center;
 }
-.com-chars { font-family: 'Nunito', sans-serif; font-size: .73rem; color: #ccc; font-weight: 600; }
+.com-chars { font-family: 'Inter', sans-serif; font-size: .73rem; color: #ccc; font-weight: 600; }
 .btn-post {
     background: var(--color-uttec-blue-dark); color: #fff;
     border: none; padding: .6rem 1.4rem; border-radius: 10px;
-    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .85rem;
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: .85rem;
     cursor: pointer; display: flex; align-items: center; gap: 6px;
     transition: background .2s, transform .15s;
     box-shadow: 0 4px 12px rgba(0,45,98,.25);
@@ -310,16 +310,16 @@
 }
 .com-bub:hover { border-color: rgba(0,168,107,.2); }
 .com-hd { display: flex; align-items: baseline; gap: 8px; margin-bottom: .45rem; flex-wrap: wrap; }
-.com-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .88rem; color: var(--color-uttec-blue-dark); }
-.com-date { font-family: 'Nunito', sans-serif; font-size: .72rem; color: #c0c5d0; }
+.com-name { font-family: 'Inter', sans-serif; font-weight: 800; font-size: .88rem; color: var(--color-uttec-blue-dark); }
+.com-date { font-family: 'Inter', sans-serif; font-size: .72rem; color: #c0c5d0; }
 .com-del  {
     margin-left: auto; background: none; border: none;
     color: #d0d5e0; cursor: pointer; font-size: .71rem; font-weight: 700;
     padding: .18rem .5rem; border-radius: 5px;
-    font-family: 'Nunito', sans-serif; transition: all .2s;
+    font-family: 'Inter', sans-serif; transition: all .2s;
 }
 .com-del:hover { color: #e74c3c; background: #fff0f0; }
-.com-txt { font-family: 'Lora', serif; font-size: .92rem; color: #3a3a3a; line-height: 1.7; }
+.com-txt { font-family: 'Inter', sans-serif; font-size: .9rem; color: #3a3a3a; line-height: 1.7; }
 
 .com-empty {
     text-align: center; padding: 3rem 1rem;
@@ -327,7 +327,7 @@
     border: 2px dashed #e0e5f0;
 }
 .com-empty svg { width: 48px; height: 48px; stroke: #d0d5e0; margin: 0 auto .8rem; display: block; }
-.com-empty p { font-family: 'Nunito', sans-serif; font-size: .9rem; color: #c0c5d0; font-weight: 700; }
+.com-empty p { font-family: 'Inter', sans-serif; font-size: .9rem; color: #c0c5d0; font-weight: 700; }
 
 /* ══════════════════════════════════════
    SIDEBAR
@@ -340,7 +340,7 @@
     margin-bottom: 1.4rem;
 }
 .s-label {
-    display: block; font-family: 'Nunito', sans-serif;
+    display: block; font-family: 'Inter', sans-serif;
     font-size: .67rem; font-weight: 800; letter-spacing: 1.6px;
     text-transform: uppercase; color: #bbb;
     margin-bottom: 1rem; padding-bottom: .7rem;
@@ -353,17 +353,17 @@
     border: 1px solid rgba(0,45,98,.05);
 }
 .s-stat-n {
-    font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400;
+    font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800;
     color: var(--color-uttec-blue-dark); line-height: 1; display: block;
 }
 .s-stat-l {
-    font-family: 'Nunito', sans-serif; font-size: .67rem; color: #aaa;
+    font-family: 'Inter', sans-serif; font-size: .67rem; color: #aaa;
     margin-top: .3rem; font-weight: 700; text-transform: uppercase; letter-spacing: .9px; display: block;
 }
 .s-dato { margin-bottom: .9rem; }
 .s-dato:last-child { margin-bottom: 0; }
-.s-dato-l { font-family: 'Nunito', sans-serif; font-size: .71rem; color: #bbb; font-weight: 700; display: block; margin-bottom: .18rem; }
-.s-dato-v { font-family: 'Nunito', sans-serif; font-size: .88rem; font-weight: 700; color: #2a2a2a; display: block; }
+.s-dato-l { font-family: 'Inter', sans-serif; font-size: .71rem; color: #bbb; font-weight: 700; display: block; margin-bottom: .18rem; }
+.s-dato-v { font-family: 'Inter', sans-serif; font-size: .88rem; font-weight: 700; color: #2a2a2a; display: block; }
 
 /* Chip reacciones en sidebar */
 .s-reacs { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -371,14 +371,14 @@
     display: inline-flex; align-items: center; gap: 4px;
     background: #f4f8ff; border: 1.5px solid #e0e8ff;
     border-radius: 50px; padding: .28rem .75rem;
-    font-family: 'Nunito', sans-serif; font-size: .8rem; font-weight: 700; color: #555;
+    font-family: 'Inter', sans-serif; font-size: .8rem; font-weight: 700; color: #555;
 }
 
 .btn-copy {
     width: 100%; padding: .8rem;
     background: var(--color-uttec-blue-dark); color: #fff;
     border: none; border-radius: 12px;
-    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .88rem;
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: .88rem;
     cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
     transition: background .2s, transform .15s;
     box-shadow: 0 4px 14px rgba(0,45,98,.2);
@@ -386,7 +386,74 @@
 .btn-copy:hover { background: var(--color-uttec-green); transform: translateY(-1px); }
 .btn-copy.ok { background: var(--color-uttec-green); }
 
-/* ══════════════════════════════════════
+
+    /* ── Emoji Picker ── */
+    .emoji-btn {
+        background: none; border: none; cursor: pointer;
+        font-size: 1.2rem; padding: .2rem .4rem; border-radius: 6px;
+        transition: transform .15s, background .15s;
+        line-height: 1;
+    }
+    .emoji-btn:hover { transform: scale(1.25); background: rgba(0,0,0,.05); }
+
+    .emoji-picker {
+        display: none;
+        position: absolute; bottom: calc(100% + 8px); left: 0;
+        background: #fff;
+        border: 1.5px solid #e0e8f0;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0,45,98,.15);
+        width: 320px;
+        z-index: 999;
+        overflow: hidden;
+        animation: epIn .18s ease;
+    }
+    .emoji-picker.open { display: block; }
+    @keyframes epIn {
+        from { opacity:0; transform: translateY(8px) scale(.96); }
+        to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    .ep-search {
+        padding: .6rem .8rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .ep-search input {
+        width: 100%; border: 1.5px solid #e8ecf4; border-radius: 8px;
+        padding: .4rem .75rem; font-size: .83rem; outline: none;
+        font-family: 'Inter', sans-serif;
+        transition: border-color .2s;
+    }
+    .ep-search input:focus { border-color: var(--color-uttec-green); }
+    .ep-tabs {
+        display: flex; gap: 2px; padding: .45rem .6rem .3rem;
+        border-bottom: 1px solid #f0f0f0; overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .ep-tab {
+        background: none; border: none; cursor: pointer;
+        font-size: 1.15rem; padding: .3rem .45rem; border-radius: 8px;
+        transition: background .15s;
+        flex-shrink: 0;
+    }
+    .ep-tab:hover, .ep-tab.active { background: rgba(0,168,107,.12); }
+    .ep-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 2px;
+        padding: .6rem .6rem .8rem;
+        max-height: 200px; overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #ddd transparent;
+    }
+    .ep-grid button {
+        background: none; border: none; cursor: pointer;
+        font-size: 1.25rem; padding: .3rem;
+        border-radius: 7px; transition: transform .12s, background .12s;
+        line-height: 1;
+    }
+    .ep-grid button:hover { transform: scale(1.3); background: rgba(0,0,0,.05); }
+
+    /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
 @media (max-width: 920px) {
@@ -436,7 +503,7 @@
             <div class="hero-meta">
                 <span class="hero-meta-chip">
                     <i data-feather="user" style="width:12px;height:12px;"></i>
-                    {{ $noticia->autor->nombre ?? 'Administración UTTEC' }}
+                    {{ $noticia->autor->nombre ?? 'Administrador' }}
                 </span>
                 <span class="hero-meta-sep">·</span>
                 <span class="hero-meta-chip">
@@ -452,9 +519,6 @@
 
         {{-- Columna principal --}}
         <div>
-
-            {{-- Lead --}}
-            <p class="art-lead">{{ Str::limit(strip_tags($noticia->contenido), 240) }}</p>
 
             {{-- Cuerpo --}}
             <div class="art-body" id="art-body">{{ $noticia->contenido }}</div>
@@ -523,7 +587,18 @@
 
             {{-- Form --}}
             <div class="com-form">
-                <div class="com-av">{{ strtoupper(substr(Auth::user()->nombre, 0, 1)) }}</div>
+                @php
+                    $miFoto = !empty(Auth::user()->foto)
+                        ? asset('storage/' . Auth::user()->foto)
+                        : null;
+                @endphp
+                @if($miFoto)
+                    <img src="{{ $miFoto }}" alt="{{ Auth::user()->nombre }}"
+                         class="com-av"
+                         style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--color-uttec-green);">
+                @else
+                    <div class="com-av">{{ strtoupper(substr(Auth::user()->nombre, 0, 1)) }}</div>
+                @endif
                 <div class="com-field">
                     <textarea
                         class="com-ta" id="com-ta"
@@ -531,7 +606,22 @@
                         oninput="updChar(this)" maxlength="500"
                     ></textarea>
                     <div class="com-foot">
-                        <span class="com-chars" id="com-chars">0 / 500</span>
+                        <div style="display:flex;align-items:center;gap:8px;position:relative;">
+                            <button class="emoji-btn" id="emoji-toggle" type="button"
+                                    title="Insertar emoji" onclick="togglePicker(event)">😊</button>
+                            <span class="com-chars" id="com-chars">0 / 500</span>
+
+                            {{-- Picker de emojis --}}
+                            <div class="emoji-picker" id="emoji-picker">
+                                <div class="ep-search">
+                                    <input type="text" id="ep-search"
+                                           placeholder="Buscar emoji..."
+                                           oninput="epSearch(this.value)">
+                                </div>
+                                <div class="ep-tabs" id="ep-tabs"></div>
+                                <div class="ep-grid" id="ep-grid"></div>
+                            </div>
+                        </div>
                         <button class="btn-post" onclick="enviarCom({{ $noticia->id_noticia }})">
                             <i data-feather="send" style="width:13px;height:13px;"></i> Publicar
                         </button>
@@ -547,9 +637,15 @@
                 @forelse($noticia->comentarios as $com)
                 @php $col = $pal[$com->id_usuario % count($pal)]; @endphp
                 <div class="com-item" id="com-{{ $com->id_comentario }}">
-                    <div class="com-av" style="background:{{ $col }};width:44px;height:44px;border-radius:50%;flex-shrink:0;">
-                        {{ strtoupper(substr($com->usuario->nombre ?? 'U', 0, 1)) }}
-                    </div>
+                    @php $comFoto = !empty($com->usuario->foto) ? asset('storage/' . $com->usuario->foto) : null; @endphp
+                    @if($comFoto)
+                        <img src="{{ $comFoto }}" alt="{{ $com->usuario->nombre }}"
+                             style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid {{ $col }};">
+                    @else
+                        <div class="com-av" style="background:{{ $col }};width:44px;height:44px;border-radius:50%;flex-shrink:0;">
+                            {{ strtoupper(substr($com->usuario->nombre ?? 'U', 0, 1)) }}
+                        </div>
+                    @endif
                     <div class="com-bub">
                         <div class="com-hd">
                             <span class="com-name">{{ $com->usuario->nombre ?? 'Usuario' }}</span>
@@ -605,7 +701,7 @@
                 <span class="s-label">Publicación</span>
                 <div class="s-dato">
                     <span class="s-dato-l">Autor</span>
-                    <span class="s-dato-v">{{ $noticia->autor->nombre ?? 'Administración' }}</span>
+                    <span class="s-dato-v">{{ $noticia->autor->nombre ?? 'Administrador' }}</span>
                 </div>
                 <div class="s-dato">
                     <span class="s-dato-l">Fecha</span>
@@ -637,6 +733,7 @@
 const CSRF      = document.querySelector('meta[name="csrf-token"]').content;
 const miNombre  = @json(Auth::user()->nombre);
 const miInicial = "{{ strtoupper(substr(Auth::user()->nombre, 0, 1)) }}";
+const miFoto    = @json(!empty(Auth::user()->foto) ? asset('storage/' . Auth::user()->foto) : null);
 const pal       = ['#002D62','#00A86B','#004C99','#1a6b4a','#003580','#005e8a','#004d38'];
 let miReac      = @json($miReaccion ?? null);
 
@@ -712,8 +809,11 @@ function enviarCom(id) {
         const color = pal[d.id % pal.length];
         const div   = document.createElement('div');
         div.className = 'com-item'; div.id = `com-${d.id}`;
+        const avHTML = miFoto
+            ? `<img src="${miFoto}" alt="${miNombre}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid ${color};">`
+            : `<div class="com-av" style="background:${color};width:44px;height:44px;border-radius:50%;flex-shrink:0;">${miInicial}</div>`;
         div.innerHTML = `
-            <div class="com-av" style="background:${color};width:44px;height:44px;border-radius:50%;flex-shrink:0;">${miInicial}</div>
+            ${avHTML}
             <div class="com-bub">
                 <div class="com-hd">
                     <span class="com-name">${miNombre}</span>
@@ -759,6 +859,81 @@ function copiar() {
         }, 2400);
     });
 }
+
+
+/* ══════════════════════════════════════
+   EMOJI PICKER
+══════════════════════════════════════ */
+const EMOJI_CATS = {
+    '😊': ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','😊','😇','🥰','😍','🤩','😘','😗','😚','😙','🥲','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🫢','🤫','🤔','🫠','🤐','🥴','😐','😑','😶','😏','😒','🙄','😬','😮','😯','😲','😳','🥺','🥹','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','🥱','😤','😠','😡','🤬','😈','👿'],
+    '👋': ['👋','🤚','🖐','✋','🖖','🫱','🫲','🫳','🫴','👌','🤌','🤏','✌️','🤞','🫰','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','🫵','👍','👎','✊','👊','🤛','🤜','👏','🙌','🫶','👐','🤲','🤝','🙏','💅','🤳','💪','🦾','🦿','🦵','🦶'],
+    '❤️': ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','❤️‍🩹','💕','💞','💓','💗','💖','💘','💝','💟','☮️','✝️','☯️','🕉️','🛐','⛎','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','🆔','⚛️','🉑','☢️','☣️','📴','📳','🈶','🈚','🈸','🈺','🈷️','✴️','🆚','💮','🉐','㊙️','㊗️','🈴','🈵','🈹','🈲','🅰️','🅱️','🆎','🆑','🅾️','🆘'],
+    '🎉': ['🎉','🎊','🎈','🎁','🎀','🎗','🎟','🎫','🏆','🥇','🥈','🥉','🏅','🎖','🎪','🤹','🎭','🎨','🖼','🎬','🎤','🎧','🎼','🎵','🎶','🎹','🥁','🪘','🎷','🎺','🎸','🪕','🎻','🪗','🎲','♟','🎯','🎳','🎮','🕹','🎰'],
+    '🌟': ['🌟','⭐','💫','✨','🌙','☀️','🌤','⛅','🌈','🌊','🌺','🌸','🌷','🌹','🌻','🌼','🍀','🌿','🍃','🍂','🍁','🌱','🌲','🌴','🌵','🎋','🎄','🌾','💐','🍄','🐚','🪸','🪨','🌍','🌎','🌏','🗺','🧭','⛰','🌋','🗻','🏔'],
+    '🍕': ['🍕','🍔','🌮','🌯','🥙','🧆','🥚','🍳','🥘','🍲','🥣','🥗','🍿','🧈','🧂','🥫','🍱','🍘','🍙','🍚','🍛','🍜','🍝','🍠','🍢','🍣','🍤','🍥','🥮','🍡','🥟','🥠','🥡','🍦','🍧','🍨','🍩','🍪','🎂','🍰','🧁','🥧','🍫','🍬','🍭','🍮','🍯','🍼','🥛','☕','🫖','🍵','🧃','🥤','🧋','🍶','🍺','🍻','🥂','🍷'],
+    '⚽': ['⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🪀','🏓','🏸','🏒','🥍','🏑','🏏','🪃','🥅','⛳','🪁','🏹','🎣','🤿','🥊','🥋','🎽','🛹','🛼','🛷','⛸','🥌','🎿','⛷','🏂','🪂','🏋️','🤼','🤸','⛹️','🤺','🤾','🏌️','🏇','🧘','🏄','🏊','🚣','🧗','🚵','🚴','🏆'],
+};
+
+let epCurrentCat = '😊';
+let epAllEmojis  = Object.values(EMOJI_CATS).flat();
+
+function buildPicker() {
+    const tabs = document.getElementById('ep-tabs');
+    const grid = document.getElementById('ep-grid');
+    if (!tabs || !grid) return;
+
+    // Tabs
+    tabs.innerHTML = Object.keys(EMOJI_CATS).map(cat =>
+        `<button class="ep-tab ${cat === epCurrentCat ? 'active' : ''}" onclick="epSetCat('${cat}')">${cat}</button>`
+    ).join('');
+
+    epRenderGrid(EMOJI_CATS[epCurrentCat]);
+}
+
+function epRenderGrid(emojis) {
+    const grid = document.getElementById('ep-grid');
+    grid.innerHTML = emojis.map(e =>
+        `<button type="button" onclick="insertEmoji('${e}')" title="${e}">${e}</button>`
+    ).join('');
+}
+
+function epSetCat(cat) {
+    epCurrentCat = cat;
+    document.getElementById('ep-search').value = '';
+    document.querySelectorAll('.ep-tab').forEach(t => t.classList.toggle('active', t.textContent === cat));
+    epRenderGrid(EMOJI_CATS[cat]);
+}
+
+function epSearch(q) {
+    if (!q.trim()) { epRenderGrid(EMOJI_CATS[epCurrentCat]); return; }
+    const results = epAllEmojis.filter(e => e.includes(q.trim()));
+    epRenderGrid(results.length ? results : ['🔍']);
+}
+
+function insertEmoji(emoji) {
+    const ta  = document.getElementById('com-ta');
+    const pos = ta.selectionStart;
+    ta.value  = ta.value.slice(0, pos) + emoji + ta.value.slice(ta.selectionEnd);
+    ta.selectionStart = ta.selectionEnd = pos + emoji.length;
+    ta.focus();
+    updChar(ta);
+}
+
+function togglePicker(e) {
+    e.stopPropagation();
+    const picker = document.getElementById('emoji-picker');
+    const isOpen = picker.classList.toggle('open');
+    if (isOpen) buildPicker();
+}
+
+// Cerrar al hacer clic fuera
+document.addEventListener('click', function(e) {
+    const picker = document.getElementById('emoji-picker');
+    const btn    = document.getElementById('emoji-toggle');
+    if (picker && !picker.contains(e.target) && e.target !== btn) {
+        picker.classList.remove('open');
+    }
+});
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 

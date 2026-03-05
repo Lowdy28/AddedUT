@@ -130,12 +130,20 @@
     </div>
 
     {{-- 2. BARRA DE CATEGORÍAS --}}
+    @php
+        $categoriasDisponibles = ['Académico','Deportivo','Cultural','General','Ambiental','Concursos','Otro'];
+    @endphp
     <div class="categories-bar">
-        <button class="category-bubble active">Todas</button>
-        <button class="category-bubble">Académico</button>
-        <button class="category-bubble">Deportes</button>
-        <button class="category-bubble">Eventos</button>
-        <button class="category-bubble">Cultura</button>
+        <a href="{{ route('estudiante.noticias.foro') }}"
+           class="category-bubble {{ is_null($categoria) ? 'active' : '' }}">
+            Todas
+        </a>
+        @foreach($categoriasDisponibles as $cat)
+        <a href="{{ route('estudiante.noticias.foro', ['categoria' => $cat]) }}"
+           class="category-bubble {{ $categoria === $cat ? 'active' : '' }}">
+            {{ $cat }}
+        </a>
+        @endforeach
     </div>
 
     {{-- 3. GRID DE NOTICIAS --}}

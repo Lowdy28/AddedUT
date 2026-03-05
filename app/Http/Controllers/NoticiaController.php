@@ -7,20 +7,23 @@ use App\Models\ComentarioNoticia;
 use App\Models\LikeNoticia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class NoticiaController extends Controller
 {
-    public function foro()
+    public function foro(Request $request)
     {
+        $categoria = $request->query('categoria'); // null = todas
+
         $noticias = Noticia::with(['autor', 'likes', 'comentarios'])
             ->where('publicada', true)
+            ->when($categoria, fn($q) => $q->where('categoria', $categoria))
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString(); // conserva ?categoria=X en los links de paginación
 
         $userId = Auth::id();
 
-        return view('estudiante.noticias.foro', compact('noticias', 'userId'));
+        return view('estudiante.noticias.foro', compact('noticias', 'userId', 'categoria'));
     }
 
     public function show(Noticia $noticia)
