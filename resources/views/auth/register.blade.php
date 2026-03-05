@@ -448,7 +448,7 @@ a { text-decoration:none; color:inherit; }
         <!-- Contrasenas -->
         <div class="frow">
             <div class="fgrp">
-                <label class="flbl" for="pwd">Contrasena</label>
+                <label class="flbl" for="pwd">Contraseña</label>
                 <div class="fwrap">
                     <span class="ficon"><i data-feather="lock"></i></span>
                     <input class="finput {{ $errors->has('password') ? 'err' : '' }}"
