@@ -56,116 +56,115 @@
         .notif-row-time { font-size: .7rem; color: rgba(255,255,255,0.35); margin-top: 4px; }
         .notif-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #00A86B; flex-shrink: 0; margin-top: 6px; }
         .notif-empty { padding: 30px; text-align: center; color: rgba(255,255,255,0.4); font-size: .85rem; }
+    
+        /* ── Header idéntico al del estudiante ── */
+        :root {
+            --color-uttec-blue-dark: #002D62;
+            --color-uttec-green: #00A86B;
+            --color-glass-light: rgba(255,255,255,0.95);
+        }
+        header { position: fixed; top:0; left:0; width:100%; background: var(--color-glass-light); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,45,98,0.1); padding: 0.8rem 3rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        header .logo { font-size: 2rem; font-weight: 800; letter-spacing: -1px; color: var(--color-uttec-blue-dark); display: flex; align-items: center; gap: 10px; text-decoration:none; }
+        .logo span { color: var(--color-uttec-green); }
+        header nav { display: flex; align-items: center; gap: 1.5rem; }
+        header nav a, header nav button { color: var(--color-uttec-blue-dark); font-weight: 600; padding: 0.5rem 0; position: relative; transition: color 0.3s ease; background: none; border: none; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 6px; text-decoration:none; }
+        header nav a::after, header nav button::after { content: ''; position: absolute; width: 0; height: 3px; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--color-uttec-green); transition: width 0.3s ease; }
+        header nav a:hover, header nav button:hover { color: var(--color-uttec-green); }
+        header nav a.active::after { width: 100%; }
+        header nav a.active { color: var(--color-uttec-green); }
+        .logout-btn { color: #374151 !important; margin-left: 1rem; }
+        .logout-btn:hover { color: #ef4444 !important; }
+
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal min-h-screen flex flex-col">
     @include('components.page-loader')
 
-@php $profUser = App\Models\User::find(auth()->id()); @endphp
+@php $authUser = App\Models\User::find(auth()->id()); @endphp
 
-    <nav class="bg-white shadow-sm fixed w-full z-40 top-0 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
+<header>
+    <a href="{{ route('profesor.dashboard') }}" class="logo">
+        <i data-feather="book-open" style="color:var(--color-uttec-green);"></i>
+        Added<span>UT</span>
+    </a>
+    <nav>
+        <a href="{{ route('profesor.dashboard') }}"
+           class="{{ request()->routeIs('profesor.dashboard') ? 'active' : '' }}">
+            <i data-feather="rss" class="feather"></i> Noticias
+        </a>
+        <a href="{{ route('profesor.taller') }}"
+           class="{{ request()->routeIs('profesor.taller') ? 'active' : '' }}">
+            <i data-feather="layers" class="feather"></i> Mi Taller
+        </a>
 
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('profesor.dashboard') }}" class="flex items-center gap-2 text-2xl font-bold text-gray-900 tracking-tight">
-                        <i data-feather="book-open" class="text-uttec-green w-7 h-7"></i>
-                        <span>Added<span class="text-uttec-green">UT</span></span>
-                    </a>
-                </div>
+        <div style="display:flex; align-items:center; gap:20px; border-left:1px solid #ddd; padding-left:20px;">
 
-                <div class="hidden md:flex items-center space-x-8">
-
-                    <a href="{{ route('profesor.dashboard') }}"
-                       class="nav-link {{ request()->routeIs('profesor.dashboard') ? 'active' : '' }}">
-                        <i data-feather="rss" class="w-4 h-4"></i> Noticias
-                    </a>
-
-                    <a href="{{ route('profesor.taller') }}"
-                       class="nav-link {{ request()->routeIs('profesor.taller') ? 'active' : '' }}">
-                        <i data-feather="layers" class="w-4 h-4"></i> Mi Taller
-                    </a>
-
-                    <div class="flex items-center gap-4 pl-6 border-l border-gray-200">
-
-                        <!-- CAMPANA ESTILO NETFLIX -->
-                        <div class="notif-wrapper">
-                            <button id="profNotifBtn" style="background:none; border:none; cursor:pointer; position:relative; display:flex; align-items:center; padding:4px;">
-                                <i data-feather="bell" style="color:#002D62; width:22px; height:22px; stroke-width:2.5;"></i>
-                                @if($profUser && $profUser->unreadNotifications->count() > 0)
-                                    <span class="notif-badge" id="profNotifBadge">{{ $profUser->unreadNotifications->count() }}</span>
-                                @endif
-                            </button>
-
-                            <div class="notif-panel" id="profNotifPanel">
-                                <div class="notif-panel-header">
-                                    <span>🔔 Notificaciones</span>
-                                </div>
-                                <div class="notif-list">
-                                    @if($profUser)
-                                        @forelse($profUser->unreadNotifications as $notification)
-                                            @php
-                                                $tipo  = $notification->data['tipo'] ?? 'info';
-                                                $url   = $notification->data['url'] ?? '#';
-                                                $icono = match($tipo) {
-                                                    'inscripcion' => '✅',
-                                                    'baja'        => '❌',
-                                                    'like'        => '❤️',
-                                                    'cambio'      => '🕐',
-                                                    'cupos_disponibles' => '🟢',
-                                                    'sin_cupos'   => '🔴',
-                                                    'noticia'     => '📰',
-                                                    default       => '🔔',
-                                                };
-                                            @endphp
-                                            <div class="notif-row unread notif-link-prof" data-url="{{ $url }}">
-                                                <div class="notif-row-icon">{{ $icono }}</div>
-                                                <div class="notif-row-body">
-                                                    <div class="notif-row-title">{{ $notification->data['titulo'] }}</div>
-                                                    <div class="notif-row-msg">{{ $notification->data['mensaje'] }}</div>
-                                                    <div class="notif-row-time">{{ $notification->created_at->diffForHumans() }}</div>
-                                                </div>
-                                                <div class="notif-unread-dot"></div>
-                                            </div>
-                                        @empty
-                                            <div class="notif-empty">
-                                                <div style="font-size:1.5rem; margin-bottom:6px;">🔕</div>
-                                                Sin notificaciones nuevas
-                                            </div>
-                                        @endforelse
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- PERFIL -->
-                        <a href="{{ route('profesor.profile.edit') }}"
-                           class="nav-link {{ request()->routeIs('*.profile.*') ? 'active' : '' }}">
-                            @php
-                                $fotoProf    = $profUser->foto ?? null;
-                                $fotoUrlProf = $fotoProf
-                                    ? asset('storage/' . $fotoProf)
-                                    : 'https://ui-avatars.com/api/?name=' . urlencode($profUser->nombre) . '&background=1e3a8a&color=fff&size=64';
-                            @endphp
-                            <img src="{{ $fotoUrlProf }}" alt="Foto"
-                                 style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #00a86b;">
-                            {{ $profUser->nombre }}
-                        </a>
+            <div class="notif-wrapper">
+                <button id="profNotifBtn" style="background:none; border:none; cursor:pointer; position:relative; display:flex; align-items:center; padding:4px;">
+                    <i data-feather="bell" style="color:var(--color-uttec-blue-dark); width:22px; height:22px; stroke-width:2.5;"></i>
+                    @if($authUser && $authUser->unreadNotifications->count() > 0)
+                        <span class="notif-badge" id="profNotifBadge">{{ $authUser->unreadNotifications->count() }}</span>
+                    @endif
+                </button>
+                <div class="notif-panel" id="profNotifPanel">
+                    <div class="notif-panel-header">
+                        <span>Notificaciones</span>
                     </div>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="nav-link" style="background:none; border:none; cursor:pointer;">
-                            <i data-feather="log-out" class="w-4 h-4"></i> Salir
-                        </button>
-                    </form>
-
+                    <div class="notif-list">
+                        @if($authUser)
+                            @forelse($authUser->unreadNotifications as $notification)
+                                @php
+                                    $tipo  = $notification->data['tipo'] ?? 'info';
+                                    $url   = $notification->data['url'] ?? '#';
+                                    $icono = match($tipo) {
+                                        'inscripcion' => '✅', 'baja' => '❌',
+                                        'cambio' => '🕐', 'cupos_disponibles' => '🟢',
+                                        'sin_cupos' => '🔴', 'noticia' => '📰',
+                                        default => '🔔',
+                                    };
+                                @endphp
+                                <div class="notif-row unread notif-link-prof" data-url="{{ $url }}">
+                                    <div class="notif-row-icon">{{ $icono }}</div>
+                                    <div class="notif-row-body">
+                                        <div class="notif-row-title">{{ $notification->data['titulo'] }}</div>
+                                        <div class="notif-row-msg">{{ $notification->data['mensaje'] }}</div>
+                                        <div class="notif-row-time">{{ $notification->created_at->diffForHumans() }}</div>
+                                    </div>
+                                    <div class="notif-unread-dot"></div>
+                                </div>
+                            @empty
+                                <div class="notif-empty">
+                                    <div style="font-size:1.5rem; margin-bottom:6px;">🔕</div>
+                                    Sin notificaciones nuevas
+                                </div>
+                            @endforelse
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
 
-    <main class="flex-grow pt-28 pb-12 px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl mx-auto w-full">
+            <a href="{{ route('profesor.profile.edit') }}"
+               style="display:flex; align-items:center; gap:8px; font-weight:600; color:var(--color-uttec-blue-dark); font-size:0.95rem;">
+                @php
+                    $fotoUrl = !empty($authUser->foto)
+                        ? asset('storage/' . $authUser->foto)
+                        : 'https://ui-avatars.com/api/?name=' . urlencode($authUser->nombre) . '&background=002D62&color=fff&size=64';
+                @endphp
+                <img src="{{ $fotoUrl }}" alt="Foto" style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:2px solid var(--color-uttec-blue-dark);">
+                {{ $authUser->nombre }}
+            </a>
+        </div>
+
+        <form method="POST" action="{{ route('logout') }}" class="inline">
+            @csrf
+            <button type="submit" class="logout-btn">
+                <i data-feather="log-out" class="feather"></i> Salir
+            </button>
+        </form>
+    </nav>
+</header>
+
+    <main style="padding-top: 5rem; padding-bottom: 3rem; max-width: 1300px; margin: 0 auto; padding-left: 3rem; padding-right: 3rem;">
 
         @if(session('success'))
             <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-800 px-4 py-3 rounded shadow-sm flex items-center gap-2">

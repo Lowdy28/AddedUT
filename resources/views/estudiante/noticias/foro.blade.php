@@ -108,10 +108,10 @@
 </style>
 
 <div class="foro-container">
-    {{-- 1. CARRUSEL DE DESTACADOS (Las últimas 3 noticias) --}}
+    {{-- 1. CARRUSEL DE DESTACADOS (Las últimas 4 noticias) --}}
     <div class="swiper hero-slider">
         <div class="swiper-wrapper">
-            @foreach($noticias->take(3) as $destacada)
+            @foreach($noticias->take(4) as $destacada)
             <div class="swiper-slide">
                 @if($destacada->imagen)
                     <img src="{{ asset('storage/' . $destacada->imagen) }}" class="hero-img">

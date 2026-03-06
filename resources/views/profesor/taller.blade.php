@@ -69,6 +69,83 @@
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 
+
+
+    /* SweetAlert encima del modal de asistencia */
+    .swal-on-top { z-index: 999999 !important; }
+
+    .asist-modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 99999;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    padding-top: 5rem; /* compensa el navbar fijo */
+}
+.asist-modal {
+    background: #fff; border-radius: 1.5rem;
+    width: 100%; max-width: 680px;
+    max-height: calc(100vh - 6rem); /* deja espacio al navbar */
+    overflow: hidden; display: flex; flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+    animation: asistIn .2s ease;
+}
+@keyframes asistIn {
+    from { opacity:0; transform:scale(.94) translateY(20px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+}
+.asist-header {
+    background: linear-gradient(135deg, #1e3a8a, #065f46);
+    padding: 1.4rem 1.8rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+}
+.asist-body {
+    flex: 1; overflow-y: auto; padding: 1.4rem 1.8rem;
+    scrollbar-width: thin; scrollbar-color: #e5e7eb transparent;
+}
+.asist-footer {
+    padding: 1rem 1.8rem; border-top: 1px solid #f0f0f0;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; background: #fafafa;
+}
+/* Fila alumno */
+.asist-row {
+    display: grid; grid-template-columns: 38px 1fr auto auto;
+    gap: .75rem; align-items: center;
+    padding: .7rem .4rem; border-bottom: 1px solid #f5f5f5;
+}
+.asist-row:last-child { border-bottom: none; }
+.asist-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a8a, #00a86b);
+    color: #fff; font-weight: 800; font-size: .85rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; overflow: hidden;
+}
+.asist-avatar img { width:100%; height:100%; object-fit:cover; }
+/* Botones estado */
+.asist-opts { display: flex; gap: .35rem; }
+.asist-opt {
+    padding: .3rem .65rem; border-radius: 6px; font-size: .72rem;
+    font-weight: 700; border: 1.5px solid transparent; cursor: pointer;
+    transition: all .15s; text-transform: uppercase; letter-spacing: .04em;
+}
+.asist-opt.p { border-color: #00a86b; color: #065f46; background: #f0fdf4; }
+.asist-opt.p.sel, .asist-opt.p:hover { background: #00a86b; color: #fff; }
+.asist-opt.a { border-color: #ef4444; color: #991b1b; background: #fef2f2; }
+.asist-opt.a.sel, .asist-opt.a:hover { background: #ef4444; color: #fff; }
+.asist-opt.j { border-color: #f59e0b; color: #92400e; background: #fffbeb; }
+.asist-opt.j.sel, .asist-opt.j:hover { background: #f59e0b; color: #fff; }
+/* Stats rápidos */
+.asist-stat-bar {
+    display: flex; gap: .5rem; margin-bottom: 1.1rem; flex-wrap: wrap;
+}
+.asist-stat {
+    flex: 1; min-width: 80px; text-align: center;
+    padding: .6rem .5rem; border-radius: .75rem; font-size: .78rem; font-weight: 700;
+}
+
 .badge { display: inline-flex; align-items: center; gap: .3rem; padding: .28rem .8rem; border-radius: 50px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 .badge-green  { background: #d1fae5; color: #065f46; }
 .badge-blue   { background: #dbeafe; color: #1e40af; }
@@ -254,30 +331,24 @@
                 </p>
             </div>
 
-            {{-- Estado --}}
+            {{-- Tomar Lista --}}
             <div style="background:#fff; border-radius:1.25rem; padding:1.4rem; border:1px solid #e5e7eb; box-shadow:0 2px 12px rgba(0,0,0,.04);">
                 <div class="section-title">
-                    <i data-feather="activity" style="width:17px;height:17px;"></i> Estado
+                    <i data-feather="check-square" style="width:17px;height:17px;"></i> Asistencia
                 </div>
-                @php
-                    $hoy    = \Carbon\Carbon::today();
-                    $inicio = \Carbon\Carbon::parse($taller->fecha_inicio);
-                    $fin    = \Carbon\Carbon::parse($taller->fecha_fin ?? $taller->fecha_inicio);
-                    if ($hoy->lt($inicio)) {
-                        $estadoLabel = 'Próximamente'; $estadoClass = 'badge-blue';
-                        $estadoDesc  = 'Inicia en ' . $hoy->diffInDays($inicio) . ' día(s).';
-                    } elseif ($hoy->between($inicio, $fin)) {
-                        $estadoLabel = 'En curso'; $estadoClass = 'badge-green';
-                        $estadoDesc  = 'Activo. Quedan ' . $hoy->diffInDays($fin) . ' día(s).';
-                    } else {
-                        $estadoLabel = 'Finalizado'; $estadoClass = 'badge-orange';
-                        $estadoDesc  = 'Concluyó el ' . $fin->format('d M Y') . '.';
-                    }
-                @endphp
-                <div style="text-align:center; padding:.4rem 0;">
-                    <span class="badge {{ $estadoClass }}" style="font-size:.88rem; padding:.45rem 1.4rem;">{{ $estadoLabel }}</span>
-                    <p style="font-size:.83rem; color:#6b7280; margin-top:.7rem; line-height:1.5;">{{ $estadoDesc }}</p>
-                </div>
+                <p style="font-size:.82rem; color:#6b7280; margin:0 0 1rem; line-height:1.5;">
+                    Registra la asistencia de los alumnos por sesión.
+                </p>
+                <button onclick="abrirAsistencia({{ $taller->id_evento }})"
+                        style="width:100%; padding:.7rem 1rem; border-radius:.75rem;
+                               background:linear-gradient(135deg,#1e3a8a,#065f46);
+                               color:#fff; border:none; font-weight:800; font-size:.88rem;
+                               cursor:pointer; display:flex; align-items:center; justify-content:center;
+                               gap:.5rem; transition:opacity .2s;"
+                        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                    <i data-feather="check-square" style="width:15px;height:15px;"></i>
+                    Tomar Lista
+                </button>
             </div>
 
             {{-- Cupos visual --}}
@@ -300,6 +371,95 @@
         </div>
     </div>
 @endif
+
+
+   {{-- ══════════════════════════════════
+        MODAL ASISTENCIA
+   ══════════════════════════════════ --}}
+   <div id="asist-overlay" class="asist-modal-overlay" style="display:none;" onclick="cerrarAsistencia(event)">
+       <div class="asist-modal" onclick="event.stopPropagation()">
+
+           {{-- Header --}}
+           <div class="asist-header">
+               <div>
+                   <h2 style="color:#fff; font-size:1.2rem; font-weight:900; margin:0;">
+                       Tomar Lista de Asistencia
+                   </h2>
+                   <p style="color:rgba(255,255,255,.7); font-size:.8rem; margin:.25rem 0 0;" id="asist-subtitle">
+                       Cargando...
+                   </p>
+               </div>
+               <button onclick="cerrarAsistencia()" style="background:rgba(255,255,255,.15); border:none; border-radius:50%;
+                       width:34px; height:34px; color:#fff; font-size:1rem; cursor:pointer;
+                       display:flex; align-items:center; justify-content:center;">✕</button>
+           </div>
+
+           {{-- Sub-header: selector de fecha + stats --}}
+           <div style="padding:1rem 1.8rem; border-bottom:1px solid #f0f0f0; background:#f8fafc; flex-shrink:0;">
+               <div style="display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; margin-bottom:.75rem;">
+                   <label style="font-size:.8rem; font-weight:700; color:#374151;">Fecha:</label>
+                   <input type="date" id="asist-fecha"
+                          style="border:1.5px solid #d1d5db; border-radius:.5rem; padding:.35rem .7rem;
+                                 font-size:.85rem; color:#111; font-weight:600;"
+                          onchange="cargarAsistencia()">
+                   <button onclick="cargarAsistencia()"
+                           style="padding:.35rem .9rem; border-radius:.5rem; background:#1e3a8a;
+                                  color:#fff; border:none; font-size:.8rem; font-weight:700; cursor:pointer;">
+                       Cargar
+                   </button>
+               </div>
+               {{-- Stats rápidos --}}
+               <div class="asist-stat-bar">
+                   <div class="asist-stat" style="background:#f0fdf4; color:#065f46;">
+                       <span id="cnt-p">0</span> Presentes
+                   </div>
+                   <div class="asist-stat" style="background:#fef2f2; color:#991b1b;">
+                       <span id="cnt-a">0</span> Ausentes
+                   </div>
+                   <div class="asist-stat" style="background:#fffbeb; color:#92400e;">
+                       <span id="cnt-j">0</span> Justificados
+                   </div>
+                   <div class="asist-stat" style="background:#f1f5f9; color:#475569;">
+                       <span id="cnt-n">0</span> Sin marcar
+                   </div>
+               </div>
+           </div>
+
+           {{-- Body: lista de alumnos --}}
+           <div class="asist-body" id="asist-lista">
+               <div style="text-align:center; padding:3rem; color:#9ca3af;">
+                   <i data-feather="loader" style="width:36px;height:36px;"></i>
+                   <p style="margin-top:.75rem; font-size:.9rem;">Cargando alumnos...</p>
+               </div>
+           </div>
+
+           {{-- Footer --}}
+           <div class="asist-footer">
+               <span style="font-size:.8rem; color:#9ca3af;" id="asist-guardado"></span>
+               <div style="display:flex; gap:.75rem; flex-wrap:wrap;">
+                   <button onclick="cerrarAsistencia()"
+                           style="padding:.55rem 1.2rem; border-radius:.65rem; background:#f3f4f6;
+                                  color:#374151; border:1.5px solid #d1d5db; font-weight:700;
+                                  font-size:.88rem; cursor:pointer;">
+                       Cerrar
+                   </button>
+                   <button onclick="descargarPdf()"
+                           style="padding:.55rem 1.2rem; border-radius:.65rem; background:#fff;
+                                  color:#1e3a8a; border:1.5px solid #1e3a8a; font-weight:700;
+                                  font-size:.88rem; cursor:pointer; display:flex; align-items:center; gap:.4rem;">
+                       <i data-feather="download" style="width:14px;height:14px;"></i> Descargar PDF
+                   </button>
+                   <button onclick="guardarAsistencia()"
+                           style="padding:.55rem 1.4rem; border-radius:.65rem;
+                                  background:linear-gradient(135deg,#1e3a8a,#065f46);
+                                  color:#fff; border:none; font-weight:800; font-size:.88rem;
+                                  cursor:pointer; display:flex; align-items:center; gap:.4rem;">
+                       <i data-feather="save" style="width:14px;height:14px;"></i> Guardar
+                   </button>
+               </div>
+           </div>
+       </div>
+   </div>
 
    {{-- MODAL EDITAR --}}
 <div x-show="modalEdit" x-cloak
@@ -482,10 +642,10 @@ function profesorHandler() {
                 const json = await res.json();
                 if (!res.ok) throw new Error(json.message || 'Error');
                 this.closeAll();
-                Swal.fire({ title:'¡Guardado!', text:json.message, icon:'success', timer:1800, showConfirmButton:false })
+                Swal.fire({ title:'¡Guardado!', text:json.message, icon:'success', timer:1800, showConfirmButton:false, customClass: { container: 'swal-on-top' } })
                     .then(() => location.reload());
             } catch(err) {
-                Swal.fire({ title:'Error', text:err.message, icon:'error' });
+                Swal.fire({ title:'Error', text:err.message, icon:'error', customClass: { container: 'swal-on-top' } });
             }
         }
     }
@@ -493,3 +653,152 @@ function profesorHandler() {
 </script>
 
 @endsection
+<script>
+/* ══════════════════════════════════
+   ASISTENCIA JS
+══════════════════════════════════ */
+let asistEventoId = null;
+let asistData     = [];
+
+function abrirAsistencia(eventoId) {
+    asistEventoId = eventoId;
+    document.getElementById('asist-overlay').style.display = 'flex';
+    // Fecha de hoy por defecto
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('asist-fecha').value = hoy;
+    cargarAsistencia();
+}
+
+function cerrarAsistencia(e) {
+    if (e && e.target !== document.getElementById('asist-overlay')) return;
+    document.getElementById('asist-overlay').style.display = 'none';
+    document.getElementById('asist-guardado').textContent = '';
+}
+
+async function cargarAsistencia() {
+    const fecha = document.getElementById('asist-fecha').value;
+    document.getElementById('asist-subtitle').textContent =
+        `Sesión del ${new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}`;
+
+    document.getElementById('asist-lista').innerHTML =
+        `<div style="text-align:center;padding:2rem;color:#9ca3af;">
+            <p>Cargando alumnos...</p>
+         </div>`;
+
+    const res  = await fetch(`/profesor/asistencia/${asistEventoId}?fecha=${fecha}`, {
+        headers: { 'Accept': 'application/json',
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+    });
+    const data = await res.json();
+    asistData  = data.lista.map(a => ({ ...a, estado: a.estado ?? null }));
+    renderLista();
+}
+
+function renderLista() {
+    if (!asistData.length) {
+        document.getElementById('asist-lista').innerHTML =
+            `<div style="text-align:center;padding:3rem;color:#9ca3af;">
+                <p>No hay alumnos inscritos en este taller.</p>
+             </div>`;
+        return;
+    }
+
+    let html = '';
+    asistData.forEach((al, i) => {
+        const av = al.foto
+            ? `<div class="asist-avatar"><img src="${al.foto}" alt="${al.nombre}"></div>`
+            : `<div class="asist-avatar">${al.nombre.charAt(0).toUpperCase()}</div>`;
+
+        const est = al.estado;
+        html += `
+        <div class="asist-row">
+            ${av}
+            <div>
+                <div style="font-weight:700;font-size:.88rem;color:#1e3a8a;">${esc(al.nombre)}</div>
+                <div style="font-size:.73rem;color:#9ca3af;">${esc(al.matricula)}</div>
+            </div>
+            <div class="asist-opts">
+                <button class="asist-opt p ${est==='presente'?'sel':''}"
+                        onclick="setEstado(${i},'presente',this)">Presente</button>
+                <button class="asist-opt a ${est==='ausente'?'sel':''}"
+                        onclick="setEstado(${i},'ausente',this)">Ausente</button>
+                <button class="asist-opt j ${est==='justificado'?'sel':''}"
+                        onclick="setEstado(${i},'justificado',this)">Justif.</button>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById('asist-lista').innerHTML = html;
+    actualizarStats();
+    feather.replace();
+}
+
+function setEstado(idx, estado, btn) {
+    // Deseleccionar hermanos
+    btn.closest('.asist-opts').querySelectorAll('.asist-opt').forEach(b => b.classList.remove('sel'));
+    // Seleccionar este o deseleccionar si ya estaba activo
+    const mismoEstado = asistData[idx].estado === estado;
+    asistData[idx].estado = mismoEstado ? null : estado;
+    if (!mismoEstado) btn.classList.add('sel');
+    actualizarStats();
+}
+
+function actualizarStats() {
+    const cnts = { presente:0, ausente:0, justificado:0, null:0 };
+    asistData.forEach(a => {
+        if (a.estado === 'presente')    cnts.presente++;
+        else if (a.estado === 'ausente')     cnts.ausente++;
+        else if (a.estado === 'justificado') cnts.justificado++;
+        else cnts.null++;
+    });
+    document.getElementById('cnt-p').textContent = cnts.presente;
+    document.getElementById('cnt-a').textContent = cnts.ausente;
+    document.getElementById('cnt-j').textContent = cnts.justificado;
+    document.getElementById('cnt-n').textContent = cnts.null;
+}
+
+async function guardarAsistencia() {
+    const fecha = document.getElementById('asist-fecha').value;
+    const payload = {
+        fecha,
+        asistencias: asistData
+            .filter(a => a.estado !== null)
+            .map(a => ({ id_usuario: a.id_usuario, estado: a.estado, nota: a.nota || '' }))
+    };
+
+    if (!payload.asistencias.length) {
+        Swal.fire({ icon:'warning', title:'Sin cambios', text:'Marca al menos un alumno antes de guardar.', timer:2000, showConfirmButton:false, customClass: { container: 'swal-on-top' } });
+        return;
+    }
+
+    const res  = await fetch(`/profesor/asistencia/${asistEventoId}/guardar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+        Swal.fire({ icon:'success', title:'¡Guardado!', text: data.message, timer:1800, showConfirmButton:false, customClass: { container: 'swal-on-top' } });
+        const now = new Date().toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('asist-guardado').textContent = `Último guardado: ${now}`;
+    } else {
+        Swal.fire({ icon:'error', title:'Error', text: data.message || 'No se pudo guardar.', customClass: { container: 'swal-on-top' } });
+    }
+}
+
+
+function descargarPdf() {
+    const fecha = document.getElementById('asist-fecha').value;
+    if (!fecha) { alert('Selecciona una fecha primero.'); return; }
+    window.open(`/profesor/asistencia/${asistEventoId}/pdf?fecha=${fecha}`, '_blank');
+}
+
+function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
