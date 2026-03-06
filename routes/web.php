@@ -13,6 +13,7 @@ use App\Http\Controllers\EstudianteDashboardController;
 use App\Http\Controllers\EstudianteEventoController;
 use App\Http\Controllers\ProfesorDashboardController;
 use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\GestionAlumnoController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\AdminNoticiaController;
 use App\Http\Controllers\RecomendacionController;
@@ -135,6 +136,12 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
         Route::post('/profesor/asistencia/{evento}/guardar',[AsistenciaController::class, 'guardar'])->name('profesor.asistencia.guardar');
         Route::get('/profesor/asistencia/{evento}/historial/{usuario}', [AsistenciaController::class, 'historial'])->name('profesor.asistencia.historial');
         Route::get('/profesor/asistencia/{evento}/pdf', [AsistenciaController::class, 'exportPdf'])->name('profesor.asistencia.pdf');
+
+        // ── Gestión de alumnos ──
+        Route::get('/profesor/alumno/{evento}/{usuario}',          [GestionAlumnoController::class, 'datosAlumno'])->name('profesor.alumno.datos');
+        Route::patch('/profesor/alumno/{evento}/{usuario}/baja',   [GestionAlumnoController::class, 'darDeBaja'])->name('profesor.alumno.baja');
+        Route::patch('/profesor/alumno/{evento}/{usuario}/reactivar', [GestionAlumnoController::class, 'reactivar'])->name('profesor.alumno.reactivar');
+        Route::patch('/profesor/alumno/{evento}/{usuario}/nota',   [GestionAlumnoController::class, 'guardarNota'])->name('profesor.alumno.nota');
     });
 });
 

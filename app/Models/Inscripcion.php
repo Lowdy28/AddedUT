@@ -17,7 +17,8 @@ class Inscripcion extends Model
         'id_usuario',
         'id_evento',
         'fecha_inscripcion',
-        'estado'
+        'estado',
+        'nota',
     ];
 
     // Relaciones

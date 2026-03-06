@@ -143,6 +143,7 @@
         .event-header-image { aspect-ratio: 16 / 9; }
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <div class="mb-4">
     <a href="{{ route('estudiante.eventos.index') }}" style="color:var(--color-uttec-blue-dark); font-weight:600; display:inline-flex; align-items:center; gap:5px; transition: color 0.3s ease;" onmouseover="this.style.color='var(--color-uttec-green)'" onmouseout="this.style.color='var(--color-uttec-blue-dark)'">
@@ -204,10 +205,36 @@
 
             <div style="margin-top: 1.5rem;">
                 @if (isset($estaInscrito) && $estaInscrito)
-                    <form action="{{ route('estudiante.inscripciones.destroy', $evento->id_evento) }}" method="POST">
+                    <form id="form-cancelar-inscripcion"
+                          action="{{ route('estudiante.inscripciones.destroy', $evento->id_evento) }}"
+                          method="POST">
                         @csrf @method('DELETE')
-                        <button type="submit" class="action-button cancelar-btn"><i data-feather="x-circle"></i> Cancelar Inscripción</button>
+                        <button type="button" class="action-button cancelar-btn"
+                                onclick="confirmarCancelacion('{{ addslashes($evento->nombre) }}')">
+                            <i data-feather="x-circle"></i> Cancelar Inscripción
+                        </button>
                     </form>
+
+                    <script>
+                    function confirmarCancelacion(nombreTaller) {
+                        Swal.fire({
+                            title: '¿Cancelar inscripción?',
+                            html: `¿Estás seguro de que deseas darte de baja del taller <strong>${nombreTaller}</strong>?<br><br>
+                                   <span style="font-size:.88rem; color:#9ca3af;">Esta acción liberará tu lugar y tendrás que volver a inscribirte si cambias de opinión.</span>`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, cancelar mi inscripción',
+                            cancelButtonText: 'No, quedarme',
+                            confirmButtonColor: '#e74c3c',
+                            cancelButtonColor: '#002D62',
+                            reverseButtons: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('form-cancelar-inscripcion').submit();
+                            }
+                        });
+                    }
+                    </script>
                     <p style="text-align:center; margin-top:10px; font-weight:600; font-size:0.9rem; color:var(--color-uttec-blue-dark);">¡Ya estás inscrito a esta actividad!</p>
                 @else
                     @if ($cuposDisp > 0)

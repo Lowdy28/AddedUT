@@ -146,6 +146,83 @@
     padding: .6rem .5rem; border-radius: .75rem; font-size: .78rem; font-weight: 700;
 }
 
+
+/* ── MODAL ALUMNO ── */
+.alumno-row { cursor: pointer; }
+.alumno-row:hover .alumno-nombre { color: #1e3a8a; text-decoration: underline; }
+
+.alumno-estado-baja .alumno-avatar {
+    background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
+}
+.alumno-estado-baja { opacity: .65; }
+
+.al-modal-overlay {
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    z-index: 99998;
+    background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem; padding-top: 5rem;
+}
+.al-modal {
+    background: #fff; border-radius: 1.25rem;
+    width: 100%; max-width: 460px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: alIn .18s ease;
+}
+@keyframes alIn {
+    from { opacity:0; transform:scale(.95) translateY(16px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+}
+.al-header {
+    background: linear-gradient(135deg, #1e3a8a, #065f46);
+    padding: 1.4rem 1.6rem;
+    display: flex; align-items: center; gap: 1rem;
+}
+.al-avatar-lg {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    color: #fff; font-weight: 900; font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; overflow: hidden; border: 2px solid rgba(255,255,255,.35);
+}
+.al-avatar-lg img { width:100%; height:100%; object-fit:cover; }
+.al-body { padding: 1.4rem 1.6rem; }
+.al-info-row {
+    display: flex; justify-content: space-between;
+    padding: .5rem 0; border-bottom: 1px solid #f5f5f5;
+    font-size: .88rem;
+}
+.al-info-row:last-child { border-bottom: none; }
+.al-info-label { color: #9ca3af; font-weight: 600; }
+.al-info-value { color: #1e293b; font-weight: 700; text-align: right; max-width: 60%; }
+.al-footer {
+    padding: 1rem 1.6rem;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+    display: flex; flex-direction: column; gap: .75rem;
+}
+.al-nota-area {
+    width: 100%; padding: .6rem .85rem; border-radius: .6rem;
+    border: 1.5px solid #d1d5db; font-size: .88rem; color: #111;
+    resize: vertical; min-height: 70px; font-family: inherit;
+    transition: border-color .2s;
+}
+.al-nota-area:focus { outline: none; border-color: #1e3a8a; }
+.al-btns { display: flex; gap: .6rem; }
+.al-btn {
+    flex: 1; padding: .6rem; border-radius: .65rem;
+    font-size: .82rem; font-weight: 700; border: none;
+    cursor: pointer; transition: opacity .15s; display: flex;
+    align-items: center; justify-content: center; gap: .35rem;
+}
+.al-btn:hover { opacity: .85; }
+.al-btn-cancel { background: #f3f4f6; color: #374151; border: 1.5px solid #d1d5db !important; border: none; }
+.al-btn-nota   { background: #eff6ff; color: #1e40af; border: 1.5px solid #93c5fd !important; border: none; }
+.al-btn-baja   { background: #fef2f2; color: #991b1b; border: 1.5px solid #fca5a5 !important; border: none; }
+.al-btn-reactiv{ background: #f0fdf4; color: #065f46; border: 1.5px solid #86efac !important; border: none; }
+.al-btn-save   { background: linear-gradient(135deg,#1e3a8a,#065f46); color: #fff; }
+
 .badge { display: inline-flex; align-items: center; gap: .3rem; padding: .28rem .8rem; border-radius: 50px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 .badge-green  { background: #d1fae5; color: #065f46; }
 .badge-blue   { background: #dbeafe; color: #1e40af; }
@@ -283,17 +360,31 @@
                 </div>
 
                 @forelse($inscritos as $inscripcion)
-                    <div class="alumno-row">
-                        <div class="alumno-avatar">{{ strtoupper(substr($inscripcion->usuario->nombre ?? 'A', 0, 1)) }}</div>
+                    @php $esBaja = ($inscripcion->estado === 'baja'); @endphp
+                    <div class="alumno-row {{ $esBaja ? 'alumno-estado-baja' : '' }}"
+                         onclick="abrirAlumno({{ $taller->id_evento }}, {{ $inscripcion->id_usuario }})">
+                        <div class="alumno-avatar">
+                            @if(!empty($inscripcion->usuario->foto))
+                                <img src="{{ asset('storage/' . $inscripcion->usuario->foto) }}"
+                                     style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                            @else
+                                {{ strtoupper(substr($inscripcion->usuario->nombre ?? 'A', 0, 1)) }}
+                            @endif
+                        </div>
                         <div style="flex:1; min-width:0;">
-                            <p style="font-weight:700; color:#111827; font-size:.9rem; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                            <p class="alumno-nombre" style="font-weight:700; color:#111827; font-size:.9rem; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color .15s;">
                                 {{ $inscripcion->usuario->nombre ?? '—' }}
                             </p>
                             <p style="font-size:.78rem; color:#6b7280; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                {{ $inscripcion->usuario->email ?? '' }}
+                                {{ $inscripcion->usuario->matricula ?? $inscripcion->usuario->email ?? '' }}
                             </p>
                         </div>
-                        <span class="badge badge-green" style="font-size:.68rem;">Inscrito</span>
+                        @if($esBaja)
+                            <span class="badge badge-orange" style="font-size:.68rem;">Baja</span>
+                        @else
+                            <span class="badge badge-green" style="font-size:.68rem;">Inscrito</span>
+                        @endif
+                        <i data-feather="chevron-right" style="width:14px;height:14px;color:#9ca3af;flex-shrink:0;"></i>
                     </div>
                     @if(!$loop->last)<hr style="border:none; border-top:1px solid #f3f4f6; margin:.1rem 0;">@endif
                 @empty
@@ -372,6 +463,69 @@
     </div>
 @endif
 
+
+
+   {{-- ══════════════════════════════════
+        MODAL GESTIÓN ALUMNO
+   ══════════════════════════════════ --}}
+   <div id="al-overlay" class="al-modal-overlay" style="display:none;" onclick="cerrarAlumno(event)">
+       <div class="al-modal" onclick="event.stopPropagation()">
+
+           {{-- Header --}}
+           <div class="al-header">
+               <div class="al-avatar-lg" id="al-avatar-el">A</div>
+               <div style="flex:1; min-width:0;">
+                   <div id="al-nombre" style="font-size:1.1rem; font-weight:900; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                   <div id="al-matricula" style="font-size:.8rem; color:rgba(255,255,255,.65); margin-top:2px;"></div>
+               </div>
+               <button onclick="cerrarAlumno()" style="background:rgba(255,255,255,.15); border:none; border-radius:50%; width:32px; height:32px; color:#fff; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;">✕</button>
+           </div>
+
+           {{-- Info --}}
+           <div class="al-body">
+               <div class="al-info-row">
+                   <span class="al-info-label">Correo</span>
+                   <span class="al-info-value" id="al-email">—</span>
+               </div>
+               <div class="al-info-row">
+                   <span class="al-info-label">Estado</span>
+                   <span class="al-info-value" id="al-estado-badge">—</span>
+               </div>
+               <div class="al-info-row">
+                   <span class="al-info-label">Inscrito desde</span>
+                   <span class="al-info-value" id="al-fecha">—</span>
+               </div>
+               <div class="al-info-row" id="al-asist-row">
+                   <span class="al-info-label">Asistencia</span>
+                   <span class="al-info-value" id="al-asist">—</span>
+               </div>
+           </div>
+
+           {{-- Footer con nota y acciones --}}
+           <div class="al-footer">
+               <div>
+                   <label style="font-size:.75rem; font-weight:700; color:#374151; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:.4rem;">
+                       Nota / Observación del profesor
+                   </label>
+                   <textarea id="al-nota" class="al-nota-area" placeholder="Escribe una observación sobre este alumno..."></textarea>
+               </div>
+               <div class="al-btns">
+                   <button class="al-btn al-btn-cancel" onclick="cerrarAlumno()">Cerrar</button>
+                   <button class="al-btn al-btn-save" onclick="guardarNotaAlumno()">
+                       <i data-feather="save" style="width:13px;height:13px;"></i> Guardar nota
+                   </button>
+               </div>
+               <div id="al-baja-wrap">
+                   <button id="al-btn-baja" class="al-btn al-btn-baja" style="width:100%;" onclick="darDeBaja()">
+                       <i data-feather="user-x" style="width:13px;height:13px;"></i> Dar de baja del taller
+                   </button>
+                   <button id="al-btn-reactiv" class="al-btn al-btn-reactiv" style="width:100%; display:none;" onclick="reactivarAlumno()">
+                       <i data-feather="user-check" style="width:13px;height:13px;"></i> Reactivar inscripción
+                   </button>
+               </div>
+           </div>
+       </div>
+   </div>
 
    {{-- ══════════════════════════════════
         MODAL ASISTENCIA
@@ -797,6 +951,159 @@ function descargarPdf() {
     if (!fecha) { alert('Selecciona una fecha primero.'); return; }
     window.open(`/profesor/asistencia/${asistEventoId}/pdf?fecha=${fecha}`, '_blank');
 }
+
+/* ══════════════════════════════════
+   GESTIÓN ALUMNO JS
+══════════════════════════════════ */
+let alEventoId  = null;
+let alUsuarioId = null;
+let alEstadoActual = null;
+
+async function abrirAlumno(eventoId, usuarioId) {
+    alEventoId  = eventoId;
+    alUsuarioId = usuarioId;
+
+    // Limpiar y mostrar overlay
+    document.getElementById('al-nombre').textContent    = 'Cargando...';
+    document.getElementById('al-matricula').textContent = '';
+    document.getElementById('al-email').textContent     = '—';
+    document.getElementById('al-estado-badge').innerHTML= '—';
+    document.getElementById('al-fecha').textContent     = '—';
+    document.getElementById('al-asist').textContent     = '—';
+    document.getElementById('al-nota').value            = '';
+    document.getElementById('al-overlay').style.display = 'flex';
+
+    const res  = await fetch(`/profesor/alumno/${eventoId}/${usuarioId}`, {
+        headers: { 'Accept': 'application/json',
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+    });
+    const d = await res.json();
+
+    // Avatar
+    const avEl = document.getElementById('al-avatar-el');
+    avEl.innerHTML = d.foto
+        ? `<img src="${d.foto}" style="width:100%;height:100%;object-fit:cover;">`
+        : d.nombre.charAt(0).toUpperCase();
+
+    document.getElementById('al-nombre').textContent    = d.nombre;
+    document.getElementById('al-matricula').textContent = d.matricula;
+    document.getElementById('al-email').textContent     = d.email;
+    document.getElementById('al-fecha').textContent     = d.fecha_inscripcion
+        ? new Date(d.fecha_inscripcion).toLocaleDateString('es-MX', {day:'2-digit', month:'long', year:'numeric'})
+        : '—';
+
+    // Estado badge
+    alEstadoActual = d.estado;
+    const estadoBadge = d.estado === 'baja'
+        ? `<span style="background:#ffedd5;color:#9a3412;padding:2px 10px;border-radius:50px;font-size:.78rem;font-weight:800;">Baja</span>`
+        : `<span style="background:#d1fae5;color:#065f46;padding:2px 10px;border-radius:50px;font-size:.78rem;font-weight:800;">Inscrito</span>`;
+    document.getElementById('al-estado-badge').innerHTML = estadoBadge;
+
+    // Asistencia
+    if (d.sesiones_total > 0) {
+        document.getElementById('al-asist').textContent =
+            `${d.sesiones_presente} / ${d.sesiones_total} sesiones (${d.asistencia_pct}%)`;
+    } else {
+        document.getElementById('al-asist').textContent = 'Sin sesiones registradas';
+    }
+
+    // Nota
+    document.getElementById('al-nota').value = d.nota || '';
+
+    // Mostrar botón baja o reactivar según estado
+    const btnBaja    = document.getElementById('al-btn-baja');
+    const btnReactiv = document.getElementById('al-btn-reactiv');
+    if (d.estado === 'baja') {
+        btnBaja.style.display    = 'none';
+        btnReactiv.style.display = 'flex';
+    } else {
+        btnBaja.style.display    = 'flex';
+        btnReactiv.style.display = 'none';
+    }
+
+    feather.replace();
+}
+
+function cerrarAlumno(e) {
+    if (e && e.target !== document.getElementById('al-overlay')) return;
+    document.getElementById('al-overlay').style.display = 'none';
+}
+
+async function guardarNotaAlumno() {
+    const nota = document.getElementById('al-nota').value;
+    const res  = await fetch(`/profesor/alumno/${alEventoId}/${alUsuarioId}/nota`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json', 'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ nota })
+    });
+    const data = await res.json();
+    if (res.ok) {
+        Swal.fire({ icon:'success', title:'Nota guardada', text: data.message,
+                    timer:1600, showConfirmButton:false, customClass:{ container:'swal-on-top' } });
+    } else {
+        Swal.fire({ icon:'error', title:'Error', text: data.message, customClass:{ container:'swal-on-top' } });
+    }
+}
+
+async function darDeBaja() {
+    const confirm = await Swal.fire({
+        icon: 'warning',
+        title: '¿Dar de baja?',
+        text: 'El alumno perderá acceso al taller y recibirá una notificación.',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, dar de baja',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#ef4444',
+        customClass: { container: 'swal-on-top' }
+    });
+    if (!confirm.isConfirmed) return;
+
+    const res  = await fetch(`/profesor/alumno/${alEventoId}/${alUsuarioId}/baja`, {
+        method: 'PATCH',
+        headers: { 'Accept': 'application/json',
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+    });
+    const data = await res.json();
+    if (res.ok) {
+        Swal.fire({ icon:'success', title:'Baja registrada', text: data.message,
+                    timer:1800, showConfirmButton:false, customClass:{ container:'swal-on-top' } })
+            .then(() => location.reload());
+    } else {
+        Swal.fire({ icon:'error', title:'Error', text: data.message, customClass:{ container:'swal-on-top' } });
+    }
+}
+
+async function reactivarAlumno() {
+    const confirm = await Swal.fire({
+        icon: 'question',
+        title: '¿Reactivar alumno?',
+        text: 'El alumno volverá a tener estado "inscrito" y recibirá una notificación.',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, reactivar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#00a86b',
+        customClass: { container: 'swal-on-top' }
+    });
+    if (!confirm.isConfirmed) return;
+
+    const res  = await fetch(`/profesor/alumno/${alEventoId}/${alUsuarioId}/reactivar`, {
+        method: 'PATCH',
+        headers: { 'Accept': 'application/json',
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+    });
+    const data = await res.json();
+    if (res.ok) {
+        Swal.fire({ icon:'success', title:'Alumno reactivado', text: data.message,
+                    timer:1800, showConfirmButton:false, customClass:{ container:'swal-on-top' } })
+            .then(() => location.reload());
+    } else {
+        Swal.fire({ icon:'error', title:'Error', text: data.message, customClass:{ container:'swal-on-top' } });
+    }
+}
+
 
 function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
