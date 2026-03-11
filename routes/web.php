@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\RecuperarContrasenaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EventoController;
@@ -35,6 +36,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+
+    // ── Recuperar contraseña ──
+    Route::get('/recuperar',             [RecuperarContrasenaController::class, 'showForm'])->name('recuperar');
+    Route::post('/recuperar/verificar',  [RecuperarContrasenaController::class, 'verificar'])->name('recuperar.verificar');
+    Route::get('/recuperar/nueva',       [RecuperarContrasenaController::class, 'showNueva'])->name('recuperar.nueva');
+    Route::post('/recuperar/guardar',    [RecuperarContrasenaController::class, 'guardar'])->name('recuperar.guardar');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
