@@ -474,6 +474,14 @@ a { text-decoration:none; color:inherit; }
             </div>
         </div>
 
+        <div style="text-align:right; margin-bottom:.8rem; margin-top:-.4rem;">
+            <a href="{{ route('recuperar') }}"
+               style="font-size:.82rem; color:rgba(0,220,130,.75); font-weight:600; transition:color .2s;"
+               onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(0,220,130,.75)'">
+                ¿Olvidaste tu contraseña?
+            </a>
+        </div>
+
         <button type="submit" class="btn-go">
             <i data-feather="log-in"></i>
             Ingresar a AddedUT
@@ -507,5 +515,24 @@ function togglePwd(id, btn) {
         : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
 }
 </script>
+@if (session('status'))
+<div id="toast-ok" style="position:fixed;top:1.5rem;right:1.5rem;z-index:9999;
+    background:linear-gradient(135deg,#065f46,#00b868);color:#fff;
+    padding:1rem 1.4rem;border-radius:14px;font-family:'DM Sans',sans-serif;
+    font-size:.9rem;font-weight:600;box-shadow:0 8px 24px rgba(0,220,130,.3);
+    display:flex;align-items:center;gap:.6rem;max-width:360px;
+    animation:slideIn .35s ease;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+    {{ session('status') }}
+</div>
+<style>
+@keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+</style>
+<script>setTimeout(() => { const t = document.getElementById('toast-ok'); if(t) t.remove(); }, 4500);</script>
+@endif
 </body>
 </html>

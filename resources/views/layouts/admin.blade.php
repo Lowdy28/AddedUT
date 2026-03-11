@@ -7,7 +7,8 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="Sat, 01 Jan 2000 00:00:00 GMT">
-    <title>{{ config('app.name', 'AddedUT - Admin') }}</title>
+    <title>Panel de Administración — AddedUT</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23002D62'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='20' fill='%2300A86B'>A</text></svg>">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -85,12 +86,10 @@
         }
 
         .sidebar-brand {
-            padding: 1.4rem 1rem 1rem;
+            padding: 1.2rem 1rem 1rem;
             border-bottom: 1px solid var(--border);
-            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            display: flex; flex-direction: row; align-items: center;
         }
-        .sidebar-brand img { max-width: 110px; }
-        .sidebar-brand span { font-size: .75rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
 
         .sidebar-nav { padding: .75rem .6rem; flex: 1; overflow-y: auto; }
 
@@ -300,8 +299,23 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <img src="{{ asset('imagenes/logo.png') }}" alt="logo">
-            <span>Panel Administrativo</span>
+            <div style="display:flex; align-items:center; gap:.55rem;">
+                <div style="width:36px; height:36px; border-radius:8px;
+                            background:linear-gradient(135deg,#002D62,#1e3a8a);
+                            display:flex; align-items:center; justify-content:center;
+                            flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,.3);">
+                    <span style="font-family:Inter,sans-serif; font-weight:900; font-size:1.15rem;
+                                 color:#00A86B; line-height:1;">A</span>
+                </div>
+                <div style="line-height:1.2;">
+                    <div style="font-size:.95rem; font-weight:900; color:#fff; letter-spacing:.01em;">
+                        Added<span style="color:#00A86B;">UT</span>
+                    </div>
+                    <div style="font-size:.62rem; color:var(--text-muted); font-weight:600; letter-spacing:.08em; text-transform:uppercase;">
+                        Panel Admin
+                    </div>
+                </div>
+            </div>
         </div>
 
         <nav class="sidebar-nav">
