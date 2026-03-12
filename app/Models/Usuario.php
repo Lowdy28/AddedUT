@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Usuario extends Authenticatable
+class Usuario extends Authenticatable implements CanResetPasswordContract
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, CanResetPassword;
 
     protected $table      = 'usuarios';
     protected $primaryKey = 'id_usuario';
@@ -38,18 +40,10 @@ class Usuario extends Authenticatable
 
     /**
      * Detecta el rol a partir de la matricula institucional UTTEC.
-     *
-     * Reglas:
-     *   - Estudiante: exactamente 10 digitos numericos (ej. 2523260044)
-     *   - Profesor:   empieza con una o mas letras seguidas de digitos (ej. P2301, D240015)
-     *
-     * @param  string $matricula  Parte antes del @ del correo institucional
-     * @return string|null        'estudiante' | 'profesor' | null si no reconoce
      */
     public static function detectarRolPorMatricula(string $matricula): ?string
     {
         $matricula = trim($matricula);
-
 
         if (preg_match('/^\d{10}$/', $matricula)) {
             return 'estudiante';

@@ -475,7 +475,7 @@ a { text-decoration:none; color:inherit; }
         </div>
 
         <div style="text-align:right; margin-bottom:.8rem; margin-top:-.4rem;">
-            <a href="{{ route('recuperar') }}"
+            <a href="{{ route('password.request') }}"
                style="font-size:.82rem; color:rgba(0,220,130,.75); font-weight:600; transition:color .2s;"
                onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(0,220,130,.75)'">
                 ¿Olvidaste tu contraseña?
