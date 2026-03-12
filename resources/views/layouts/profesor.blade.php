@@ -240,5 +240,6 @@
         });
     </script>
     @include('components.toast-alerts')
+    @include('partials._modal-opinion')
 </body>
 </html>

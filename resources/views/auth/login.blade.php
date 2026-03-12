@@ -406,6 +406,9 @@ a { text-decoration:none; color:inherit; }
         </div>
 
         <!-- Testimonio -->
+        @if(isset($testimonios) && $testimonios->isNotEmpty())
+            @include('partials._testimonios', ['testimonios' => $testimonios, 'modo' => 'login'])
+        @else
         <div class="pl-card">
             <p class="pl-card-text">"AddedUT me ayudó a inscribirme al taller de música en segundos. Todo muy fácil y organizado."</p>
             <div class="pl-card-author">
@@ -416,6 +419,7 @@ a { text-decoration:none; color:inherit; }
                 </div>
             </div>
         </div>
+        @endif
 
         <div class="pl-badge">
             <div class="pl-badge-dot"></div>
