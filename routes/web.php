@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistroController;
-use App\Http\Controllers\RecuperarContrasenaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EventoController;
@@ -103,8 +102,10 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
         )->name('notificaciones.marcarLeida');
 
         Route::post('/notificaciones/mark-all-read', function () {
-            $user = App\Models\User::find(auth()->id());
-            $user->unreadNotifications->markAsRead();
+            $user = auth()->user();
+            if ($user) {
+                $user->unreadNotifications->markAsRead();
+            }
             return response()->json(['success' => true]);
         })->name('notificaciones.markAllRead');
 
@@ -175,6 +176,3 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
         Route::patch('/profesor/alumno/{evento}/{usuario}/nota',   [GestionAlumnoController::class, 'guardarNota'])->name('profesor.alumno.nota');
     });
 });
-
-Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('profesor.eventos.update');
-Route::post('/eventos/{evento}', [EventoController::class, 'update'])->name('profesor.eventos.update.post');
