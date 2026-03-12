@@ -21,6 +21,10 @@ use App\Http\Controllers\ChatbotController;
 
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Auth\Passwords\PasswordBrokerManager;
+use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 
 // ── Pública ──────────────────────────────────────────────────────────────────
 // Si ya hay sesión activa, / y /login redirigen al dashboard del rol
@@ -35,6 +39,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+
+    // ── Recuperar contraseña con token por correo ──────────────
+    Route::get('/forgot-password',  [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('/reset-password',  [NewPasswordController::class, 'store'])->name('password.store');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
