@@ -19,6 +19,7 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\AdminNoticiaController;
 use App\Http\Controllers\RecomendacionController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\TestimonioController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -31,21 +32,35 @@ use App\Http\Controllers\Auth\NewPasswordController;
 // Si ya hay sesión activa, / y /login redirigen al dashboard del rol
 Route::middleware('guest')->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+        $testimonios = \App\Models\Testimonio::with('usuario')
+            ->where('aprobado', true)->latest()->take(6)->get();
+        return view('welcome', compact('testimonios'));
     });
 
     Route::view('/terminos', 'terminos')->name('terminos');
 
     Route::get('/registro', [RegistroController::class, 'mostrarFormulario'])->name('registro');
     Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::get('/login', function() {
+        $testimonios = \App\Models\Testimonio::with('usuario')
+            ->where('aprobado', true)->latest()->take(5)->get();
+        return view('auth.login', compact('testimonios'));
+    })->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-    // ── Recuperar contraseña con token por correo ──────────────
-    Route::get('/forgot-password',  [PasswordResetLinkController::class, 'create'])->name('password.request');
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
-    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
-    Route::post('/reset-password',  [NewPasswordController::class, 'store'])->name('password.store');
+
+});
+
+// ── Recuperar contraseña (siempre disponible, fuera del grupo guest) ──────
+Route::get('/forgot-password',  [PasswordResetLinkController::class, 'create'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+Route::post('/reset-password',  [NewPasswordController::class, 'store'])->name('password.store');
+
+// ── Testimonios (estudiante y profesor) ──────────────────────
+Route::middleware(['auth:web', 'nocache'])->group(function () {
+    Route::post('/mi-opinion', [TestimonioController::class, 'store'])->name('testimonio.store');
+    Route::get('/mi-opinion',  [TestimonioController::class, 'miTestimonio'])->name('testimonio.mio');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -68,6 +83,11 @@ Route::middleware(['auth:web', 'nocache'])->group(function () {
     Route::middleware([\App\Http\Middleware\RoleMiddleware::class . ':admin'])->group(function () {
 
         Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
+
+        // ── Testimonios (moderación admin) ────────────────────────
+        Route::get('/admin/testimonios',                        [TestimonioController::class, 'index'])->name('admin.testimonios');
+        Route::patch('/admin/testimonios/{testimonio}/aprobar', [TestimonioController::class, 'aprobar'])->name('admin.testimonios.aprobar');
+        Route::delete('/admin/testimonios/{testimonio}',        [TestimonioController::class, 'rechazar'])->name('admin.testimonios.rechazar');
 
         Route::resource('usuarios', UsuarioController::class);
         Route::get('/usuarios/buscar/ajax', [UsuarioController::class, 'buscarAjax'])->name('usuarios.buscar.ajax');

@@ -975,6 +975,80 @@ footer {
     </div>
 </section>
 
+<!-- ── TESTIMONIOS ── -->
+@if(isset($testimonios) && $testimonios->isNotEmpty())
+<section class="features-section" style="padding:5rem 5%;">
+    <div class="features-inner">
+        <div class="section-header reveal" style="margin-bottom:3rem;">
+            <span class="section-tag">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none"
+                     stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:4px;">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                Comunidad UTTEC
+            </span>
+            <h2 class="section-h2">Lo que dicen nuestros <span>usuarios</span></h2>
+            <p class="section-sub">Opiniones reales de estudiantes y profesores que ya forman parte de AddedUT.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem;">
+            @foreach($testimonios as $t)
+            <div class="feat-card reveal" style="position:relative; overflow:hidden;">
+                {{-- Comilla decorativa --}}
+                <span style="position:absolute;top:-4px;left:14px;font-size:4rem;
+                              font-family:Georgia,serif;color:rgba(0,220,130,.1);
+                              line-height:1;pointer-events:none;user-select:none;">"</span>
+
+                {{-- Estrellas --}}
+                <div style="display:flex;gap:3px;margin-bottom:.85rem;position:relative;z-index:1;">
+                    @for($i=1;$i<=5;$i++)
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="{{ $i <= $t->estrellas ? '#f59e0b' : 'none' }}"
+                         stroke="{{ $i <= $t->estrellas ? '#f59e0b' : 'rgba(255,255,255,.2)' }}"
+                         stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    @endfor
+                </div>
+
+                {{-- Comentario --}}
+                <p class="feat-text" style="font-style:italic;margin-bottom:1.2rem;position:relative;z-index:1;">
+                    "{{ $t->comentario }}"
+                </p>
+
+                {{-- Autor --}}
+                <div style="display:flex;align-items:center;gap:.65rem;padding-top:.9rem;
+                             border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:1;">
+                    @if(!empty($t->usuario->foto))
+                    <img src="{{ asset('storage/' . $t->usuario->foto) }}"
+                         alt="{{ $t->usuario->nombre }}"
+                         style="width:32px;height:32px;border-radius:50%;flex-shrink:0;
+                                object-fit:cover;border:2px solid rgba(0,220,130,.3);">
+                    @else
+                    <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;
+                                 background:linear-gradient(135deg,#002D62,#00b868);
+                                 display:flex;align-items:center;justify-content:center;
+                                 font-size:.75rem;font-weight:800;color:#fff;">
+                        {{ strtoupper(substr($t->usuario->nombre ?? 'U', 0, 1)) }}
+                    </div>
+                    @endif
+                    <div>
+                        <div class="feat-title" style="font-size:.85rem;margin-bottom:0;">
+                            {{ $t->usuario->nombre ?? '—' }}
+                        </div>
+                        <div style="font-size:.72rem;color:var(--muted);text-transform:capitalize;">
+                            {{ $t->usuario->rol ?? '' }} · UTTEC
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+
 <!-- ── FOOTER ── -->
 <footer>
     <div class="footer-logo">Added<span>UT</span></div>

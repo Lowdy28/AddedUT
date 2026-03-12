@@ -206,7 +206,7 @@
         </div>
     </div>
     <div class="footer-bottom">
-        &copy; {{ date('Y') }} Universidad Tecnológica de Tecámac (UTTEC). Todos los derechos reservados.
+        &copy; {{ date('Y') }} AddedUT. Todos los derechos reservados.
     </div>
 </footer>
 
@@ -354,5 +354,6 @@
     });
 </script>
     @include('components.toast-alerts')
+    @include('partials._modal-opinion')
 </body>
 </html>
