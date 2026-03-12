@@ -4,28 +4,12 @@
     @include('partials._modal-opinion')
 --}}
 
-{{-- Botón flotante — cambia si ya opinó --}}
 @php
-    $yaOpino = \App\Models\Testimonio::where('id_usuario', auth()->user()->id_usuario)->exists();
+    $testimonioExistente = \App\Models\Testimonio::where('id_usuario', auth()->user()->id_usuario)->first();
+    $yaOpino = !is_null($testimonioExistente);
 @endphp
 
-@if($yaOpino)
-{{-- Ya tiene testimonio enviado --}}
-<div style="position:fixed; bottom:1.8rem; right:1.8rem; z-index:800;
-            display:inline-flex; align-items:center; gap:.5rem;
-            background:rgba(0,168,107,.15); border:1px solid rgba(0,168,107,.4);
-            color:rgba(255,255,255,.7); border-radius:50px;
-            padding:.75rem 1.3rem; font-size:.85rem; font-weight:700;
-            font-family:inherit; cursor:default;"
-     title="Ya enviaste tu opinión. El admin la revisará pronto.">
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
-         stroke="#00DC82" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-    </svg>
-    Opinión enviada ✓
-</div>
-@else
-{{-- Aún no ha opinado --}}
+{{-- Botón flotante --}}
 <button onclick="abrirOpinion()"
         style="position:fixed; bottom:1.8rem; right:1.8rem; z-index:800;
                display:inline-flex; align-items:center; gap:.5rem;
@@ -36,13 +20,21 @@
                transition:transform .2s, box-shadow .2s; font-family:inherit;"
         onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 10px 28px rgba(0,168,107,.45)'"
         onmouseout="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(0,168,107,.35)'">
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
-         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-    </svg>
-    ¿Qué opinas de AddedUT?
+    @if($yaOpino)
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        Editar mi opinión
+    @else
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        ¿Qué opinas de AddedUT?
+    @endif
 </button>
-@endif
 
 {{-- Overlay + Modal --}}
 <div id="opinion-overlay"
@@ -60,10 +52,10 @@
         <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.5rem;">
             <div>
                 <h3 style="font-size:1.15rem; font-weight:800; color:#111827; margin-bottom:.25rem;">
-                    Tu opinión importa
+                    {{ $yaOpino ? 'Edita tu opinión' : 'Tu opinión importa' }}
                 </h3>
                 <p style="font-size:.85rem; color:#6b7280; line-height:1.5;">
-                    Una vez revisada por el admin aparecerá en la plataforma.
+                    {{ $yaOpino ? 'Puedes actualizar tu calificación y comentario.' : 'Una vez revisada por el admin aparecerá en la plataforma.' }}
                 </p>
             </div>
             <button onclick="cerrarOpinion()"
@@ -87,16 +79,18 @@
                         style="background:none; border:none; cursor:pointer; padding:2px;
                                transition:transform .1s;" class="star-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
-                         fill="none" stroke="#d1d5db" stroke-width="1.5" class="star-svg"
+                         fill="{{ $yaOpino && $testimonioExistente->estrellas >= $i ? '#f59e0b' : 'none' }}"
+                         stroke="{{ $yaOpino && $testimonioExistente->estrellas >= $i ? '#f59e0b' : '#d1d5db' }}"
+                         stroke-width="1.5" class="star-svg"
                          style="transition:fill .15s, stroke .15s;">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                     </svg>
                 </button>
                 @endfor
             </div>
-            <input type="hidden" id="estrellas-val" value="0">
-            <span id="star-label" style="font-size:.8rem; color:#9ca3af; margin-top:.3rem; display:block;">
-                Toca para calificar
+            <input type="hidden" id="estrellas-val" value="{{ $yaOpino ? $testimonioExistente->estrellas : 0 }}">
+            <span id="star-label" style="font-size:.8rem; color:{{ $yaOpino ? '#f59e0b' : '#9ca3af' }}; margin-top:.3rem; display:block;">
+                {{ $yaOpino ? (['','Muy malo 😞','Regular 😐','Bueno 🙂','Muy bueno 😊','Excelente 🤩'][$testimonioExistente->estrellas]) : 'Toca para calificar' }}
             </span>
         </div>
 
@@ -114,9 +108,9 @@
                              color:#111827; resize:none; outline:none; font-family:inherit;
                              transition:border-color .2s;"
                       onfocus="this.style.borderColor='#00A86B'; this.style.boxShadow='0 0 0 3px rgba(0,168,107,.1)'"
-                      onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow=''"></textarea>
+                      onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow=''">{{ $yaOpino ? $testimonioExistente->comentario : '' }}</textarea>
             <span style="font-size:.74rem; color:#9ca3af; display:block; text-align:right; margin-top:.2rem;">
-                <span id="char-count">300</span> caracteres restantes
+                <span id="char-count">{{ $yaOpino ? 300 - strlen($testimonioExistente->comentario) : 300 }}</span> caracteres restantes
             </span>
         </div>
 
@@ -130,13 +124,13 @@
                 style="width:100%; padding:.9rem; background:linear-gradient(135deg,#00b868,#00DC82);
                        color:#001a1a; border:none; border-radius:12px; font-size:.95rem;
                        font-weight:800; cursor:pointer; transition:opacity .2s; font-family:inherit;">
-            Enviar mi opinión
+            {{ $yaOpino ? 'Actualizar mi opinión' : 'Enviar mi opinión' }}
         </button>
     </div>
 </div>
 
 <script>
-let estrellasSeleccionadas = 0;
+let estrellasSeleccionadas = {{ $yaOpino ? $testimonioExistente->estrellas : 0 }};
 const labels = ['','Muy malo 😞','Regular 😐','Bueno 🙂','Muy bueno 😊','Excelente 🤩'];
 
 function abrirOpinion() {
@@ -186,7 +180,7 @@ function enviarOpinion() {
     }
 
     btn.disabled = true;
-    btn.textContent = 'Enviando...';
+    btn.textContent = 'Guardando...';
 
     fetch('{{ route("testimonio.store") }}', {
         method: 'POST',
@@ -201,7 +195,7 @@ function enviarOpinion() {
     .then(data => {
         if (data.message) {
             mostrarMsg(data.message, 'ok');
-            setTimeout(cerrarOpinion, 2500);
+            setTimeout(() => { cerrarOpinion(); location.reload(); }, 2000);
         } else {
             mostrarMsg(data.error || 'Error al enviar.', 'error');
         }
@@ -209,7 +203,7 @@ function enviarOpinion() {
     .catch(() => mostrarMsg('Error de conexión. Intenta de nuevo.', 'error'))
     .finally(() => {
         btn.disabled = false;
-        btn.textContent = 'Enviar mi opinión';
+        btn.textContent = '{{ $yaOpino ? "Actualizar mi opinión" : "Enviar mi opinión" }}';
     });
 }
 

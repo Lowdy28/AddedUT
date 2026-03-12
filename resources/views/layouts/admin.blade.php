@@ -299,9 +299,22 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <img src="{{ asset('imagenes/logo.png') }}" alt="logo">
-            <span>Panel Administrativo</span>
+        <div class="sidebar-brand" style="padding:1.2rem 1rem; border-bottom:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
+            <div style="display:flex; align-items:center; gap:9px;">
+                <div style="width:32px; height:32px; border-radius:9px;
+                             background:linear-gradient(135deg,#002D62,#00A86B);
+                             display:flex; align-items:center; justify-content:center;
+                             font-weight:900; font-size:1rem; color:#00DC82;
+                             box-shadow:0 0 14px rgba(0,168,107,.35); flex-shrink:0;">A</div>
+                <span style="font-family:'Inter',sans-serif; font-weight:800; font-size:1.2rem;
+                              letter-spacing:-.5px; color:#fff;">
+                    Added<span style="color:#00DC82;">UT</span>
+                </span>
+            </div>
+            <span style="font-size:.65rem; color:rgba(255,255,255,.4); font-weight:600;
+                          letter-spacing:1.2px; text-transform:uppercase; margin-left:41px;">
+                Panel Admin
+            </span>
         </div>
 
         <nav class="sidebar-nav">
