@@ -529,8 +529,10 @@ function togglePwd(id, btn) {
     </svg>
     {{ session('status') }}
 </div>
-<style>@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}</style>
-<script>setTimeout(()=>{const t=document.getElementById('toast-ok');if(t)t.remove();},4500);</script>
+<style>
+@keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+</style>
+<script>setTimeout(() => { const t = document.getElementById('toast-ok'); if(t) t.remove(); }, 4500);</script>
 @endif
 </body>
 </html>
